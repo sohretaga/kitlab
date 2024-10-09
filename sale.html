@@ -908,11 +908,23 @@
                         <label for="author">Yazar Adı</label>
                         <input type="text" id="author" placeholder="Istəyə bağlı...">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group w-25">
                         <label for="publishing">Nəşriyyat</label>
                         <select id="publishing">
                             <option selected>Seç... (istəyə bağlı)</option>
                             <option>...</option>
+                        </select>
+                    </div>
+                    <div class="form-group w-25">
+                        <label for="inputState">Kitab Dili</label>
+                        <select id="inputState">
+                            <option selected>Azərbaycan</option>
+                            <option>Türk</option>
+                            <option>İngilis</option>
+                            <option>Rus</option>
+                            <option>Alman</option>
+                            <option>Fransız</option>
+                            <option>Digər</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -939,13 +951,11 @@
                     </div>
 
                     <div class="form-group w-100">
-                        <div class="add-img">
-                          <label for="image-upload">Kitab Şəklini Yüklə</label>
-                          <label for="image-upload">
-                            <img id="image-preview" class="image-preview" src="./assets/images/add-img.png">
-                          </label>
-                          <input type="file" id="image-upload" accept="image/*" onchange="previewImage(event)" style="display: none;">
-                          </div>
+                      <div class="image-uploader">
+                        <input type="file" id="image-input" accept="image/*" multiple>
+                        <label for="image-input" class="upload-label">Kitab Şəkilləri Seç (ən çox 4 şəkil)</label>
+                        <div id="image-preview" class="image-preview"></div>
+                      </div>
                     </div>
 
                     <div class="form-group">

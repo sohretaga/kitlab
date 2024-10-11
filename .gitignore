@@ -1,0 +1,80 @@
+# Python files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment (venv) files
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# Django secret keys and configuration files
+*.env
+.env.*
+
+# Django files
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3
+
+# Pytest / Coverage files
+htmlcov/
+.tox/
+noxfile_config.json
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Docker files
+*.dockerignore
+docker-compose.override.yml
+docker-compose.override.yaml
+**/Dockerfile
+
+# Environment dependencies
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# macOS operating system files
+.DS_Store
+
+# Linux operating system files
+*~
+*.swp
+
+# Windows operating system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Static and media files
+/staticfiles/
+/media/
+
+# Bytecode files
+*.py[co]
+
+# Other
+*.bak
+*.old

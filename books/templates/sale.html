@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Kitab Sat - Kitlab{% endblock title %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/left-side.css' %}">
+<link rel="stylesheet" href="{% static 'css/sale/sale.css' %}">
+{% endblock stylesheet %}
+
+{% block content %}
+<!--
+   - MAIN
+-->
+
+<main>
+    <!--
+      - PRODUCT
+    -->
+
+    <div class="product-container">
+
+        <div class="container">
+
+        <!--
+          - SIDEBAR
+        -->
+            {% include 'sidebar.html' %}
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="sale-container">
+                        <div class="info-container">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                    <path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                </svg>
+                            </div>
+                            <p class="info-text">Bütün sahələri düzgün doldurmağınız, kitabınızın daha tez satılmasına
+                                kömək olacaq.</p>
+                        </div>
+                        <form class="form-container">
+                            <div class="form-group">
+                                <label for="book-name">Kitab Adı</label>
+                                <input type="text" id="book-name" placeholder="Kitab adı..." required>
+                            </div>
+                            <div class="form-group w-25">
+                                <label for="inputState">Kateqoriya</label>
+                                <select id="inputState">
+                                    <option selected>Seç...</option>
+                                    <option>...</option>
+                                </select>
+                            </div>
+                            <div class="form-group w-25">
+                                <label for="inputState">Alt Kateqoriya</label>
+                                <select id="inputState">
+                                    <option selected>Seç...</option>
+                                    <option>...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="author">Yazar Adı</label>
+                                <input type="text" id="author" placeholder="Istəyə bağlı...">
+                            </div>
+                            <div class="form-group w-25">
+                                <label for="publishing">Nəşriyyat</label>
+                                <select id="publishing">
+                                    <option selected>Seç... (istəyə bağlı)</option>
+                                    <option>...</option>
+                                </select>
+                            </div>
+                            <div class="form-group w-25">
+                                <label for="inputState">Kitab Dili</label>
+                                <select id="inputState">
+                                    <option selected>Azərbaycan</option>
+                                    <option>Türk</option>
+                                    <option>İngilis</option>
+                                    <option>Rus</option>
+                                    <option>Alman</option>
+                                    <option>Fransız</option>
+                                    <option>Digər</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">Şəhər</label>
+                                <select id="city">
+                                    <option selected>Seç...</option>
+                                    <option>...</option>
+                                </select>
+                            </div>
+                            <div class="form-group w-25">
+                                <label for="condition">Vəziyyət</label>
+                                <select id="condition">
+                                    <option selected>İkinci Əl</option>
+                                    <option>Yeni</option>
+                                </select>
+                            </div>
+                            <div class="form-group w-25">
+                                <label for="price">Qiymət (AZN)</label>
+                                <input type="number" id="price" placeholder="İkinci əl qiyməti">
+                            </div>
+                            <div class="form-group w-100">
+                                <label for="book-description">Açıqlama</label>
+                                <textarea id="book-description"
+                                    placeholder="Kitab vəziyyəti vəya məzmunu ilə bağlı açıqlama..."
+                                    rows="4"></textarea>
+                            </div>
+
+                            <div class="form-group w-100">
+                                <div class="image-uploader">
+                                    <input type="file" id="image-input" accept="image/*" multiple>
+                                    <label for="image-input" class="upload-label">Kitab Şəkilləri Seç (ən çox 4
+                                        şəkil)</label>
+                                    <div id="image-preview" class="image-preview"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="submit-btn">Sat!</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <!--
+      - TESTIMONIALS, CTA & SERVICE
+    -->
+
+</main>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/sale/sale.js' %}"></script>
+{% endblock script %}

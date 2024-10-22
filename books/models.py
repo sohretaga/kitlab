@@ -6,7 +6,8 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=55, verbose_name='Kateqoriya Adı')
-    parent = models.ForeignKey('self', verbose_name='Alt Kateqoriya', on_delete=models.CASCADE, blank=True, null=True, related_name='childrens')
+    emoji_code = models.CharField(max_length=9, blank=True, null=True, help_text='Emojinin HTML kodu yazılmalıdır və sadəcə paret kateqoriyalarda əlavə edilməlidir. (emojiguide.org)', verbose_name='Emoji Kodu')
+    parent = models.ForeignKey('self', verbose_name='Üst Kateqoriya', on_delete=models.CASCADE, blank=True, null=True, related_name='childrens')
     slug = models.SlugField(unique=True, blank=True, null=True)
 
     class Meta:

@@ -5,8 +5,16 @@ from .models import Category, Publishing, Language, City, Condition, Book
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent', 'slug')
+    list_display = ('name', 'parent', 'slug', 'parent_category')
     prepopulated_fields = {'slug': ('name',)}
+
+    def parent_category(self, obj):
+        # Return False if the category has a parent (meaning it's not a main category),
+        # otherwise return True, indicating it is a main category.
+        return False if obj.parent else True
+    
+    parent_category.boolean = True
+    parent_category.short_description = 'ƏSAS KATEQORİYA'
 
 @admin.register(Publishing)
 class PublishingAdmin(admin.ModelAdmin):
@@ -53,4 +61,4 @@ class BookAdmin(admin.ModelAdmin):
         """
         return obj.sub_category
     
-    category_path.short_description = 'KATEQORIYA'
+    category_path.short_description = 'KATEQORİYA'

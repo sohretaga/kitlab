@@ -82,19 +82,21 @@
       <div class="container">
 
         <div class="category-item-container has-scrollbar">
-
+          
+          {% for category in categories %}
           <div class="category-item">
 
             <div class="category-img-box">
-              <img src="{% static 'images/icons/dress.svg' %}" alt="dress & frock" width="30">
+              <p>{{ category.emoji_code|safe }}</p>
+              <!-- <img src="{% static 'images/icons/dress.svg' %}" alt="dress & frock" width="30"> -->
             </div>
 
             <div class="category-content-box">
 
               <div class="category-content-flex">
-                <h3 class="category-item-title">Şəxsi İnkişaf</h3>
+                <h3 class="category-item-title">{{ category.name }}</h3>
 
-                <p class="category-item-amount">(53)</p>
+                <p class="category-item-amount">({{ category.books.count }})</p>
               </div>
 
               <a href="#" class="category-btn">Hamsına Bax</a>
@@ -102,146 +104,7 @@
             </div>
 
           </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img src="{% static 'images/icons/coat.svg' %}" alt="winter wear" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Klassik Ədəbiyyat</h3>
-
-                <p class="category-item-amount">(58)</p>
-              </div>
-
-              <a href="#" class="category-btn">Hamsına Bax</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img src="{% static 'images/icons/glasses.svg' %}" alt="glasses & lens" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Uşaq Ədəbiyyatı</h3>
-
-                <p class="category-item-amount">(68)</p>
-              </div>
-
-              <a href="#" class="category-btn">Hamsına Bax</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img src="{% static 'images/icons/shorts.svg' %}" alt="shorts & jeans" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Fəlsəfə</h3>
-
-                <p class="category-item-amount">(84)</p>
-              </div>
-
-              <a href="#" class="category-btn">Hamsına Bax</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img src="{% static 'images/icons/tee.svg' %}" alt="t-shirts" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Dedektiv</h3>
-
-                <p class="category-item-amount">(35)</p>
-              </div>
-
-              <a href="#" class="category-btn">Hamsına Bax</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img src="{% static 'images/icons/jacket.svg' %}" alt="jacket" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Roman</h3>
-
-                <p class="category-item-amount">(16)</p>
-              </div>
-
-              <a href="#" class="category-btn">Hamsına Bax</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img src="{% static 'images/icons/watch.svg' %}" alt="watch" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Din</h3>
-
-                <p class="category-item-amount">(27)</p>
-              </div>
-
-              <a href="#" class="category-btn">Hamsına Bax</a>
-
-            </div>
-
-          </div>
-
-          <div class="category-item">
-
-            <div class="category-img-box">
-              <img src="{% static 'images/icons/hat.svg' %}" alt="hat & caps" width="30">
-            </div>
-
-            <div class="category-content-box">
-
-              <div class="category-content-flex">
-                <h3 class="category-item-title">Xarici Dil</h3>
-
-                <p class="category-item-amount">(39)</p>
-              </div>
-
-              <a href="#" class="category-btn">Hamsına Bax</a>
-
-            </div>
-
-          </div>
+          {% endfor %}
 
         </div>
 

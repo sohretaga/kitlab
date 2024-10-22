@@ -932,6 +932,11 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 .category-img-box {
+  min-width: 52px;
+  height: 52px;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
   background: var(--cultured);
   border: 1px solid hsl(0, 0%, 80%);
   padding: 10px;
@@ -2070,7 +2075,6 @@ footer {
   width: max-content;
   color: var(--sonic-silver);
   font-size: var(--fs-7);
-  text-transform: capitalize;
   -webkit-transition: var(--transition-timing);
   -o-transition: var(--transition-timing);
   transition: var(--transition-timing);

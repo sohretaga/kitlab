@@ -48,17 +48,18 @@
                                 <input type="text" id="book-name" placeholder="Kitab adı..." required>
                             </div>
                             <div class="form-group w-25">
-                                <label for="inputState">Kateqoriya</label>
-                                <select id="inputState">
-                                    <option selected>Seç...</option>
-                                    <option>...</option>
+                                <label for="category">Kateqoriya</label>
+                                <select id="category" onchange="getSubCategories(this)">
+                                    <option value="" selected>Seç...</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group w-25">
-                                <label for="inputState">Alt Kateqoriya</label>
-                                <select id="inputState">
-                                    <option selected>Seç...</option>
-                                    <option>...</option>
+                                <label for="subcategory">Alt Kateqoriya</label>
+                                <select id="subcategory">
+                                    <option value="" selected>Seç...</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -69,33 +70,36 @@
                                 <label for="publishing">Nəşriyyat</label>
                                 <select id="publishing">
                                     <option selected>Seç... (istəyə bağlı)</option>
-                                    <option>...</option>
+                                    {% for publishing in publishings %}
+                                    <option value="{{ publishing.id }}">{{ publishing.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group w-25">
-                                <label for="inputState">Kitab Dili</label>
-                                <select id="inputState">
-                                    <option selected>Azərbaycan</option>
-                                    <option>Türk</option>
-                                    <option>İngilis</option>
-                                    <option>Rus</option>
-                                    <option>Alman</option>
-                                    <option>Fransız</option>
-                                    <option>Digər</option>
+                                <label for="language">Kitab Dili</label>
+                                <select id="language">
+                                    <option selected>Seç...</option>
+                                    {% for language in languages %}
+                                    <option value="{{ language.id }}">{{ language.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="city">Şəhər</label>
                                 <select id="city">
                                     <option selected>Seç...</option>
-                                    <option>...</option>
+                                    {% for city in cities %}
+                                    <option value="{{ city.id }}">{{ city.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group w-25">
                                 <label for="condition">Vəziyyət</label>
                                 <select id="condition">
-                                    <option selected>İkinci Əl</option>
-                                    <option>Yeni</option>
+                                    <option selected>Seç...</option>
+                                    {% for condition in conditions %}
+                                    <option value="{{ condition.id }}">{{ condition.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group w-25">

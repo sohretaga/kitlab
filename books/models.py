@@ -53,7 +53,6 @@ class Language(models.Model):
     class Meta:
         verbose_name = 'Dil'
         verbose_name_plural = 'Dillər'
-
         ordering = ['order']
 
     def __str__(self) -> str:
@@ -83,6 +82,7 @@ class Condition(models.Model):
     class Meta:
         verbose_name = 'Vəziyyət'
         verbose_name_plural = 'Vəziyyət'
+        ordering = ['order']
     
     def __str__(self) -> str:
         return self.name

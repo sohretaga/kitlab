@@ -1,3 +1,6 @@
+// Get the CSRF token from the meta tag in the HTML
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 function previewImage(event) {
     var reader = new FileReader();
     reader.onload = function(){
@@ -52,4 +55,55 @@ document.getElementById("image-input").addEventListener("change", function(event
     
     event.target.value = "";
   });
+
+function listSubCategories(data) {
+  const subCategorySelect = document.getElementById('subcategory');
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.textContent = 'Seç...';
+  subCategorySelect.innerHTML = '';
+  subCategorySelect.appendChild(defaultOption);
+
+  if (data) {
+    data.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category.id;
+      option.textContent = category.name;
   
+      subCategorySelect.appendChild(option);
+    });
+  };
+};
+  
+
+async function getSubCategories(category) {
+  const url = "/get-sub-categories";
+  const categoryId = category.value;
+  
+  if (categoryId) {
+    const payload = {'id': categoryId};
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const data = await response.json()
+      listSubCategories(data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  } else {
+    listSubCategories(false)
+  }
+
+};

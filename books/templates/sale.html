@@ -6,6 +6,7 @@
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'css/left-side.css' %}">
 <link rel="stylesheet" href="{% static 'css/sale/sale.css' %}">
+<link rel="stylesheet" href="{% static 'css/notyf.min.css' %}">
 {% endblock stylesheet %}
 
 {% block content %}
@@ -116,13 +117,19 @@
                             <div class="form-group w-100">
                                 <div class="image-uploader">
                                     <input type="file" id="image-input" accept="image/*" multiple>
-                                    <label for="image-input" class="upload-label">Kitab Şəkilləri Seç (ən çox 4
-                                        şəkil)</label>
-                                    <div id="image-preview" class="image-preview"></div>
+                                    <label for="image-input" class="upload-label">Kitab Şəkilləri Seç (ən çox 5 şəkil)</label>
+                                    
+                                    <div id="book-images">
+                                        <div id="main-image-container">
+                                             <div id="main-image-preview"></div>
+                                            <span>Əsas Şəkil</span>
+                                        </div>
+                                        <div id="image-preview" class="image-preview"></div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group sale-btn w-100">
                                 <button type="submit" class="submit-btn">Sat!</button>
                             </div>
                         </form>
@@ -140,5 +147,6 @@
 {% endblock content %}
 
 {% block script %}
+<script src="{% static 'js/notyf.min.js' %}"></script>
 <script src="{% static 'js/sale/sale.js' %}"></script>
 {% endblock script %}

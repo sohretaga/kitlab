@@ -13,7 +13,7 @@ import json
 class IndexView(TemplateView):
     template_name = 'index.html'
 
-class SaleBookView(CreateView):
+class SaleBookView(LoginRequiredMixin, CreateView):
     model = Book
     form_class = SaleBookForm
     template_name = 'sale.html'

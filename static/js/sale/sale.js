@@ -1,28 +1,69 @@
 // Get the CSRF token from the meta tag in the HTML
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const notyf = new Notyf({
+  duration: 5000,
+  position: {
+    x: 'right',
+    y: 'top'
+  },
+  types: [
+    {
+      type: 'warning',
+      background: 'orange',
+      icon: {
+        className: 'material-icons',
+        tagName: 'i',
+        text: 'warning'
+      }
+    },
+  ]
+});
 
 function previewImage(event) {
     var reader = new FileReader();
     reader.onload = function(){
         var output = document.getElementById('image-preview');
         output.src = reader.result;
-        output.style.display = 'block'; // Resim yüklendiğinde önizlemeyi göster
+        output.style.display = 'block';
     };
     reader.readAsDataURL(event.target.files[0]);
 }
 
+function changeMainImage(imageContainer) {
+  const mainImagePreviewContainer = document.getElementById('main-image-preview');
+  const currentImgSrc = mainImagePreviewContainer.querySelector('img').src;
+  mainImagePreviewContainer.querySelector('img').src = imageContainer.target.src;
+  imageContainer.target.src = currentImgSrc;
+}
 
 document.getElementById("image-input").addEventListener("change", function(event) {
+    const mainImageContainer = document.getElementById('main-image-container');
+    const mainImagePreviewContainer = document.getElementById('main-image-preview');
     const imagePreviewContainer = document.getElementById("image-preview");
-    const files = event.target.files;
-    
-    if (files.length > 4 || imagePreviewContainer.children.length + files.length > 4) {
-      alert("En fazla 4 resim seçebilirsiniz.");
-      event.target.value = "";
+    const uploadedImageCount = document.querySelectorAll('#book-images img').length;
+    let files = event.target.files;
+
+    // If the number of selected images is more than 5, only take the first 5
+    if (files.length > 5) {
+      files = Array.from(files).slice(0, 5);
+    }
+
+    // If the current uploaded image count is less than 5 and the total of newly selected files will exceed 5,
+    // select only the missing ones
+    if (uploadedImageCount < 5 && uploadedImageCount + files.length > 5) {
+      // Limit the number of files to a maximum of 5 images in total
+      const remainingSlots = 5 - uploadedImageCount;
+      files = Array.from(files).slice(0, remainingSlots);
+      notyf.error(`${remainingSlots} şəkil əlavə edildi. Ən çox 5 şəkil yükləyə bilərsiniz!`);
+    }
+
+    // If the total number of images reaches or exceeds 5, stop uploading and give warning
+    if (uploadedImageCount >= 5 || uploadedImageCount + files.length > 5) {
+      notyf.error('Ən çox 5 şəkil yükləyə bilərsiniz!');
       return;
     }
   
-    Array.from(files).forEach((file) => {
+    Array.from(files).forEach((file, index) => {
       const reader = new FileReader();
       reader.onload = function(e) {
         const imageContainer = document.createElement("div");
@@ -37,16 +78,23 @@ document.getElementById("image-input").addEventListener("change", function(event
   
         removeButton.addEventListener("click", function() {
           imageContainer.remove();
-          if (imagePreviewContainer.children.length < 4) {
+          if (uploadedImageCount < 5) {
             document.getElementById("image-input").disabled = false;
           }
         });
+
+        if(index == 0 && mainImageContainer.style.display != 'inline') {
+          imageContainer.appendChild(imageElement);
+          mainImageContainer.style.display = 'inline';
+          mainImagePreviewContainer.appendChild(imageContainer)
+        } else {
+          imageElement.addEventListener('click', changeMainImage);
+          imageContainer.appendChild(imageElement);
+          imageContainer.appendChild(removeButton);
+          imagePreviewContainer.appendChild(imageContainer);
+        }
   
-        imageContainer.appendChild(imageElement);
-        imageContainer.appendChild(removeButton);
-        imagePreviewContainer.appendChild(imageContainer);
-  
-        if (imagePreviewContainer.children.length >= 4) {
+        if (uploadedImageCount >= 5) {
           document.getElementById("image-input").disabled = true;
         }
       };

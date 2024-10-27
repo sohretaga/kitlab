@@ -43,14 +43,15 @@
                             <p class="info-text">Bütün sahələri düzgün doldurmağınız, kitabınızın daha tez satılmasına
                                 kömək olacaq.</p>
                         </div>
-                        <form class="form-container">
+                        <form class="form-container" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <div class="form-group">
                                 <label for="book-name">Kitab Adı</label>
-                                <input type="text" id="book-name" placeholder="Kitab adı..." required>
+                                <input type="text" id="book-name" name="name" placeholder="Kitab adı...">
                             </div>
                             <div class="form-group w-25">
                                 <label for="category">Kateqoriya</label>
-                                <select id="category" onchange="getSubCategories(this)">
+                                <select id="category" name="category" onchange="getSubCategories(this)">
                                     <option value="" selected>Seç...</option>
                                     {% for category in categories %}
                                     <option value="{{ category.id }}">{{ category.name }}</option>
@@ -59,18 +60,18 @@
                             </div>
                             <div class="form-group w-25">
                                 <label for="subcategory">Alt Kateqoriya</label>
-                                <select id="subcategory">
+                                <select id="subcategory" name="sub_category">
                                     <option value="" selected>Seç...</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="author">Yazar Adı</label>
-                                <input type="text" id="author" placeholder="Istəyə bağlı...">
+                                <input type="text" id="author" name="author" placeholder="Istəyə bağlı...">
                             </div>
                             <div class="form-group w-25">
                                 <label for="publishing">Nəşriyyat</label>
-                                <select id="publishing">
-                                    <option selected>Seç... (istəyə bağlı)</option>
+                                <select id="publishing" name="publishing">
+                                    <option value="" selected>Seç... (istəyə bağlı)</option>
                                     {% for publishing in publishings %}
                                     <option value="{{ publishing.id }}">{{ publishing.name }}</option>
                                     {% endfor %}
@@ -78,8 +79,8 @@
                             </div>
                             <div class="form-group w-25">
                                 <label for="language">Kitab Dili</label>
-                                <select id="language">
-                                    <option selected>Seç...</option>
+                                <select id="language" name="language">
+                                    <option value="" selected>Seç...</option>
                                     {% for language in languages %}
                                     <option value="{{ language.id }}">{{ language.name }}</option>
                                     {% endfor %}
@@ -87,8 +88,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="city">Şəhər</label>
-                                <select id="city">
-                                    <option selected>Seç...</option>
+                                <select id="city" name="city">
+                                    <option value="" selected>Seç...</option>
                                     {% for city in cities %}
                                     <option value="{{ city.id }}">{{ city.name }}</option>
                                     {% endfor %}
@@ -96,8 +97,8 @@
                             </div>
                             <div class="form-group w-25">
                                 <label for="condition">Vəziyyət</label>
-                                <select id="condition">
-                                    <option selected>Seç...</option>
+                                <select id="condition" name="condition">
+                                    <option value="" selected>Seç...</option>
                                     {% for condition in conditions %}
                                     <option value="{{ condition.id }}">{{ condition.name }}</option>
                                     {% endfor %}
@@ -105,11 +106,11 @@
                             </div>
                             <div class="form-group w-25">
                                 <label for="price">Qiymət (AZN)</label>
-                                <input type="number" id="price" placeholder="İkinci əl qiyməti">
+                                <input type="number" id="price" name="price" placeholder="İkinci əl qiyməti">
                             </div>
                             <div class="form-group w-100">
                                 <label for="book-description">Açıqlama</label>
-                                <textarea id="book-description"
+                                <textarea id="book-description" name="description"
                                     placeholder="Kitab vəziyyəti vəya məzmunu ilə bağlı açıqlama..."
                                     rows="4"></textarea>
                             </div>
@@ -129,8 +130,10 @@
                                 </div>
                             </div>
 
+                            <div style="display: none;" id="image-input-container"></div>
+
                             <div class="form-group sale-btn w-100">
-                                <button type="submit" class="submit-btn">Sat!</button>
+                                <button type="button" class="submit-btn" onclick="checkFormValid(this)">Sat!</button>
                             </div>
                         </form>
                     </div>

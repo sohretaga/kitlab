@@ -4,4 +4,16 @@ from .models import Book
 class SaleBookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = "__all__"
+        fields = (
+            "name",
+            "category",
+            "sub_category",
+            "author",
+            "publishing",
+            "language",
+            "city",
+            "condition",
+            "price",
+            "description",
+            "cover_photo"
+        )

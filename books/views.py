@@ -20,6 +20,7 @@ class SaleBookView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('index')
 
     def form_valid(self, form) -> HttpResponse:
+        form.instance.seller = self.request.user
         return super().form_valid(form)
     
     def get_context_data(self, **kwargs) -> dict[str, Any]:

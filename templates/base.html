@@ -3,16 +3,38 @@
 <html lang="en">
 
 <head>
+    <title>{% block title %}Kitlab{% endblock title %}</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
-    <title>{% block title %}Kitlab{% endblock title %}</title>
 
-    <!--
-        - favicon
-    -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <meta name="description" content="Kitab oxumaq telefonunuzun batareya ömrünü uzadır.">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="{% block og_title %}Kitlab{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Kitab oxumaq telefonunuzun batareya ömrünü uzadır.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/og-image.png' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Genel Favicon -->
+    <link rel="icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon">
+
+    <!-- PNG favicon options (browsers may use these for different sizes) -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+
+    <!-- App icons for Android Chrome -->
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'favicon/android-chrome-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'favicon/android-chrome-512x512.png' %}">
+
+    <!-- Apple Touch Icon (when adding to home screen on iOS devices) -->
+    <link rel="apple-touch-icon" href="{% static 'favicon/apple-touch-icon.png' %}">
+
+    <!-- Web Application Manifest (for PWA support) -->
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
 
     <!--
         - custom css link

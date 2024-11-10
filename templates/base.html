@@ -177,6 +177,18 @@
                     </p>
                 </div>
 
+                <div class="header-top-actions">
+
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="auth-btn">Çıxış et</button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'auth' %}" class="auth-btn">Giriş & Qeydiyyat</a>
+                    {% endif %}
+          
+                </div>
 
             </div>
 

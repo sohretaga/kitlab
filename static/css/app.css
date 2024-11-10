@@ -981,6 +981,12 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   text-transform: capitalize;
 }
 
+.auth-btn {
+  color: var(--salmon-pale-purple);
+  font-size: var(--fs-9);
+  font-weight: var(--weight-500);
+}
+
 
 
 

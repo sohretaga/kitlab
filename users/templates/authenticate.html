@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kitlab - Giriş & Qeydiyyat</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <meta name="description" content="Kitab oxumaq telefonunuzun batareya ömrünü uzadır.">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="Kitlab - Giriş & Qeydiyyat">
+    <meta property="og:description" content="Kitab oxumaq telefonunuzun batareya ömrünü uzadır.">
+    <meta property="og:image" content="{% static 'images/og-image.png' %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Genel Favicon -->
+    <link rel="icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon">
+
+    <!-- PNG favicon options (browsers may use these for different sizes) -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+
+    <!-- App icons for Android Chrome -->
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'favicon/android-chrome-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'favicon/android-chrome-512x512.png' %}">
+
+    <!-- Apple Touch Icon (when adding to home screen on iOS devices) -->
+    <link rel="apple-touch-icon" href="{% static 'favicon/apple-touch-icon.png' %}">
+
+    <!-- Web Application Manifest (for PWA support) -->
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/users/authenticate.css' %}" />
+    
+    <!--
+      - google font link
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="{% url 'login' %}" method="post" class="sign-in-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <h2 class="title">Giriş et</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" name="username" placeholder="İstifadəçi adı" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" name="password" placeholder="Şifrə" />
+            </div>
+            <input type="submit" value="Giriş" class="btn solid" />
+            <p class="social-text">Və ya sosial platformalarla daxil olun</p>
+            <div class="social-media">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+          <form action="#" class="sign-up-form">
+            <h2 class="title">Qeydiyyatdan keç</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="İstifadəçi adı" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="email" placeholder="E-Poçt" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" placeholder="Şifrə" />
+            </div>
+            <input type="submit" class="btn" value="Qeydiyyat" />
+            <p class="social-text">Və ya sosial platformalarda qeydiyyatdan keçin</p>
+            <div class="social-media">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>Hesabınız yoxdur ?</h3>
+            <p>Qeydiyyatdan keç və kitlabda yeni kitablar kəşf et! Woov</p>
+            <button class="btn transparent" id="sign-up-btn">Qeydiyyatdan keç</button>
+          </div>
+          <img src="{% static 'images/users/log.svg' %}" class="image" alt="Login" />
+        </div>
+        <div class="panel right-panel">
+          <div class="content">
+            <h3>Hesabınız var ?</h3>
+            <p>Hesabınız varsa, hesabınıza giriş edin və yeni kitablar kəşf edin!</p>
+            <button class="btn transparent" id="sign-in-btn">Giriş et</button>
+          </div>
+          <img src="{% static 'images/users/register.svg' %}" class="image" alt="Register" />
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'js/users/authenticate.js' %}"></script>
+  </body>
+</html>

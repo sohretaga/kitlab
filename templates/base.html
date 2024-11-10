@@ -182,10 +182,10 @@
                     {% if user.is_authenticated %}
                     <form action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
-                        <button type="submit" class="auth-btn">Çıxış et</button>
+                        <button type="submit" class="auth-btn"><b>Çıxış et</b></button>
                     </form>
                     {% else %}
-                    <a href="{% url 'auth' %}" class="auth-btn">Giriş & Qeydiyyat</a>
+                    <a href="{% url 'auth' %}" class="auth-btn"><b>Giriş & Qeydiyyat</b></a>
                     {% endif %}
           
                 </div>
@@ -344,6 +344,21 @@
 
                 </ul>
 
+            </div>
+
+            <div class="mobile-auth-btn">
+
+                <div>
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="auth-btn"><b>Çıxış et</b></button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'auth' %}" class="auth-btn"><b>Giriş & Qeydiyyat</b></a>
+                    {% endif %}
+                </div>
+      
             </div>
 
         </nav>

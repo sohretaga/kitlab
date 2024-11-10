@@ -987,7 +987,23 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   font-weight: var(--weight-500);
 }
 
+.mobile-auth-btn {
+  position: relative;
+}
 
+.mobile-auth-btn > div {
+  position: absolute;
+  width: 100%;
+  background: var(--cultured);
+  border-radius: var(--border-radius-md);
+  padding: 10px;
+  text-align: center;
+  top: 100px;
+}
+
+.mobile-auth-btn button {
+  width: 100%;
+}
 
 
 

@@ -1,20 +1,5 @@
 // Get the CSRF token from the meta tag in the HTML
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-const notyf = new Notyf({
-  duration: 3500,
-  dismissible: true,
-  position: {
-    x: 'right',
-    y: 'top'
-  },
-  types: [
-    {
-      type: 'info',
-      background: '#9195f6',
-      icon: false,
-    },
-  ]
-});
 
 function previewImage(event) {
     var reader = new FileReader();

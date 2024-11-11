@@ -45,6 +45,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/notyf.min.css' %}">
 
   </head>
   <body>
@@ -57,13 +58,13 @@
             <h2 class="title">Giriş et</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" name="username" placeholder="İstifadəçi adı" />
+              <input type="text" name="username" id="username" placeholder="İstifadəçi adı" {% if username %}value="{{ username }}"{% endif %}/>
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" name="password" placeholder="Şifrə" />
+              <input type="password" name="password" id="password" placeholder="Şifrə" />
             </div>
-            <input type="submit" value="Giriş" class="btn solid" />
+            <input type="button" value="Giriş" class="btn solid" onclick="checkFormValid(this)"/>
             <p class="social-text">Və ya sosial platformalarla daxil olun</p>
             <div class="social-media">
               <a href="#" class="social-icon">
@@ -134,6 +135,7 @@
       </div>
     </div>
 
+    <script src="{% static 'js/notyf.min.js' %}"></script>
     <script src="{% static 'js/users/authenticate.js' %}"></script>
   </body>
 </html>

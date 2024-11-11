@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_book_filters %}
 
 <div class="sidebar has-scrollbar" data-mobile-menu>
 
@@ -36,7 +37,7 @@
                     <li class="sidebar-submenu-category">
                         <a href="#" class="sidebar-submenu-title">
                             <p class="product-name">{{ children.name }}</p>
-                            <data value="{{ children.sub_books.count }}" class="stock" title="Available Stock">{{ children.sub_books.count }}</data>
+                            <data value="{{ children.sub_books.count }}" class="stock" title="Available Stock">{{ children|approved_sub_books_count }}</data>
                         </a>
                     </li>
                     {% endfor %}

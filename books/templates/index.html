@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_book_filters %}
 
 {% block title %}Ana Səhifə - Kitlab{% endblock title %}
 
@@ -94,7 +95,7 @@
               <div class="category-content-flex">
                 <h3 class="category-item-title">{{ category.name }}</h3>
 
-                <p class="category-item-amount">({{ category.books.count }})</p>
+                <p class="category-item-amount">({{ category|approved_books_count }})</p>
               </div>
 
               <a href="#" class="category-btn">Hamsına Bax</a>

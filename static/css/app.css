@@ -739,6 +739,8 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .menu-bottom .menu-category-list { margin-bottom: 20px; }
 
+.menu-bottom p {display: flex;}
+
 .menu-bottom .menu-category { border-bottom: none; }
 
 .menu-bottom .menu-title {
@@ -985,6 +987,16 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   color: var(--salmon-pale-purple);
   font-size: var(--fs-9);
   font-weight: var(--weight-500);
+}
+
+.kofe-al {
+  color: var(--eerie-black);
+  font-size: var(--fs-9);
+  font-weight: var(--weight-500);
+}
+
+.mobile-kofe-al {
+  color: var(--eerie-black);
 }
 
 .mobile-auth-btn {
@@ -2272,6 +2284,7 @@ footer {
   }
 
   .header-alert-news b { font-weight: var(--weight-500); }
+  .header-alert-news p {display: flex;}
 
   .header-main { padding: 25px 0; }
 

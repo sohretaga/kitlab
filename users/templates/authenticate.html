@@ -58,13 +58,13 @@
             <h2 class="title">Giriş et</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" name="username" id="username" placeholder="İstifadəçi adı" {% if username %}value="{{ username }}"{% endif %}/>
+              <input type="text" name="username" id="login-username" placeholder="İstifadəçi adı" {% if login_username %}value="{{ login_username }}"{% endif %}/>
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" name="password" id="password" placeholder="Şifrə" />
+              <input type="password" name="password" id="login-password" placeholder="Şifrə" />
             </div>
-            <input type="button" value="Giriş" class="btn solid" onclick="checkFormValid(this)"/>
+            <input type="button" value="Giriş" class="btn solid" id="login-btn" onclick="checkFormValid(this, 'login')"/>
             <p class="social-text">Və ya sosial platformalarla daxil olun</p>
             <div class="social-media">
               <a href="#" class="social-icon">
@@ -81,21 +81,33 @@
               </a>
             </div>
           </form>
-          <form action="#" class="sign-up-form">
+          <form action="{% url 'register' %}" class="sign-up-form" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="mode" id="mode" {% if mode %}value="{{ mode }}"{% endif %}>
+            <input type="hidden" name="error" id="error" {% if error %}value="{{ error }}"{% endif %}>
+
             <h2 class="title">Qeydiyyatdan keç</h2>
             <div class="input-field">
+              <i class="fas fa-id-card"></i>
+              <input type="text" name="first_name" id="full-name" placeholder="Ad Soyad" {% if first_name %}value="{{ first_name }}"{% endif %}/>
+            </div>
+            <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" placeholder="İstifadəçi adı" />
+              <input type="text" name="username" id="register-username" placeholder="İstifadəçi adı" {% if register_username %}value="{{ register_username }}"{% endif %}/>
             </div>
             <div class="input-field">
               <i class="fas fa-envelope"></i>
-              <input type="email" placeholder="E-Poçt" />
+              <input type="email" name="email" id="email" placeholder="E-Poçt" {% if email %}value="{{ email }}"{% endif %}/>
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Şifrə" />
+              <input type="password" name="password1" id="register-password1" placeholder="Şifrə" />
             </div>
-            <input type="submit" class="btn" value="Qeydiyyat" />
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" name="password2" id="register-password2" placeholder="Şifrə təkrar" />
+            </div>
+            <input type="button" value="Qeydiyyat" class="btn" id="register-btn" onclick="checkFormValid(this, 'register')"/>
             <p class="social-text">Və ya sosial platformalarda qeydiyyatdan keçin</p>
             <div class="social-media">
               <a href="#" class="social-icon">

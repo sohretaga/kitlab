@@ -5,7 +5,6 @@
     margin: 0 auto;
 }
 
-/* Bilgi Kutusu */
 .info-container {
     display: flex;
     align-items: center;
@@ -25,7 +24,6 @@
     margin: 0;
 }
 
-/* Form Stili */
 .form-container {
     display: flex;
     flex-wrap: wrap;

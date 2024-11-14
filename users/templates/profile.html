@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_book_filters %}
+
+{% block title %}Profil - Kitlab{% endblock title %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/profile/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile/icons.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/left-side.css' %}">
+{% endblock stylesheet %}
+
+{% block content %}
+  <!--
+    - MAIN
+  -->
+
+  <main>
+
+    <!--
+      - PRODUCT
+    -->
+
+    <div class="product-container">
+
+      <div class="container">
+
+
+        <!--
+          - SIDEBAR
+        -->
+        {% include 'sidebar.html' %}
+
+        <div class="container-fluid">
+                        
+          <div class="row">
+            <div class="col-lg-4 profile-card">
+                <div class="card profile-sidebar me-lg-4">
+                    <div class="card-body p-4">
+                        <div class="text-center pb-4">
+                            <img src="{% static 'images/default-profile-photo.jpg' %}" alt=""
+                                class="avatar-lg img-thumbnail rounded-circle mb-4" />
+                            <h5 class="mb-0">Sohret Aga</h5>
+                            <p class="text-muted">0 Kitab</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 profile-card">
+                <div class="card profile-content-page mt-4 mt-lg-0">
+                    <ul class="profile-content-nav nav nav-pills border-bottom mb-4" id="pills-tab"
+                            role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="overview-tab" data-bs-toggle="pill"
+                                    data-bs-target="#overview" type="button" role="tab" aria-controls="overview"
+                                    aria-selected="true">
+                                    Kitablar
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="settings-tab" data-bs-toggle="pill"
+                                    data-bs-target="#settings" type="button" role="tab" aria-controls="settings"
+                                    aria-selected="false">
+                                    Parametrlər
+                                </button>
+                            </li>
+                        </ul>
+                        <!--end profile-content-nav-->
+                    <div class="card-body p-4">
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="overview" role="tabpanel"
+                                aria-labelledby="overview-tab">
+                                <div>
+                                    <h5 class="fs-18 fw-bold">Kitab yoxdur</h5>
+                                    <p class="text-muted mt-4">
+                                        Hələ ki satışda kitabınız yoxdur. <b>Kitab Sat</b> düyməsinə klikləyib ilk kitabınızı satın.
+                                    </p>
+                                    <p class="text-muted">
+                                        İstifadəçilərin alış-veriş zamanı sizinlə əlaqə saxlaya bilməsi üçün əlaqə məlumatlarını daxil edin.
+                                        Bunun üçün <b>Parametrlər > Əlaqə</b> bölməsindən əlaqə məlumatlarınızı yaza bilərsiniz.
+                                    </p>
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <a href="{% url 'sale' %}" class="btn btn-primary">Kitab Sat</a>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                                <form action="#">
+                                    <div>
+                                        <h5 class="fs-17 fw-semibold mb-3 mb-0">Profilim</h5>
+                                        <div class="text-center">
+                                            <div class="mb-4 profile-user">
+                                                <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle img-thumbnail profile-img" id="profile-img" alt="">
+                                                <div class="p-0 rounded-circle profile-photo-edit">
+                                                    <input id="profile-img-file-input" type="file" class="profile-img-file-input" onchange="previewImg()" >
+                                                    <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                                        <i class="uil uil-edit"></i>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="firstName" class="form-label">Ad Soyad</label>
+                                                    <input type="text" class="form-control" id="firstName"
+                                                        value="Sohret Aga" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="lastName" class="form-label">İstifadəçi adı</label>
+                                                    <input type="text" class="form-control" id="lastName"
+                                                        value="sohretaga" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">E-Poçt</label>
+                                                    <input type="text" class="form-control" id="email"
+                                                        value="shohretaga@gmail.com" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h5 class="fs-17 fw-semibold mb-3">Əlaqə</h5>
+                                        <div class="info-container">
+                                            <div class="icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                    class="bi bi-info-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                    <path
+                                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                                </svg>
+                                            </div>
+                                            <p class="info-text">İstifadəçilərin alış-veriş zamanı sizinlə əlaqəyə keçə bilməsi üçün əlaqə vasitələrini yazın. WhatsApp və ya Telegram tövsiyə olunur.</p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="whatsapp" class="form-label">WhatsApp</label>
+                                                    <input type="text" class="form-control" id="whatsapp" placeholder="WhatsApp nömrənizi yazın"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="telegram" class="form-label">Telegram</label>
+                                                    <input type="text" class="form-control" id="telegram" placeholder="Telegram isdifadəçi adınızı yazın" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="telephone" class="form-label">Telefon</label>
+                                                    <input type="text" class="form-control" id="telephone" placeholder="Zəng üçün telefon nömrənizi yazın" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="instagram" class="form-label">Instagram</label>
+                                                    <input type="text" class="form-control" id="instagram" placeholder="Instagram istifadəçi adınızı yazın"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h5 class="fs-17 fw-semibold mb-3 mb-3">
+                                            Şifrəni Dəyiş
+                                        </h5>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="mb-3">
+                                                    <label for="current-password-input" class="form-label">Cari şifrə</label>
+                                                    <input type="password" class="form-control" placeholder="Cari şifrəni yaz" id="current-password-input" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="new-password-input" class="form-label">Yeni şifrə</label>
+                                                    <input type="password" class="form-control" placeholder="Yeni şifrəni yaz" id="new-password-input" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="confirm-password-input" class="form-label">Yeni şifrə təkrar</label>
+                                                    <input type="password" class="form-control" placeholder="Yeni şifrəni təkrar yazın" id="confirm-password-input" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 text-end">
+                                        <a href="javascript:void(0)" class="btn btn-primary">Saxla</a>
+                                    </div>
+                                </form>
+                                <!--end form-->
+                            </div>
+                            <!--end tab-pane-->
+                        </div>
+                        <!--end tab-content-->
+                    </div>
+                    <!--end card-body-->
+                </div>
+                <!--end profile-content-page-->
+            </div>
+            <!--end col-->
+        </div>
+
+        </div>
+
+    </div>
+
+
+    <!--
+      - TESTIMONIALS, CTA & SERVICE
+    -->
+
+  </main>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/profile/bootstrap.bundle.min.js' %}"></script>
+{% endblock script %}

@@ -244,7 +244,11 @@
                     </button>
 
                     <button class="action-btn">
-                        <a href="#"><img src="{% static 'images/ionicons/person-outline.svg' %}" width="35" height="35"></a>
+                        {% if 'profile' in request.path %}
+                        <a href="{% url 'profile' %}"><img src="{% static 'images/ionicons/person-sharp.svg' %}" width="35" height="35"></a>
+                        {% else %}
+                        <a href="{% url 'profile' %}"><img src="{% static 'images/ionicons/person-outline.svg' %}" width="35" height="35"></a>
+                        {% endif %}
                     </button>
 
                     <button class="action-btn">
@@ -302,7 +306,11 @@
             </button>
 
             <button class="action-btn">
-                <a href="#"><img src="{% static 'images/ionicons/person-outline.svg' %}" width="26" height="26"></a>
+                {% if 'profile' in request.path %}
+                <a href="{% url 'profile' %}"><img src="{% static 'images/ionicons/person-sharp.svg' %}" width="26" height="26"></a>
+                {% else %}
+                <a href="{% url 'profile' %}"><img src="{% static 'images/ionicons/person-outline.svg' %}" width="26" height="26"></a>
+                {% endif %}
             </button>
 
         </div>

@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from .mixins import LogoutRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CustomUserCreationForm
 
 # Create your views here.
@@ -48,7 +49,7 @@ class RegisterView(CreateView):
         user = form.save()
         login(self.request, user)
         return response
-    
+
     def form_invalid(self, form: BaseModelForm) -> HttpResponse:
         first_name = form.cleaned_data.get('first_name')
         username = form.cleaned_data.get('username')
@@ -62,5 +63,9 @@ class RegisterView(CreateView):
 
         for filed, _ in form.errors.items():
             self.request.session['error'] = filed
+            break
 
         return HttpResponseRedirect(reverse_lazy('auth'))
+    
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'profile.html'

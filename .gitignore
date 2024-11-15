@@ -11,6 +11,8 @@ __pycache__/
 venv/
 ENV/
 env/
+**/__pycache__/
+**/migrations/[0-9]*.py
 
 # Django secret keys and configuration files
 *.env

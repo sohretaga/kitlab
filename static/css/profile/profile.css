@@ -73,6 +73,10 @@ h6 {
     .container-fluid ul {
         padding-left: 0;
     }
+
+    .card-body > div {
+        padding-bottom: 0 !important;
+    }
 }
 
 /* .container-fluid a {

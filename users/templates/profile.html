@@ -106,12 +106,13 @@
                                 {% endif %}
                             </div>
                             <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-                                <form action="#">
+                                <form action="#" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
                                     <div>
                                         <h5 class="fs-17 fw-semibold mb-3 mb-0">Profilim</h5>
                                         <div class="text-center">
                                             <div class="mb-4 profile-user">
-                                                <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle img-thumbnail profile-img" id="profile-img" alt="">
+                                                <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle img-thumbnail profile-img" id="profile-img" alt="{{ user.first_name }}">
                                                 <div class="p-0 rounded-circle profile-photo-edit">
                                                     <input id="profile-img-file-input" type="file" class="profile-img-file-input" onchange="previewImg()" >
                                                     <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
@@ -125,25 +126,28 @@
                                                 <div class="mb-3">
                                                     <label for="firstName" class="form-label">Ad Soyad</label>
                                                     <input type="text" class="form-control" id="firstName"
-                                                        value="Sohret Aga" />
+                                                        value="{{ user.first_name }}" />
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="lastName" class="form-label">İstifadəçi adı</label>
                                                     <input type="text" class="form-control" id="lastName"
-                                                        value="sohretaga" />
+                                                        value="{{ user.username }}" />
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <label for="email" class="form-label">E-Poçt</label>
                                                     <input type="text" class="form-control" id="email"
-                                                        value="shohretaga@gmail.com" />
+                                                        value="{{ user.email }}" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </form>
+                                <form action="#" method="post">
+                                    {% csrf_token %}
                                     <div class="mt-4">
                                         <h5 class="fs-17 fw-semibold mb-3">Əlaqə</h5>
                                         <div class="info-container">
@@ -161,29 +165,40 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="whatsapp" class="form-label">WhatsApp</label>
-                                                    <input type="text" class="form-control" id="whatsapp" placeholder="WhatsApp nömrənizi yazın"/>
+                                                    <input type="text" class="form-control" id="whatsapp" placeholder="WhatsApp nömrənizi yazın"
+                                                    {% if user.profile.whatsapp %}value="{{ user.profile.whatsapp }}"{% endif %}/>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="telegram" class="form-label">Telegram</label>
-                                                    <input type="text" class="form-control" id="telegram" placeholder="Telegram isdifadəçi adınızı yazın" />
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="telephone" class="form-label">Telefon</label>
-                                                    <input type="text" class="form-control" id="telephone" placeholder="Zəng üçün telefon nömrənizi yazın" />
+                                                    <input type="text" class="form-control" id="telegram" placeholder="Telegram isdifadəçi adınızı yazın"
+                                                    {% if user.profile.telegram %}value="{{ user.profile.telegram }}"{% endif %}/>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="instagram" class="form-label">Instagram</label>
-                                                    <input type="text" class="form-control" id="instagram" placeholder="Instagram istifadəçi adınızı yazın"/>
+                                                    <input type="text" class="form-control" id="instagram" placeholder="Instagram istifadəçi adınızı yazın"
+                                                    {% if user.profile.instagram %}value="{{ user.profile.instagram }}"{% endif %}/>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="telephone" class="form-label">Telefon</label>
+                                                    <input type="text" class="form-control" id="telephone" placeholder="Zəng üçün telefon nömrənizi yazın"
+                                                    {% if user.profile.phone %}value="{{ user.profile.phone }}"{% endif %}/>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </form>
+                                <div class="mt-4 text-end">
+                                    <a href="javascript:void(0)" class="btn btn-primary">Yenilə</a>
+                                </div>
+
+                                <form action="#" method="post">
+                                    {% csrf_token %}
                                     <div class="mt-4">
                                         <h5 class="fs-17 fw-semibold mb-3 mb-3">
                                             Şifrəni Dəyiş
@@ -192,13 +207,13 @@
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
                                                     <label for="current-password-input" class="form-label">Cari şifrə</label>
-                                                    <input type="password" class="form-control" placeholder="Cari şifrəni yaz" id="current-password-input" />
+                                                    <input type="password" class="form-control" placeholder="Cari şifrəni yazın" id="current-password-input" />
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="new-password-input" class="form-label">Yeni şifrə</label>
-                                                    <input type="password" class="form-control" placeholder="Yeni şifrəni yaz" id="new-password-input" />
+                                                    <input type="password" class="form-control" placeholder="Yeni şifrəni yazın" id="new-password-input" />
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -210,10 +225,9 @@
                                         </div>
                                     </div>
                                     <div class="mt-4 text-end">
-                                        <a href="javascript:void(0)" class="btn btn-primary">Saxla</a>
+                                        <a href="javascript:void(0)" class="btn btn-primary">Şifrəni Dəyiş</a>
                                     </div>
                                 </form>
-                                <!--end form-->
                             </div>
                         </div>
                     </div>

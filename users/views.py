@@ -69,3 +69,15 @@ class RegisterView(CreateView):
     
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'profile.html'
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        user_books = self.request.user.books.filter(is_approved=True)
+        user_favorites = self.request.user.favorites.all()
+
+        context = super().get_context_data(**kwargs)
+        context['books_count'] = user_books.count()
+        context['books'] = user_books
+        context['favorites_count'] = user_favorites.count()
+        context['favorites'] = user_favorites
+
+        return context

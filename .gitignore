@@ -4,6 +4,8 @@ __pycache__/
 *.pyo
 *.pyd
 *.pyc
+**/__pycache__/
+**/migrations/[0-9]*.py
 
 # Virtual environment (venv) files
 .env
@@ -11,8 +13,6 @@ __pycache__/
 venv/
 ENV/
 env/
-**/__pycache__/
-**/migrations/[0-9]*.py
 
 # Django secret keys and configuration files
 *.env

@@ -601,6 +601,10 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   margin-bottom: 10px;
 }
 
+.sale-page-btn {
+  padding: 0 !important;
+}
+
 .mobile-bottom-navigation .count {
   background: var(--bittersweet);
   color: var(--white);

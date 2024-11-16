@@ -34,6 +34,24 @@ h6 {
     margin: 0 !important;
 }
 
+.container-fluid p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.container-fluid ul {
+    padding-left: 2rem;
+}
+
+.container-fluid ul {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.container-fluid b {
+    font-weight: bolder;
+}
+
 @media only screen and (max-width: 768px) {
     .profile-card {
         padding-right: 0 !important;
@@ -51,24 +69,10 @@ h6 {
     #pills-tab {
         justify-content: space-around;
     }
-}
 
-.container-fluid p {
-    margin-top: 0;
-    margin-bottom: 1rem;
-}
-
-.container-fluid ul {
-    padding-left: 2rem;
-}
-
-.container-fluid ul {
-    margin-top: 0;
-    margin-bottom: 1rem;
-}
-
-.container-fluid b {
-    font-weight: bolder;
+    .container-fluid ul {
+        padding-left: 0;
+    }
 }
 
 /* .container-fluid a {
@@ -855,6 +859,12 @@ textarea.form-control {
     color: #766df4;
     background-color: transparent !important;
     border-bottom-color: #766df4;
+}
+
+@media only screen and (max-width: 768px) {
+    .profile-content-nav.nav-pills .nav-item .nav-link {
+        padding: 12px 0;
+    }
 }
 
 .profile-user {

@@ -41,7 +41,7 @@
                             <img src="{% static 'images/default-profile-photo.jpg' %}" alt=""
                                 class="avatar-lg img-thumbnail rounded-circle mb-4" />
                             <h5 class="mb-0">Sohret Aga</h5>
-                            <p class="text-muted">0 Kitab</p>
+                            <p class="text-muted">{{ books_count }} Kitab</p>
                         </div>
                     </div>
                 </div>
@@ -58,6 +58,13 @@
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="favorites-tab" data-bs-toggle="pill"
+                                    data-bs-target="#favorites" type="button" role="tab" aria-controls="favorites"
+                                    aria-selected="false">
+                                    Sevimlilər
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="settings-tab" data-bs-toggle="pill"
                                     data-bs-target="#settings" type="button" role="tab" aria-controls="settings"
                                     aria-selected="false">
@@ -68,8 +75,9 @@
                         <!--end profile-content-nav-->
                     <div class="card-body p-4">
                         <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="overview" role="tabpanel"
-                                aria-labelledby="overview-tab">
+                            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                                {% if books %}
+                                {% else %}
                                 <div>
                                     <h5 class="fs-18 fw-bold">Kitab yoxdur</h5>
                                     <p class="text-muted mt-4">
@@ -83,6 +91,19 @@
                                 <div class="mt-4 text-center">
                                     <a href="{% url 'sale' %}" class="btn btn-primary">Kitab Sat</a>
                                 </div>
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane fade" id="favorites" role="tabpanel" aria-labelledby="favorites-tab">
+                                {% if favorites %}
+                                <h5 class="fs-18 fw-bold">{{ favorites_count }} kitab</h5>
+                                {% else %}
+                                <div>
+                                    <h5 class="fs-18 fw-bold">Sevimli kitab yoxdur</h5>
+                                    <p class="text-muted mt-4">
+                                        Hələ ki, sevimlilərə kitab əlavə etməmisiniz. <b>Kitlab</b> ilə yeni kitablar kəşf edin.
+                                    </p>
+                                </div>
+                                {% endif %}
                             </div>
                             <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                                 <form action="#">
@@ -194,15 +215,10 @@
                                 </form>
                                 <!--end form-->
                             </div>
-                            <!--end tab-pane-->
                         </div>
-                        <!--end tab-content-->
                     </div>
-                    <!--end card-body-->
                 </div>
-                <!--end profile-content-page-->
             </div>
-            <!--end col-->
         </div>
 
         </div>

@@ -207,14 +207,6 @@
 
                     <div class="button-group">
 
-                        <button class="action-btn">
-                            {% if 'sale' in request.path %}
-                            <a href="{% url 'sale' %}"><img src="{% static 'images/ionicons/add-circle-sharp.svg' %}" width="26" height="26"></a>
-                            {% else %}
-                            <a href="{% url 'sale' %}"><img src="{% static 'images/ionicons/add-circle-outline.svg' %}" width="26" height="26"></a>
-                            {% endif %}
-                        </button>
-
                         <button class="action-btn" data-mobile-menu-open-btn>
                             <img src="{% static 'images/ionicons/menu-outline.svg' %}" width="26" height="26">
                         </button>
@@ -252,11 +244,6 @@
                     </button>
 
                     <button class="action-btn">
-                        <a href="#"><img src="{% static 'images/ionicons/heart-outline.svg' %}" width="35" height="35"></a>
-                        <span class="count">0</span>
-                    </button>
-
-                    <button class="action-btn">
                         <a href="#"><img src="{% static 'images/ionicons/chatbubble-ellipses-outline.svg' %}" width="35" height="34"></a>
                         <span class="count">0</span>
                     </button>
@@ -291,13 +278,16 @@
                 {% endif %}
             </button>
 
-            <button class="action-btn">
-                <a href="#"><img src="{% static 'images/ionicons/heart-outline.svg' %}" width="26" height="26"></a>
-                <span class="count">0</span>
-            </button>
-
             <button class="action-btn" data-mobile-menu-open-btn>
                 <img src="{% static 'images/ionicons/grid-outline.svg' %}" width="26" height="26">
+            </button>
+
+            <button class="action-btn sale-page-btn">
+                {% if 'sale' in request.path %}
+                <a href="{% url 'sale' %}"><img src="{% static 'images/ionicons/add-circle-sharp.svg' %}" width="40" height="40"></a>
+                {% else %}
+                <a href="{% url 'sale' %}"><img src="{% static 'images/ionicons/add-circle-outline.svg' %}" width="35" height="35"></a>
+                {% endif %}
             </button>
 
             <button class="action-btn">

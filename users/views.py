@@ -2,15 +2,17 @@ from typing import Any
 from django.contrib.auth.views import LoginView
 from django.forms import BaseModelForm
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormView
 from django.contrib.auth.models import User
 from django.contrib.auth import login
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from .mixins import LogoutRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm
+from .models import Profile
 
 # Create your views here.
 
@@ -81,3 +83,18 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         context['favorites'] = user_favorites
 
         return context
+    
+class UpdateProfileView(LoginRequiredMixin, FormView):
+    model = Profile
+    success_url = reverse_lazy('profile')
+    user_form_class = UserUpdateForm
+    profile_form_class = ProfileUpdateForm
+
+    def post(self, request, *args, **kwargs):
+        user_form = self.user_form_class(request.POST, instance=request.user)
+        profile_form = self.profile_form_class(request.POST, instance=request.user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return super().form_valid(profile_form)

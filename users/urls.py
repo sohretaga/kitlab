@@ -10,4 +10,5 @@ urlpatterns = [
     path('auth/register', views.RegisterView.as_view(), name='register'),
 
     path('profile', views.ProfileView.as_view(), name='profile'),
+    path('profile/update', views.UpdateProfileView.as_view(), name='update-profile'),
 ]

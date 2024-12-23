@@ -6,7 +6,7 @@ from books.models import Book
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     whatsapp = models.CharField(max_length=15, blank=True, null=True)
     telegram = models.CharField(max_length=32, blank=True, null=True)
     instagram = models.CharField(max_length=30, blank=True, null=True)

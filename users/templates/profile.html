@@ -38,9 +38,12 @@
                 <div class="card profile-sidebar me-lg-4">
                     <div class="card-body p-4">
                         <div class="text-center pb-4">
-                            <img src="{% static 'images/default-profile-photo.jpg' %}" alt=""
-                                class="avatar-lg img-thumbnail rounded-circle mb-4" />
-                            <h5 class="mb-0">Sohret Aga</h5>
+                            {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.first_name }}" class="avatar-lg img-thumbnail rounded-circle mb-4" />
+                            {% else %}
+                            <img src="{% static 'images/default-profile-photo.jpg' %}" alt="{{ user.first_name }}" class="avatar-lg img-thumbnail rounded-circle mb-4" />
+                            {% endif %}
+                            <h5 class="mb-0">{{ user.first_name }}</h5>
                             <p class="text-muted">{{ books_count }} Kitab</p>
                         </div>
                     </div>
@@ -100,7 +103,8 @@
                                 <div>
                                     <h5 class="fs-18 fw-bold">Sevimli kitab yoxdur</h5>
                                     <p class="text-muted mt-4">
-                                        Hələ ki, sevimlilərə kitab əlavə etməmisiniz. <b>Kitlab</b> ilə yeni kitablar kəşf edin.
+                                        Hələ ki, sevimli kitablar siyahınıza heç bir kitab əlavə etməmisiniz. <b>Kitlab</b> platformasından istifadə edərək,
+                                        maraq dairənizə uyğun yeni kitablar kəşf edə və onları sevimlilərinizə əlavə edə bilərsiniz.
                                     </p>
                                 </div>
                                 {% endif %}
@@ -112,7 +116,11 @@
                                         <h5 class="fs-17 fw-semibold mb-3 mb-0">Profilim</h5>
                                         <div class="text-center">
                                             <div class="mb-4 profile-user">
+                                                {% if user.profile.avatar %}
+                                                <img src="{{ user.profile.avatar.url }}" class="rounded-circle img-thumbnail profile-img" id="profile-img" alt="{{ user.first_name }}">
+                                                {% else %}
                                                 <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle img-thumbnail profile-img" id="profile-img" alt="{{ user.first_name }}">
+                                                {% endif %}
                                                 <div class="p-0 rounded-circle profile-photo-edit">
                                                     <input id="profile-img-file-input" name="avatar" type="file" class="profile-img-file-input" onchange="previewImg(this)" >
                                                     <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">

@@ -1,11 +1,11 @@
 from typing import Any
+from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from django.forms import BaseModelForm
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, FormView
 from django.contrib.auth.models import User
 from django.contrib.auth import login
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -86,15 +86,13 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     
 class UpdateProfileView(LoginRequiredMixin, FormView):
     model = Profile
-    success_url = reverse_lazy('profile')
     user_form_class = UserUpdateForm
     profile_form_class = ProfileUpdateForm
 
     def post(self, request, *args, **kwargs):
         user_form = self.user_form_class(request.POST, instance=request.user)
-        profile_form = self.profile_form_class(request.POST, instance=request.user.profile)
-
+        profile_form = self.profile_form_class(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return super().form_valid(profile_form)
+            return redirect(reverse_lazy('profile'))

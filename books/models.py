@@ -105,7 +105,7 @@ class Book(models.Model):
     condition = models.ForeignKey(Condition, on_delete=models.SET_NULL, null=True, related_name='books', verbose_name='Kitab Vəziyyəti')
     price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Qiymət')
     description = models.TextField(verbose_name='Açıqlama')
-    cover_photo = models.ImageField(upload_to='book-images')
+    cover_photo = models.ImageField(upload_to='book-images/%Y/%m/%d')
 
     slug = models.SlugField(unique=True, blank=True, null=True)
     is_approved = models.BooleanField(default=False, verbose_name='İcazə')
@@ -138,3 +138,13 @@ class Book(models.Model):
                 queryset = self.__class__.objects.filter(slug=self.slug)
 
         super(Book, self).save(*args, **kwargs)
+
+class Image(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='book-images/%Y/%m/%d')
+
+    class Meta:
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.book.name

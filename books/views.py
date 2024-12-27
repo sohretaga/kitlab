@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from typing import Any
 
-from .models import Book, Category, Publishing, Language, City, Condition
+from .models import Book, Image, Category, Publishing, Language, City, Condition
 from .forms import SaleBookForm
 
 import json
@@ -20,9 +20,16 @@ class SaleBookView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('index')
 
     def form_valid(self, form) -> HttpResponse:
-        form.instance.seller = self.request.user
+        book = form.save(commit=False)
+        book.seller = self.request.user
+        book.save()
+        images = self.request.FILES.getlist('images')
+
+        for image in images:
+            Image.objects.create(book=book,image=image)
+
         return super().form_valid(form)
-    
+
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         # The parent categories are derived from context_processors.py

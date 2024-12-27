@@ -13,12 +13,24 @@ function previewImage(event) {
 
 function changeMainImage(imageContainer) {
   const mainImagePreviewContainer = document.getElementById('main-image-preview');
+  const imageContainerDiv = imageContainer.target.closest('div');
+
   const currentImgSrc = mainImagePreviewContainer.querySelector('img').src;
   mainImagePreviewContainer.querySelector('img').src = imageContainer.target.src;
   imageContainer.target.src = currentImgSrc;
+
+  const imageInput = imageContainerDiv.querySelector('input');
+  const mainImageInput = mainImagePreviewContainer.querySelector('input');
+  imageInput.name = 'cover_photo';
+  mainImageInput.name = 'images';
+
+  imageContainerDiv.appendChild(mainImageInput);
+  mainImagePreviewContainer.querySelector('div').appendChild(imageInput);
 }
 
-async function setImageToFileInput(imgElement) {
+async function setImageToFileInput(imgElement, inputName) {
+  const bookName = document.getElementById('book-name').value;
+
   // 1. Get the Base64 data of the image
   const base64Data = imgElement.src;
 
@@ -27,7 +39,7 @@ async function setImageToFileInput(imgElement) {
   const blob = await res.blob();
 
   // 3. Convert Blob data to File object
-  const file = new File([blob], "book_image.jpg", { type: blob.type });
+  const file = new File([blob], `${bookName}.jpg`, { type: blob.type });
 
   // 4. Add the File object to the input as a FileList
   const dataTransfer = new DataTransfer();
@@ -35,22 +47,25 @@ async function setImageToFileInput(imgElement) {
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
   fileInput.accept = 'image/*';
-  fileInput.name = 'cover_photo';
+  fileInput.name = inputName;
+  fileInput.style.display = 'none';
   fileInput.files = dataTransfer.files;
 
-  // 5. Append the file input to a container element on the page
-  const imageInputContainer = document.getElementById('image-input-container');
-  imageInputContainer.appendChild(fileInput);
+  imgElement.parentNode.insertBefore(fileInput, imgElement.nextSibling)
 }
 
 function handleImageInputs() {
-  const imageInputContainer = document.getElementById('image-input-container');
-  imageInputContainer.innerHTML = '';
   const mainImage = document.querySelector('#main-image-preview img');
   const otherImages = document.querySelectorAll('#image-preview img');
 
   if (mainImage) {
-    setImageToFileInput(mainImage);
+    setImageToFileInput(mainImage, 'cover_photo');
+  }
+
+  if (otherImages) {
+    otherImages.forEach(image => {
+      setImageToFileInput(image, 'images');
+    })
   }
 
 }
@@ -93,14 +108,14 @@ document.getElementById("image-input").addEventListener("change", function(event
       reader.onload = function(e) {
         const imageContainer = document.createElement("div");
         imageContainer.classList.add("image-container");
-  
+
         const imageElement = document.createElement("img");
         imageElement.src = e.target.result;
         
         const removeButton = document.createElement("button");
         removeButton.innerText = "×";
         removeButton.classList.add("remove-image");
-  
+
         removeButton.addEventListener("click", function() {
           imageContainer.remove();
           if (uploadedImageCount < 5) {
@@ -127,7 +142,7 @@ document.getElementById("image-input").addEventListener("change", function(event
     });
     
     event.target.value = "";
-    setTimeout(handleImageInputs, 50);
+    setTimeout(handleImageInputs, 100);
   });
 
 function listSubCategories(data) {

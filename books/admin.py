@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Category, Publishing, Language, City, Condition, Book
+from .models import Category, Publishing, Language, City, Condition, Book, Image
 
 # Register your models here.
-
+admin.site.register(Image)
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent', 'slug', 'parent_category')

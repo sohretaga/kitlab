@@ -51,7 +51,7 @@
             </div>
             <div class="col-lg-8 profile-card">
                 <div class="card profile-content-page mt-4 mt-lg-0">
-                    <ul class="profile-content-nav nav nav-pills border-bottom mb-4" id="pills-tab"
+                    <ul class="profile-content-nav nav nav-pills border-bottom" id="pills-tab"
                             role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="overview-tab" data-bs-toggle="pill"
@@ -80,7 +80,9 @@
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
                                 {% if books %}
-
+                                <p class="hidden-text">
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
+                                </p>
                                 {% include 'books.html' %}
 
                                 {% else %}

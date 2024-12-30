@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 
                 'books.context_processors.categories',
+                'books.context_processors.suggested_books',
             ],
         },
     },

@@ -158,11 +158,10 @@
           <!--
             - TESTIMONIALS
           -->
-
+          {% if quote %}
           <div class="testimonial">
 
             <!-- <h2 class="title">testimonial</h2> -->
-            {% if quote %}
             <div class="testimonial-card">
 
               <img src="{{ quote.author_avatar.url }}" alt="{{ quote.author }}" class="testimonial-banner" width="80" height="80">
@@ -178,8 +177,9 @@
               </i>
 
             </div>
-            {% endif %}
+
           </div>
+          {% endif %}
 
           <!--
             - CTA

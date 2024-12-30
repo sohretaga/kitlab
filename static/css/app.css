@@ -1749,13 +1749,14 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 .testimonial-banner {
   margin: auto;
   margin-bottom: 20px;
+  object-fit: cover;
   -webkit-border-radius: 50%;
           border-radius: 50%;
 }
 
 .testimonial-name {
   font-weight: var(--weight-700);
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   color: var(--sonic-silver);
   margin-bottom: 5px;
 }

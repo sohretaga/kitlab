@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from typing import Any
 
-from .models import Book, Image, Category, Publishing, Language, City
+from .models import Book, Image, Category, Publishing, Language, City, Quote
 from .forms import SaleBookForm
 
 import json
@@ -16,6 +16,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['books'] = Book.objects.filter(is_approved=True)
+        context['quote'] = Quote.get_random_quote()
 
         return context
 

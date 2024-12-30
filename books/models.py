@@ -3,11 +3,20 @@ from django.utils.text import slugify
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+import random
+
 # Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=55, verbose_name='Kateqoriya Adı')
-    emoji_code = models.CharField(max_length=9, blank=True, null=True, help_text='Emojinin HTML kodu yazılmalıdır və sadəcə paret kateqoriyalarda əlavə edilməlidir. (emojiguide.org)', verbose_name='Emoji Kodu')
+    emoji_code = models.CharField(
+        max_length=9,
+        blank=True,
+        null=True,
+        help_text='Emojinin HTML kodu yazılmalıdır və sadəcə paret kateqoriyalarda əlavə edilməlidir. (emojiguide.org)',
+        verbose_name='Emoji Kodu'
+    )
+
     parent = models.ForeignKey('self', verbose_name='Üst Kateqoriya', on_delete=models.CASCADE, blank=True, null=True, related_name='childrens')
     slug = models.SlugField(unique=True, blank=True, null=True)
 
@@ -130,3 +139,25 @@ class Image(models.Model):
     
     def __str__(self):
         return self.book.name
+    
+class Quote(models.Model):
+    author = models.CharField(max_length=255)
+    profession = models.CharField(max_length=255)
+    author_avatar = models.ImageField(upload_to='quote')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Sitat'
+        verbose_name_plural = 'Sitatlar'
+
+    def __str__(self):
+        return f"{self.author} - {self.text[:50]}..."
+
+    @staticmethod
+    def get_random_quote():
+        """Get random quote"""
+        quotes = Quote.objects.all()
+        if quotes.exists():
+            return random.choice(quotes)
+        return None

@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import Category, Publishing, Language, City, Book, Image
+from .models import Category, Publishing, Language, City, Book, Quote
 
 # Register your models here.
-admin.site.register(Image)
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent', 'slug', 'parent_category')
@@ -57,3 +56,5 @@ class BookAdmin(admin.ModelAdmin):
         return obj.sub_category
     
     category_path.short_description = 'KATEQORİYA'
+
+admin.site.register(Quote)

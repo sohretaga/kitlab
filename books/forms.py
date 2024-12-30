@@ -12,7 +12,7 @@ class SaleBookForm(forms.ModelForm):
             "publishing",
             "language",
             "city",
-            "condition",
+            "new",
             "price",
             "description",
             "cover_photo"

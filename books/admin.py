@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Publishing, Language, City, Condition, Book, Image
+from .models import Category, Publishing, Language, City, Book, Image
 
 # Register your models here.
 admin.site.register(Image)
@@ -30,11 +30,6 @@ class CityAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
 
-@admin.register(Condition)
-class ConditionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'order')
-    prepopulated_fields = {'slug': ('name',)}
-
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = (
@@ -45,7 +40,7 @@ class BookAdmin(admin.ModelAdmin):
         'publishing',
         'language',
         'city',
-        'condition',
+        'new',
         'price'
     )
 

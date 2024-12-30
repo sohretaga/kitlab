@@ -5,13 +5,19 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from typing import Any
 
-from .models import Book, Image, Category, Publishing, Language, City, Condition
+from .models import Book, Image, Category, Publishing, Language, City
 from .forms import SaleBookForm
 
 import json
 
 class IndexView(TemplateView):
     template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['books'] = Book.objects.filter(is_approved=True)
+
+        return context
 
 class SaleBookView(LoginRequiredMixin, CreateView):
     model = Book
@@ -36,7 +42,6 @@ class SaleBookView(LoginRequiredMixin, CreateView):
         context['publishings'] = Publishing.objects.values('id', 'name')
         context['languages'] = Language.objects.values('id', 'name')
         context['cities'] = City.objects.values('id', 'name')
-        context['conditions'] = Condition.objects.values('id', 'name')
 
         return context
     

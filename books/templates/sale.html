@@ -95,12 +95,10 @@
                                 </select>
                             </div>
                             <div class="form-group w-25">
-                                <label for="condition">Vəziyyət</label>
-                                <select id="condition" name="condition">
-                                    <option value="" selected>Seç...</option>
-                                    {% for condition in conditions %}
-                                    <option value="{{ condition.id }}">{{ condition.name }}</option>
-                                    {% endfor %}
+                                <label for="new">Vəziyyət</label>
+                                <select id="new" name="new">
+                                    <option value="" selected>İkinci Əl</option>
+                                    <option value="1">Yeni</option>
                                 </select>
                             </div>
                             <div class="form-group w-25">

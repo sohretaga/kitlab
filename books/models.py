@@ -75,24 +75,6 @@ class City(models.Model):
             self.slug = slugify(self.name)
         super(City, self).save(*args, **kwargs)
 
-class Condition(models.Model):
-    order = models.PositiveIntegerField(unique=True, verbose_name='Sıra')
-    name = models.CharField(max_length=55, verbose_name='Kitab Vəziyyəti')
-    slug = models.SlugField(unique=True, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Vəziyyət'
-        verbose_name_plural = 'Vəziyyət'
-        ordering = ['order']
-    
-    def __str__(self) -> str:
-        return self.name
-    
-    def save(self, *args, **kwargs) -> None:
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super(Condition, self).save(*args, **kwargs)
-
 class Book(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='books')
     name = models.CharField(max_length=255, verbose_name='Kitab Adı')
@@ -102,7 +84,7 @@ class Book(models.Model):
     publishing = models.ForeignKey(Publishing, on_delete=models.SET_NULL, blank=True, null=True, related_name='books', verbose_name='Nəşriyyat')
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True, related_name='books', verbose_name='Kitab Dili')
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, related_name='books', verbose_name='Şəhər')
-    condition = models.ForeignKey(Condition, on_delete=models.SET_NULL, null=True, related_name='books', verbose_name='Kitab Vəziyyəti')
+    new = models.BooleanField(default=False, verbose_name='Yeni')
     price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Qiymət')
     description = models.TextField(verbose_name='Açıqlama')
     cover_photo = models.ImageField(upload_to='book-images/%Y/%m/%d')

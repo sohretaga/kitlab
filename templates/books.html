@@ -1,0 +1,75 @@
+<div class="product-grid">
+    {% for book in books %}
+    <div class="showcase">
+
+      <div class="showcase-banner">
+
+        <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img default">
+        {% if book.images.first %}
+        <img src="{{ book.images.first.image.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img hover">
+        {% else %}
+        <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img hover">
+        {% endif %}
+
+        <!-- <p class="showcase-badge">15%</p> -->
+        {% if book.new %}
+        <p class="showcase-badge angle black">Yeni</p>
+        {% else %}
+        <p class="showcase-badge angle pink">ikinci</p>
+        {% endif %}
+
+        <div class="showcase-actions">
+
+          <button class="btn-action">
+            <ion-icon name="heart-outline"></ion-icon>
+          </button>
+
+          <button class="btn-action">
+            <ion-icon name="repeat-outline"></ion-icon>
+          </button>
+
+          <a href="chat.html">
+            <button class="btn-action">
+              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+            </button>
+          </a>
+
+        </div>
+
+      </div>
+
+      <div class="showcase-content">
+
+        <a href="#" class="showcase-category">{{ book.category.name }}</a>
+
+        <a href="#">
+          <h3 class="showcase-title">{{ book.name }}</h3>
+        </a>
+
+        <div class="mobile-showcase-actions">
+          <button class="btn-action">
+            <ion-icon name="heart-outline"></ion-icon>
+          </button>
+    
+          <button class="btn-action">
+            <ion-icon name="repeat-outline"></ion-icon>
+          </button>
+    
+          <a href="chat.html">
+            <button class="btn-action">
+              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+            </button>
+          </a>
+
+        </div>
+
+        <div class="price-box">
+          <p class="price">{{ book.price }}₼</p>
+          <del>₼75.00</del>
+        </div>
+
+      </div>
+
+    </div>
+    {% endfor %}
+</div>

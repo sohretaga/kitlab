@@ -202,7 +202,6 @@ function checkFormValid(button) {
   const subCategoryInput = document.getElementById('subcategory').value;
   const languageInput = document.getElementById('language').value;
   const cityInput = document.getElementById('city').value;
-  const conditionInput = document.getElementById('condition').value;
   const priceInput = document.getElementById('price').value;
   const descriptionInput = document.getElementById('book-description').value;
 
@@ -228,11 +227,6 @@ function checkFormValid(button) {
 
   else if (!cityInput) {
     notyf.error('Şəhər seçilməlidir!');
-    return;
-  }
-
-  else if (!conditionInput) {
-    notyf.error('Kitab vəziyyəti seçilməlidir!');
     return;
   }
 

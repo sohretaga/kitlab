@@ -80,6 +80,9 @@
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
                                 {% if books %}
+
+                                {% include 'books.html' %}
+
                                 {% else %}
                                 <div>
                                     <h5 class="fs-18 fw-bold">Kitab yoxdur</h5>

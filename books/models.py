@@ -106,6 +106,7 @@ class Book(models.Model):
     class Meta:
         verbose_name = 'Kitab'
         verbose_name_plural = 'Kitablar'
+        ordering = ['-created_at']
 
     def __str__(self) -> str:
         return self.name

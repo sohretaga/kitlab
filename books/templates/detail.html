@@ -1,0 +1,191 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ book.name }} - Kitlab{% endblock title %}
+
+{% block og_title %}{{ book.name }}{% endblock %}
+{% block og_description %}{{ book.description }}{% endblock %}
+{% block og_image %}{{ book.cover_photo.url }}{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/detail/detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/left-side.css' %}">
+{% endblock stylesheet %}
+
+{% block content %}
+  <!--
+    - MAIN
+  -->
+
+  <main>
+
+    <!--
+      - PRODUCT
+    -->
+
+    <div class="product-container">
+
+      <div class="container">
+
+        <!--
+          - SIDEBAR
+        -->
+        {% include 'sidebar.html' %}
+
+        <div class="container-fluid">
+                        
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-5">
+                                    <div class="product-detail">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                    <a class="nav-link active" id="book-image-{{ book.id }}-cover-tab" data-toggle="pill" href="#book-image-{{ book.id }}-cover" role="tab">
+                                                        <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" class="img-fluid mx-auto d-block tab-img rounded">
+                                                    </a>
+                                                    
+                                                    {% for image in book.images.all %}
+                                                    <a class="nav-link" id="book-image-{{ image.id }}-tab" data-toggle="pill" href="#book-image-{{ image.id }}" role="tab">
+                                                        <img src="{{ image.image.url }}" alt="{{ book.name }}" class="img-fluid mx-auto d-block tab-img rounded">
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-9">
+                                                <div class="tab-content" id="v-pills-tabContent">
+                                                    <div class="tab-pane fade show active" id="book-image-{{ book.id }}-cover" role="tabpanel">
+                                                        <div class="product-img">
+                                                            <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" class="img-fluid mx-auto d-block" data-zoom="{{ book.cover_photo.url }}">
+                                                        </div>
+                                                    </div>
+
+                                                    {% for image in book.images.all %}
+                                                    <div class="tab-pane fade" id="book-image-{{ image.id }}" role="tabpanel">
+                                                        <div class="product-img">
+                                                            <img src="{{ image.image.url }}" alt="{{ book.name }}" class="img-fluid mx-auto d-block">
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+
+                                                <div class="detail-showcase-actions product-grid mt-2">
+                                                    <button class="btn-action">
+                                                      <ion-icon name="heart-outline"></ion-icon>
+                                                    </button>
+                                              
+                                                    <button class="btn-action">
+                                                      <ion-icon name="repeat-outline"></ion-icon>
+                                                    </button>
+                                              
+                                                    <a href="chat.html">
+                                                      <button class="btn-action">
+                                                        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+                                                      </button>
+                                                    </a>
+                                          
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end product img -->
+                                </div>
+                                <div class="col-xl-7">
+                                    <div class="mt-4 mt-xl-3">
+                                        <a href="#" class="text-primary">{{ book.seller.first_name }}</a>
+                                        <h5 class="mt-1 mb-3">{{ book.name }}</h5>
+                                        
+                                        <h5 class="mt-2"><del class="text-muted mr-2">{{ book.price }}₼</del>{{ book.price }}₼ <span class="text-danger font-size-12 ml-2"></span></h5>
+                                        <hr class="my-4">
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="mt-3">{{ book.description }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
+
+                            <div class="mt-4">
+                                <div class="product-desc">
+                                    <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
+                                        <li class="nav-item">
+                                          <a class="nav-link" id="desc-tab" data-toggle="tab" href="#desc" role="tab">Açıqlama</a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a class="nav-link active" id="specifi-tab" data-toggle="tab" href="#specifi" role="tab">Detallar</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content border border-top-0 p-4">
+                                        <div class="tab-pane fade" id="desc" role="tabpanel">
+                                            {{ book.description }}
+                                        </div>
+                                        <div class="tab-pane fade show active" id="specifi" role="tabpanel">
+                                            <div class="table-responsive">
+                                                <table class="table table-nowrap mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th scope="row" style="width: 400px;">Vəziyyət</th>
+                                                            <td>{% if book.new %}Yeni{% else %}İkinci Əl{% endif %}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Kateqoriya</th>
+                                                            <td>{{ book.category.name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Alt Kateqoriya</th>
+                                                            <td>{{ book.sub_category.name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Yazar</th>
+                                                            <td>{% if book.author %}{{ book.author }}{% else %}-{% endif %}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Nəşriyyat</th>
+                                                            <td>{% if book.publishing %}{{ book.publishing.name }}{% else %}-{% endif %}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Kitab Dili</th>
+                                                            <td>{{ book.language.name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="row">Şəhər</th>
+                                                            <td>{{ book.city.name }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end card -->
+                </div>
+            </div>
+            <!-- end row -->
+
+        </div>
+
+    </div>
+
+
+    <!--
+      - TESTIMONIALS, CTA & SERVICE
+    -->
+
+  </main>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/detail/jquery.min.js' %}"></script>
+<script src="{% static 'js/detail/bootstrap.bundle.min.js' %}"></script>
+{% endblock script %}

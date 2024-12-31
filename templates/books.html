@@ -4,12 +4,14 @@
 
       <div class="showcase-banner">
 
-        <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img default">
-        {% if book.images.first %}
-        <img src="{{ book.images.first.image.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img hover">
-        {% else %}
-        <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img hover">
-        {% endif %}
+        <a href="{% url 'book-detail' book.slug %}" class="showcase-img-box">
+          <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img default">
+          {% if book.images.first %}
+          <img src="{{ book.images.first.image.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img hover">
+          {% else %}
+          <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img hover">
+          {% endif %}
+        </a>
 
         <!-- <p class="showcase-badge">15%</p> -->
         {% if book.new %}
@@ -42,7 +44,7 @@
 
         <a href="#" class="showcase-category">{{ book.category.name }}</a>
 
-        <a href="#">
+        <a href="{% url 'book-detail' book.slug %}">
           <h3 class="showcase-title">{{ book.name }}</h3>
         </a>
 

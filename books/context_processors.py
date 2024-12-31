@@ -7,7 +7,7 @@ def categories(request):
         'categories': categories
     }
 
-def  suggested_books(request):
+def suggested_books(request):
     suggestions = Book.objects.filter(is_approved=True).order_by('?')[:4]
 
     return {

@@ -1674,9 +1674,9 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 .product-grid .btn-action:hover {
-  background: var(--eerie-black);
+  background: var(--salmon-pale-purple);
   color: var(--white);
-  border-color: var(--eerie-black);
+  border-color: var(--salmon-pale-purple);
 }
 
 .product-grid .showcase-content { padding: 15px 20px 0; }
@@ -2193,6 +2193,11 @@ footer {
 .header-logo-container, .header-logo-container .button-group{
   display: flex;
   justify-content: space-between;
+}
+
+.detail-showcase-actions {
+  display: flex;
+  justify-content: space-around;
 }
 
 

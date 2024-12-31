@@ -63,14 +63,14 @@
 
                 <div class="showcase">
 
-                    <a href="#" class="showcase-img-box">
+                    <a href="{% url 'book-detail' book.slug %}" class="showcase-img-box">
                         <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" width="75" height="75"
                             class="showcase-img">
                     </a>
 
                     <div class="showcase-content">
 
-                        <a href="#">
+                        <a href="{% url 'book-detail' book.slug %}">
                             <h4 class="showcase-title">{{ book.name }}</h4>
                         </a>
 

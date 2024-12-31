@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View, TemplateView, CreateView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -59,3 +60,11 @@ class SubCategoriesView(LoginRequiredMixin, View):
         sub_categories_list = list(sub_categories.values('id', 'name'))
 
         return JsonResponse(sub_categories_list, safe=False)
+    
+class BookDetailView(DetailView):
+    model = Book
+    template_name = 'detail.html'
+    context_object_name = 'book'
+
+    def get_object(self, queryset = ...):
+        return get_object_or_404(Book, slug=self.kwargs.get('slug'), is_approved=True)

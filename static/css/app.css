@@ -920,7 +920,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 .category-item {
-  min-width: 100%;
+  min-width: 85%;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3176,7 +3176,7 @@ footer {
    * #CATEGORY
    */
 
-  .category-item { min-width: -webkit-calc(25% - 22.5px); min-width: calc(25% - 22.5px); }
+  .category-item { min-width: -webkit-calc(25% - 37px); min-width: calc(25% - 37px); }
 
   .category-item-title { --fs-9: 0.824rem; }
 

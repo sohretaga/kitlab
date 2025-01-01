@@ -1135,9 +1135,9 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   max-height: 0;
   overflow: hidden;
   visibility: hidden;
-  -webkit-transition: 0.5s ease-in-out;
-  -o-transition: 0.5s ease-in-out;
-  transition: 0.5s ease-in-out;
+  -webkit-transition: 0.5s normal;
+  -o-transition: 0.5s normal;
+  transition: 0.5s normal;
 }
 
 .sidebar-submenu-category-list.active {

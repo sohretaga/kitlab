@@ -6,7 +6,7 @@
 
 {% block og_title %}{{ book.name }}{% endblock %}
 {% block og_description %}{{ book.description }}{% endblock %}
-{% block og_image %}{{ book.cover_photo.url }}{% endblock %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ book.cover_photo.url }}{% endblock %}
 
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'css/detail/detail.css' %}">

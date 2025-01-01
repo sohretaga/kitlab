@@ -10,7 +10,7 @@ import random
 class Category(models.Model):
     name = models.CharField(max_length=55, verbose_name='Kateqoriya Adı')
     emoji_code = models.CharField(
-        max_length=9,
+        max_length=25,
         blank=True,
         null=True,
         help_text='Emojinin HTML kodu yazılmalıdır və sadəcə paret kateqoriyalarda əlavə edilməlidir. (emojiguide.org)',

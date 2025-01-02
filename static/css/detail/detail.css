@@ -905,3 +905,22 @@ a.text-primary:hover {
 .product-desc-list li {
     padding: 4px 0px;
 }
+
+.contact-btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 5px !important;
+}
+
+.contact-btn a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.instagram-btn {
+    display: inline-block;
+    color: white;
+    background: linear-gradient(45deg, #F58529, #DD2A7B, #8134AF, #515BD4);
+    background-size: 400% 400%;
+}

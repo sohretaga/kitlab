@@ -98,7 +98,7 @@
                 <p class="category-item-amount">({{ category|approved_books_count }})</p>
               </div>
 
-              <a href="#" class="category-btn">Hamsına Bax</a>
+              <a href="{% url 'category-filter' category.slug %}" class="category-btn">Hamsına Bax</a>
 
             </div>
 

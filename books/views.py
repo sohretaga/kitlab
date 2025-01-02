@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from django.views.generic import View, TemplateView, CreateView
+from django.views.generic import View, TemplateView, CreateView, ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
@@ -60,7 +60,7 @@ class SubCategoriesView(LoginRequiredMixin, View):
         sub_categories_list = list(sub_categories.values('id', 'name'))
 
         return JsonResponse(sub_categories_list, safe=False)
-    
+
 class BookDetailView(DetailView):
     model = Book
     template_name = 'detail.html'
@@ -68,3 +68,22 @@ class BookDetailView(DetailView):
 
     def get_object(self, queryset = ...):
         return get_object_or_404(Book, slug=self.kwargs.get('slug'), is_approved=True)
+
+class CategoryFilterView(ListView):
+    model = Book
+    template_name = 'book-filter.html'
+    context_object_name = 'books'
+    paginate_by = 16
+
+    def get_queryset(self):
+        slug = self.kwargs.get('slug')
+        category = get_object_or_404(Category, slug=slug)
+        return Book.objects.filter(category=category, is_approved=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slug = self.kwargs.get('slug')
+        category = get_object_or_404(Category, slug=slug)
+
+        context['category'] = category
+        return context

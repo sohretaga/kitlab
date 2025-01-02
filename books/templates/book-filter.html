@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_book_filters %}
+
+{% block title %}{{ category.name }} - Kitlab{% endblock title %}
+
+{% block content %}
+  <!--
+    - MAIN
+  -->
+
+  <main>
+
+    <!--
+      - PRODUCT
+    -->
+
+    <div class="product-container">
+
+      <div class="container">
+
+        <!--
+          - SIDEBAR
+        -->
+        {% include 'sidebar.html' %}
+
+        <div class="product-box">
+
+          <!--
+            - PRODUCT GRID
+          -->
+
+          <div class="product-main">
+
+            <h2 class="title">{{ category.name }}</h2>
+
+            {% include 'books.html' %}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+{% endblock content %}

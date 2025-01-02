@@ -73,7 +73,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'profile.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        user_books = self.request.user.books.filter(is_approved=True)
+        user_books = self.request.user.books.all()
         user_favorites = self.request.user.favorites.all()
 
         context = super().get_context_data(**kwargs)

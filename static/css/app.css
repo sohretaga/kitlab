@@ -1642,6 +1642,8 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .product-grid .showcase-badge.pink { background: var(--salmon-pale-purple); }
 
+.product-grid .showcase-badge.amber { background: #FFBF00; }
+
 .product-grid .showcase-actions {
   position: absolute;
   top: 10px;

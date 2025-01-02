@@ -14,7 +14,9 @@
         </a>
 
         <!-- <p class="showcase-badge">15%</p> -->
-        {% if book.new %}
+        {% if not book.is_approved %}
+        <p class="showcase-badge angle amber">Gözləyir</p>
+        {% elif book.new %}
         <p class="showcase-badge angle pink">Yeni</p>
         {% endif %}
 
@@ -65,7 +67,6 @@
 
         <div class="price-box">
           <p class="price">{{ book.price }}₼</p>
-          <del>₼75.00</del>
         </div>
 
       </div>

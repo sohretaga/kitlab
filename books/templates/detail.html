@@ -100,7 +100,7 @@
                                         <a href="#" class="text-primary">{{ book.seller.first_name }}</a>
                                         <h5 class="mt-1 mb-3">{{ book.name }}</h5>
                                         
-                                        <h5 class="mt-2"><del class="text-muted mr-2">{{ book.price }}₼</del>{{ book.price }}₼ <span class="text-danger font-size-12 ml-2"></span></h5>
+                                        <h5 class="mt-2">{{ book.price }}₼ <span class="text-danger font-size-12 ml-2"></span></h5>
 
                                         {% if book.seller.profile.whatsapp or book.seller.profile.telegram or book.seller.profile.phone or book.seller.profile.instagram %}
                                         <div style="display: flex;">

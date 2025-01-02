@@ -28,6 +28,7 @@ class SaleBookView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('index')
 
     def form_valid(self, form) -> HttpResponse:
+        print(form.errors)
         book = form.save(commit=False)
         book.seller = self.request.user
         book.save()
@@ -37,6 +38,10 @@ class SaleBookView(LoginRequiredMixin, CreateView):
             Image.objects.create(book=book,image=image)
 
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)

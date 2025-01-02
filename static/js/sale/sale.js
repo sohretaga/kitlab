@@ -29,19 +29,37 @@ function changeMainImage(imageContainer) {
 }
 
 async function setImageToFileInput(imgElement, inputName) {
-  const bookName = document.getElementById('book-name').value;
+  const now = new Date();
+  const imgName = `kitlab-book-image-${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
 
   // 1. Get the Base64 data of the image
   const base64Data = imgElement.src;
 
-  // 2. Decode Base64 data and convert it to binary data
-  const res = await fetch(base64Data);
+  // 2. Create an Image element to load the Base64 data
+  const img = new Image();
+  img.src = base64Data;
+  await new Promise(resolve => img.onload = resolve);
+
+  // 3. Create a canvas element to draw the image
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  // 4. Draw the image onto the canvas
+  ctx.drawImage(img, 0, 0);
+
+  // 5. Convert the image to WebP format using canvas.toDataURL()
+  const webpBase64Data = canvas.toDataURL('image/webp');
+
+  // 6. Decode the WebP Base64 data and convert it to binary data
+  const res = await fetch(webpBase64Data);
   const blob = await res.blob();
 
-  // 3. Convert Blob data to File object
-  const file = new File([blob], `${bookName}.jpg`, { type: blob.type });
+  // 7. Convert Blob data to File object
+  const file = new File([blob], `${imgName}.webp`, { type: blob.type });
 
-  // 4. Add the File object to the input as a FileList
+  // 8. Add the File object to the input as a FileList
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(file);
   const fileInput = document.createElement('input');
@@ -51,8 +69,9 @@ async function setImageToFileInput(imgElement, inputName) {
   fileInput.style.display = 'none';
   fileInput.files = dataTransfer.files;
 
-  imgElement.parentNode.insertBefore(fileInput, imgElement.nextSibling)
+  imgElement.parentNode.insertBefore(fileInput, imgElement.nextSibling);
 }
+
 
 function handleImageInputs() {
   const mainImage = document.querySelector('#main-image-preview img');

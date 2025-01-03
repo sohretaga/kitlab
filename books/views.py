@@ -4,6 +4,9 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.core.files.base import ContentFile
+from PIL import Image as PilImage
+from io import BytesIO
 from typing import Any
 
 from .models import Book, Image, Category, Publishing, Language, City, Quote
@@ -28,19 +31,19 @@ class SaleBookView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('index')
 
     def form_valid(self, form) -> HttpResponse:
-        print(form.errors)
         book = form.save(commit=False)
         book.seller = self.request.user
+        book.cover_photo = self.optimize_image(form.cleaned_data.get('cover_photo'))
         book.save()
         images = self.request.FILES.getlist('images')
 
         for image in images:
-            Image.objects.create(book=book,image=image)
+            optimized_image = self.optimize_image(image)
+            Image.objects.create(book=book,image=optimized_image)
 
         return super().form_valid(form)
     
     def form_invalid(self, form):
-        print(form.errors)
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
@@ -51,7 +54,39 @@ class SaleBookView(LoginRequiredMixin, CreateView):
         context['cities'] = City.objects.values('id', 'name')
 
         return context
-    
+
+    def optimize_image(self, uploaded_image):
+        """
+        Optimize the uploaded image and convert it to WebP format.
+        """
+        with PilImage.open(uploaded_image) as img:
+            # Fix orientation if EXIF data is available
+            exif = img._getexif()
+            orientation = exif.get(274) if exif else None  # 274 is the Orientation tag
+            if orientation == 3:
+                img = img.rotate(180, expand=True)
+            elif orientation == 6:
+                img = img.rotate(270, expand=True)
+            elif orientation == 8:
+                img = img.rotate(90, expand=True)
+
+            # Convert image to RGB if not already in RGB mode
+            if img.mode != "RGB":
+                img = img.convert("RGB")
+
+            # Resize image to reduce dimensions (optional, set max size)
+            max_size = (800, 800)  # Change this size as needed
+            img.thumbnail(max_size, PilImage.Resampling.LANCZOS)
+
+            # Save the image to a BytesIO object in WebP format
+            buffer = BytesIO()
+            img.save(buffer, format="WEBP", quality=80)  # Adjust quality as needed
+            buffer.seek(0)
+
+            # Create a new ContentFile for saving to the database
+            optimized_image = ContentFile(buffer.read(), name=f"{uploaded_image.name.split('.')[0]}.webp")
+            return optimized_image
+
 class SubCategoriesView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)

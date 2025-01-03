@@ -4,7 +4,7 @@
 
       <div class="showcase-banner">
 
-        <a href="{% url 'book-detail' book.slug %}" class="showcase-img-box">
+        <a href="{% if book.is_approved %}{% url 'book-detail' book.slug %}{% else %}#{% endif %}" class="showcase-img-box">
           <img src="{{ book.cover_photo.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img default">
           {% if book.images.first %}
           <img src="{{ book.images.first.image.url }}" alt="{{ book.name }}" width="200" height="200" loading="lazy" class="product-img hover">

@@ -95,6 +95,7 @@ class Book(models.Model):
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, related_name='books', verbose_name='Şəhər')
     new = models.BooleanField(default=False, verbose_name='Yeni')
     price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Qiymət')
+    view_count = models.PositiveIntegerField(default=0)
     description = models.TextField(verbose_name='Açıqlama')
     cover_photo = models.ImageField(upload_to='book-images/%Y/%m/%d')
 

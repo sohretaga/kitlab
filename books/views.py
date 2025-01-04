@@ -47,7 +47,7 @@ class SaleBookView(LoginRequiredMixin, CreateView):
 
         for image in images:
             optimized_image = self.optimize_image(image)
-            Image.objects.create(book=book,image=optimized_image)
+            Image.objects.create(book=book, image=optimized_image)
 
         return super().form_valid(form)
     
@@ -115,7 +115,17 @@ class BookDetailView(DetailView):
     context_object_name = 'book'
 
     def get_object(self, queryset = ...):
-        return get_object_or_404(Book, slug=self.kwargs.get('slug'), is_approved=True)
+        book = get_object_or_404(Book, slug=self.kwargs.get('slug'), is_approved=True)
+
+        if book:
+            viewed_books = self.request.session.get('viewed_books', [])
+            if book.id not in viewed_books:
+                book.view_count += 1
+                book.save()
+                viewed_books.append(book.id)
+                self.request.session['viewed_books'] = viewed_books
+
+        return book
 
 class CategoryFilterView(ListView):
     model = Book

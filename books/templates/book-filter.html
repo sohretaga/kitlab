@@ -2,7 +2,7 @@
 {% load static %}
 {% load custom_book_filters %}
 
-{% block title %}{{ category.name }} - Kitlab{% endblock title %}
+{% block title %}{{ page_title }} - Kitlab{% endblock title %}
 
 {% block content %}
   <!--
@@ -32,7 +32,7 @@
 
           <div class="product-main">
 
-            <h2 class="title">{{ category.name }}</h2>
+            <h2 class="title">{{ page_title }}</h2>
 
             {% include 'books.html' %}
 

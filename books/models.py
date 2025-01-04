@@ -99,7 +99,7 @@ class Book(models.Model):
     description = models.TextField(verbose_name='Açıqlama')
     cover_photo = models.ImageField(upload_to='book-images/%Y/%m/%d')
 
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     is_approved = models.BooleanField(default=False, verbose_name='İcazə')
     created_at = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Yaranma Tarixi')
     approved_at = models.DateTimeField(blank=True, null=True, editable=False)

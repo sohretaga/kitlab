@@ -142,8 +142,7 @@ class CategoryFilterView(ListView):
         context = super().get_context_data(**kwargs)
         slug = self.kwargs.get('slug')
         category = get_object_or_404(Category, slug=slug)
-
-        context['category'] = category
+        context['page_title'] = category.name
         return context
     
 class SuccessSaleView(LoginRequiredMixin, TemplateView):
@@ -157,3 +156,31 @@ class SuccessSaleView(LoginRequiredMixin, TemplateView):
             return context
         
         raise Http404('Success sale not found.')
+
+class SecondhandBooksView(ListView):
+    model = Book
+    template_name = 'book-filter.html'
+    context_object_name = 'books'
+    paginate_by = 16
+
+    def get_queryset(self):
+        return Book.objects.filter(is_approved=True, new=False)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'İkinci Əl Kitablar'
+        return context
+    
+class NewBooksView(ListView):
+    model = Book
+    template_name = 'book-filter.html'
+    context_object_name = 'books'
+    paginate_by = 16
+
+    def get_queryset(self):
+        return Book.objects.filter(is_approved=True, new=True)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Yeni Kitablar'
+        return context

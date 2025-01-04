@@ -11,6 +11,19 @@ function previewImage(event) {
     reader.readAsDataURL(event.target.files[0]);
 }
 
+async function toggleLoadingAnimation(isLoading) {
+  const uploadLabelInfoText = document.getElementById('upload-label-info-text');
+  const loadingGifElement = document.getElementById('loading-gif');
+
+  if (isLoading) {
+    uploadLabelInfoText.style.display = 'none';
+    loadingGifElement.style.display = 'inline-block';
+  } else {
+    uploadLabelInfoText.style.display = 'inline-block';
+    loadingGifElement.style.display = 'none';
+  }
+}
+
 function changeMainImage(imageContainer) {
   const mainImagePreviewContainer = document.getElementById('main-image-preview');
   const imageContainerDiv = imageContainer.target.closest('div');
@@ -53,6 +66,7 @@ async function setImageToFileInput(imgElement, inputName) {
   fileInput.files = dataTransfer.files;
 
   imgElement.parentNode.insertBefore(fileInput, imgElement.nextSibling)
+  toggleLoadingAnimation(false);
 }
 
 function handleImageInputs() {
@@ -103,7 +117,9 @@ document.getElementById("image-input").addEventListener("change", function(event
       });
       return;
     };
-  
+    
+    toggleLoadingAnimation(true);
+
     const imagePromises = Array.from(files).map((file, index) => {
       const options = {
         maxSizeMB: 5,
@@ -266,6 +282,7 @@ function checkFormValid(button) {
     return;
   }
 
+  toggleLoadingAnimation(true);
   const form = button.closest('form');
   form.submit();
 };

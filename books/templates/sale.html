@@ -119,7 +119,10 @@
                             <div class="form-group w-100">
                                 <div class="image-uploader">
                                     <input type="file" id="image-input" accept="image/*" multiple>
-                                    <label for="image-input" class="upload-label">Kitab Şəkilləri Seç (ən çox 5 şəkil)</label>
+                                    <label for="image-input" class="upload-label">
+                                        <span id="upload-label-info-text">Kitab Şəkilləri Seç (ən çox 5 şəkil)</span>
+                                        <img id="loading-gif" src="{% static 'images/sale/loading.gif' %}" alt="Kitlab Loadig GIF" style="display: none;">
+                                    </label>
                                     
                                     <div id="book-images">
                                         <div id="main-image-container">

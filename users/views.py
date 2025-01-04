@@ -1,11 +1,11 @@
 from typing import Any
 from django.shortcuts import redirect
-from django.contrib.auth.views import LoginView
 from django.forms import BaseModelForm
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, FormView
+from django.views import View
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -29,16 +29,21 @@ class AuthView(LogoutRequiredMixin, TemplateView):
         context['error'] = self.request.session.pop('error', None)
         return context
 
-class CustomLoginView(LoginView):
-    def get_redirect_url(self) -> str:
-        next_url = self.request.GET.get('next')
-        if next_url:
-            return next_url
-        return super().get_redirect_url()
+class CustomLoginView(View):
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get('username').lower()
+        password = request.POST.get('password')
 
-    def form_invalid(self, form: BaseModelForm) -> HttpResponse:
-        username = form.cleaned_data.get('username')
-        self.request.session['login_username'] = username
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            next_url = request.GET.get('next', reverse_lazy('index'))
+            return HttpResponseRedirect(next_url)
+        else:
+            request.session['login_username'] = username
+            return HttpResponseRedirect(reverse_lazy('auth'))
+
+    def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(reverse_lazy('auth'))
 
 class RegisterView(CreateView):
@@ -48,7 +53,10 @@ class RegisterView(CreateView):
 
     def form_valid(self, form: BaseModelForm) -> HttpResponseRedirect:
         response = super().form_valid(form)
-        user = form.save()
+        user = form.save(commit=False)
+        user.username = form.cleaned_data.get('username').lower()
+        user.email = form.cleaned_data.get('email').lower()
+        user.save()
         login(self.request, user)
         return response
 

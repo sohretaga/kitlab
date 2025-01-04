@@ -104,46 +104,65 @@ document.getElementById("image-input").addEventListener("change", function(event
       return;
     };
   
-    Array.from(files).forEach((file, index) => {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const imageContainer = document.createElement("div");
-        imageContainer.classList.add("image-container");
-
-        const imageElement = document.createElement("img");
-        imageElement.src = e.target.result;
-        
-        const removeButton = document.createElement("button");
-        removeButton.innerText = "×";
-        removeButton.classList.add("remove-image");
-
-        removeButton.addEventListener("click", function() {
-          imageContainer.remove();
-          if (uploadedImageCount < 5) {
-            document.getElementById("image-input").disabled = false;
-          }
-        });
-
-        if(index == 0 && mainImageContainer.style.display != 'inline') {
-          imageContainer.appendChild(imageElement);
-          mainImageContainer.style.display = 'inline';
-          mainImagePreviewContainer.appendChild(imageContainer)
-        } else {
-          imageElement.addEventListener('click', changeMainImage);
-          imageContainer.appendChild(imageElement);
-          imageContainer.appendChild(removeButton);
-          imagePreviewContainer.appendChild(imageContainer);
-        }
-  
-        if (uploadedImageCount >= 5) {
-          document.getElementById("image-input").disabled = true;
-        }
+    const imagePromises = Array.from(files).map((file, index) => {
+      const options = {
+        maxSizeMB: 5,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
       };
-      reader.readAsDataURL(file);
+  
+      return imageCompression(file, options).then((compressedFile) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+  
+          reader.onload = function(e) {
+            const imageContainer = document.createElement("div");
+            imageContainer.classList.add("image-container");
+  
+            const imageElement = document.createElement("img");
+            imageElement.src = e.target.result;
+  
+            const removeButton = document.createElement("button");
+            removeButton.innerText = "×";
+            removeButton.classList.add("remove-image");
+  
+            removeButton.addEventListener("click", function() {
+              imageContainer.remove();
+              if (uploadedImageCount < 5) {
+                document.getElementById("image-input").disabled = false;
+              }
+            });
+  
+            if(index == 0 && mainImageContainer.style.display != 'inline') {
+              imageContainer.appendChild(imageElement);
+              mainImageContainer.style.display = 'inline';
+              mainImagePreviewContainer.appendChild(imageContainer);
+            } else {
+              imageElement.addEventListener('click', changeMainImage);
+              imageContainer.appendChild(imageElement);
+              imageContainer.appendChild(removeButton);
+              imagePreviewContainer.appendChild(imageContainer);
+            }
+  
+            if (uploadedImageCount >= 5) {
+              document.getElementById("image-input").disabled = true;
+            }
+  
+            resolve(); // Resolve the promise after image is processed
+          };
+  
+          reader.readAsDataURL(compressedFile);
+        });
+      }).catch((error) => {
+        console.error("Sıkıştırma hatası: ", error);
+      });
     });
-    
-    event.target.value = "";
-    setTimeout(handleImageInputs, 100);
+  
+    // Wait for all promises (all files processed) before calling handleImageInputs
+    Promise.all(imagePromises).then(() => {
+      event.target.value = ""; // Reset the input value
+      handleImageInputs() // Call handleImageInputs after all files have been processed
+    });
   });
 
 function listSubCategories(data) {

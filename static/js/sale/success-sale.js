@@ -1,4 +1,4 @@
-var countdownTime = 4;
+var countdownTime = 9;
 
 var countdownInterval = setInterval(function () {
     document.getElementById('countdown').innerText = countdownTime;

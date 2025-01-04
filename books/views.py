@@ -34,9 +34,16 @@ class SaleBookView(LoginRequiredMixin, CreateView):
         book = form.save(commit=False)
         book.seller = self.request.user
         book.cover_photo = self.optimize_image(form.cleaned_data.get('cover_photo'))
+
+        # Saves the selected city to the profile for auto-selection in future listings, speeding up the process.
+        city = form.cleaned_data.get('city')
+        if book.seller.profile.city != city:
+            book.seller.profile.city = city
+            book.seller.profile.save()
+
         book.save()
-        images = self.request.FILES.getlist('images')
         self.request.session['success_sale'] = book.slug
+        images = self.request.FILES.getlist('images')
 
         for image in images:
             optimized_image = self.optimize_image(image)

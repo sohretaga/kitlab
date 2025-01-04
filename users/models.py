@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from books.models import Book
+from books.models import Book, City
 
 # Create your models here.
 
@@ -11,6 +11,7 @@ class Profile(models.Model):
     telegram = models.CharField(max_length=32, blank=True, null=True)
     instagram = models.CharField(max_length=30, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
+    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

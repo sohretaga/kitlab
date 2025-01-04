@@ -90,7 +90,11 @@
                                 <select id="city" name="city">
                                     <option value="" selected>Seç...</option>
                                     {% for city in cities %}
+                                    {% if city.id == user.profile.city.id %}
+                                    <option value="{{ city.id }}" selected>{{ city.name }}</option>
+                                    {% else %}
                                     <option value="{{ city.id }}">{{ city.name }}</option>
+                                    {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>

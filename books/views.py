@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.views.generic import View, TemplateView, CreateView, ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,7 +28,7 @@ class SaleBookView(LoginRequiredMixin, CreateView):
     model = Book
     form_class = SaleBookForm
     template_name = 'sale.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('success-sale')
 
     def form_valid(self, form) -> HttpResponse:
         book = form.save(commit=False)
@@ -36,6 +36,7 @@ class SaleBookView(LoginRequiredMixin, CreateView):
         book.cover_photo = self.optimize_image(form.cleaned_data.get('cover_photo'))
         book.save()
         images = self.request.FILES.getlist('images')
+        self.request.session['success_sale'] = book.slug
 
         for image in images:
             optimized_image = self.optimize_image(image)
@@ -127,3 +128,15 @@ class CategoryFilterView(ListView):
 
         context['category'] = category
         return context
+    
+class SuccessSaleView(LoginRequiredMixin, TemplateView):
+    template_name = 'success-sale.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        success_sale = self.request.session.pop('success_sale', None)
+        if success_sale:
+            context['success_sale'] = success_sale
+            return context
+        
+        raise Http404('Success sale not found.')

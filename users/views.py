@@ -101,6 +101,10 @@ class UpdateProfileView(LoginRequiredMixin, FormView):
         user_form = self.user_form_class(request.POST, instance=request.user)
         profile_form = self.profile_form_class(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
+            user_instance = user_form.save(commit=False)
+            user_instance.username = user_form.cleaned_data.get('username').lower()
+            user_instance.email = user_form.cleaned_data.get('email').lower()
+            user_instance.save()
             profile_form.save()
+
             return redirect(reverse_lazy('profile'))

@@ -17,7 +17,7 @@ async function toggleLoadingAnimation(isLoading) {
 
   if (isLoading) {
     uploadLabelInfoText.style.display = 'none';
-    loadingGifElement.style.display = 'inline-block';
+    loadingGifElement.style.display = 'block';
   } else {
     uploadLabelInfoText.style.display = 'inline-block';
     loadingGifElement.style.display = 'none';

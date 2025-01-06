@@ -19,7 +19,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['books'] = Book.objects.filter(is_approved=True)
+        context['books'] = Book.objects.filter(is_approved=True)[:32]
         context['quote'] = Quote.get_random_quote()
 
         return context

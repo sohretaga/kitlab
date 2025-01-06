@@ -145,6 +145,30 @@ class CategoryFilterView(ListView):
         context['page_title'] = category.name
         return context
     
+class SubCategoryFilterView(ListView):
+    model = Book
+    template_name = 'book-filter.html'
+    context_object_name = 'books'
+    paginate_by = 16
+
+    def get_category_and_subcategory(self):
+        """Helper method to fetch category and subcategory."""
+        category_slug = self.kwargs.get('category_slug')
+        subcategory_slug = self.kwargs.get('subcategory_slug')
+        category = get_object_or_404(Category, slug=category_slug)
+        sub_category = get_object_or_404(Category, slug=subcategory_slug)
+        return category, sub_category
+
+    def get_queryset(self):
+        category, sub_category = self.get_category_and_subcategory()
+        return Book.objects.filter(category=category, sub_category=sub_category, is_approved=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category, sub_category = self.get_category_and_subcategory()
+        context['page_title'] = f'{category.name} > {sub_category.name}'
+        return context
+    
 class SuccessSaleView(LoginRequiredMixin, TemplateView):
     template_name = 'success-sale.html'
 

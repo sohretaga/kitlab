@@ -1,5 +1,15 @@
 from django.urls import path
-from .views import IndexView, SaleBookView, SubCategoriesView, BookDetailView, CategoryFilterView, SuccessSaleView, SecondhandBooksView, NewBooksView
+from .views import (
+    IndexView,
+    SaleBookView,
+    SubCategoriesView,
+    BookDetailView,
+    CategoryFilterView,
+    SuccessSaleView,
+    SecondhandBooksView,
+    NewBooksView,
+    SubCategoryFilterView
+)
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
@@ -7,7 +17,8 @@ urlpatterns = [
     path('new-books', NewBooksView.as_view(), name='new-books'),
     path('sale', SaleBookView.as_view(), name='sale'),
     path('book/<slug:slug>', BookDetailView.as_view(), name='book-detail'),
-    path('category/<slug:slug>', CategoryFilterView.as_view(), name='category-filter'),
+    path('books/<slug:slug>', CategoryFilterView.as_view(), name='category-filter'),
+    path('books/<slug:category_slug>/<slug:subcategory_slug>', SubCategoryFilterView.as_view(), name='subcategory-filter'),
     path('sale/success', SuccessSaleView.as_view(), name='success-sale'),
 
     # API's

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Əlaqə - Kitlab{% endblock title %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/users/contact.css' %}">
+<link rel="stylesheet" href="{% static 'css/left-side.css' %}">
+<meta name="form-success" content="{{ form_success }}">
+{% endblock stylesheet %}
+
+{% block content %}
+<!--
+    - MAIN
+  -->
+
+<main>
+
+    <!--
+      - PRODUCT
+    -->
+
+    <div class="product-container">
+
+        <div class="container">
+
+            <!--
+          - SIDEBAR
+        -->
+            {% include 'sidebar.html' %}
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="formbold-main-wrapper">
+                        <div class="formbold-form-wrapper">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="formbold-input-flex">
+                                    <div class="full-name">
+                                        <label for="full-name" class="formbold-form-label"> Ad Soyad </label>
+                                        <input type="text" name="full_name" id="full-name" placeholder="Ad Soyad"
+                                            class="formbold-form-input" {% if user.first_name %}value="{{ user.first_name }}"{% endif %}/>
+                                    </div>
+                                </div>
+
+                                <div class="formbold-input-flex">
+                                    <div>
+                                        <label for="email" class="formbold-form-label"> E-Poçt </label>
+                                        <input type="email" name="email" id="email" placeholder="E-Poçt"
+                                            class="formbold-form-input" {% if user.email %}value="{{ user.email }}"{% endif %}/>
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="formbold-form-label"> Əlaqə Nömrəsi </label>
+                                        <input type="text" name="phone" id="phone" placeholder="Nömrə"
+                                            class="formbold-form-input" {% if user.profile.phone %}value="{{ user.profile.phone }}"{% endif %}/>
+                                    </div>
+                                </div>
+
+                                <div class="formbold-input-radio-wrapper">
+                                    <label for="jobtitle" class="formbold-form-label"> Əlaqə səbəbini seçin</label>
+                                    <div class="formbold-radio-flex">
+                                        <div class="formbold-radio-group">
+                                            <label class="formbold-radio-label">
+                                                <input class="formbold-input-radio" type="radio" name="reason" id="reason" value="offer" checked>
+                                                Təklif
+                                                <span class="formbold-radio-checkmark"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="formbold-radio-group">
+                                            <label class="formbold-radio-label">
+                                                <input class="formbold-input-radio" type="radio" name="reason" id="reason" value="remark">
+                                                İrad
+                                                <span class="formbold-radio-checkmark"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="formbold-radio-group">
+                                            <label class="formbold-radio-label">
+                                                <input class="formbold-input-radio" type="radio" name="reason" id="reason" value="error">
+                                                Xəta
+                                                <span class="formbold-radio-checkmark"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="formbold-radio-group">
+                                            <label class="formbold-radio-label">
+                                                <input class="formbold-input-radio" type="radio" name="reason" id="reason" value="other">
+                                                Digər
+                                                <span class="formbold-radio-checkmark"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="formbold-radio-group">
+                                            <label class="formbold-radio-label">
+                                                <input class="formbold-input-radio" type="radio" name="reason" id="reason" value="collaboration">
+                                                Əməkdaşlıq
+                                                <span class="formbold-radio-checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="message" class="formbold-form-label"> Mesaj </label>
+                                    <textarea rows="6" name="message" id="message" placeholder="Mesajınızı yazın"
+                                        class="formbold-form-input"></textarea>
+                                </div>
+
+                                <button class="formbold-btn" type="button" onclick="checkFormValid(this)">Göndər</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+</main>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/users/contact.js' %}"></script>
+{% endblock script %}

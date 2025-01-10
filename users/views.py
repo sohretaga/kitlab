@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from .mixins import LogoutRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm
+from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm, ContactForm
 from .models import Profile
 
 # Create your views here.
@@ -108,3 +108,19 @@ class UpdateProfileView(LoginRequiredMixin, FormView):
             profile_form.save()
 
             return redirect(reverse_lazy('profile'))
+
+class ContactView(FormView):
+    template_name = 'contact.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('contact')
+
+    def form_valid(self, form):
+        form.save()
+        return self.render_to_response(
+            self.get_context_data(form_success=True)
+        )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_success'] = kwargs.get('form_success', '')
+        return context

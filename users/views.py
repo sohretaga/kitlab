@@ -90,6 +90,10 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         context['favorites_count'] = user_favorites.count()
         context['favorites'] = user_favorites
 
+        book_filter = {'seller__username': self.request.user.username}
+        # store filtering criteria in session for books.models.LoadMoreView
+        self.request.session['book_filter'] = book_filter
+
         return context
     
 class UpdateProfileView(LoginRequiredMixin, FormView):

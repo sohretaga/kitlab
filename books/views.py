@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
+from django.core.paginator import Paginator, EmptyPage
 from PIL import Image as PilImage
 from io import BytesIO
 from typing import Any
@@ -19,7 +20,19 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['books'] = Book.objects.filter(is_approved=True)[:32]
+        page = self.request.GET.get('page', 1)
+        book_filter = {'is_approved': True}
+        books = Book.objects.filter(**book_filter)
+        paginator = Paginator(books, 16)
+        try:
+            books_page = paginator.page(page)
+        except EmptyPage:
+            books_page = paginator.page(paginator.num_pages)
+
+        # store filtering criteria in session for LoadMoreView
+        self.request.session['book_filter'] = book_filter
+
+        context['books'] = books_page.object_list
         context['quote'] = Quote.get_random_quote()
 
         return context
@@ -136,7 +149,13 @@ class CategoryFilterView(ListView):
     def get_queryset(self):
         slug = self.kwargs.get('slug')
         category = get_object_or_404(Category, slug=slug)
-        return Book.objects.filter(category=category, is_approved=True)
+        book_filter = {
+            'category__slug': category.slug,
+            'is_approved': True
+        }
+        # store filtering criteria in session for LoadMoreView
+        self.request.session['book_filter'] = book_filter
+        return Book.objects.filter(**book_filter)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -161,7 +180,14 @@ class SubCategoryFilterView(ListView):
 
     def get_queryset(self):
         category, sub_category = self.get_category_and_subcategory()
-        return Book.objects.filter(category=category, sub_category=sub_category, is_approved=True)
+        book_filter = {
+            'category__slug': category.slug,
+            'sub_category__slug': sub_category.slug,
+            'is_approved': True
+        }
+        # store filtering criteria in session for LoadMoreView
+        self.request.session['book_filter'] = book_filter
+        return Book.objects.filter(**book_filter)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -188,7 +214,13 @@ class SecondhandBooksView(ListView):
     paginate_by = 16
 
     def get_queryset(self):
-        return Book.objects.filter(is_approved=True, new=False)
+        book_filter = {
+            'is_approved': True,
+            'new': False
+        }
+        # store filtering criteria in session for LoadMoreView
+        self.request.session['book_filter'] = book_filter
+        return Book.objects.filter(**book_filter)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -202,9 +234,54 @@ class NewBooksView(ListView):
     paginate_by = 16
 
     def get_queryset(self):
-        return Book.objects.filter(is_approved=True, new=True)
+        book_filter = {
+            'is_approved': True,
+            'new': True
+        }
+        # store filtering criteria in session for LoadMoreView
+        self.request.session['book_filter'] = book_filter
+        return Book.objects.filter(**book_filter)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Yeni Kitablar'
         return context
+    
+from .models import Image
+from django.db.models import Subquery, OuterRef, F
+    
+class LoadMoreView(ListView):
+    model = Book
+    paginate_by = 16
+
+    def get(self, request, *args, **kwargs):
+        page = request.GET.get('page', 1)
+        book_filter = self.request.session.get('book_filter', {})
+        books = Book.objects.filter(**book_filter)
+        paginator = Paginator(books, self.paginate_by)
+
+        try:
+            hover_image = Image.objects.filter(
+                book=OuterRef('pk')
+            ).values('image')
+
+            books_page = paginator.page(page)
+            loaded_books = books_page.object_list.annotate(
+                hover_image=Subquery(hover_image[:1]),
+                category_name=F('category__name')
+            )
+
+            books_data = list(loaded_books.values(
+                'name', 'slug', 'cover_photo', 'hover_image', 'category_name', 'is_approved', 'new', 'price'
+            ))
+
+            return JsonResponse({
+                'books': books_data,
+                'has_next': books_page.has_next()
+            })
+
+        except EmptyPage:
+            return JsonResponse({
+                'books': [],
+                'has_next': False
+            })

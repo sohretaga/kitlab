@@ -8,7 +8,8 @@ from .views import (
     SuccessSaleView,
     SecondhandBooksView,
     NewBooksView,
-    SubCategoryFilterView
+    SubCategoryFilterView,
+    LoadMoreView
 )
 
 urlpatterns = [
@@ -22,5 +23,6 @@ urlpatterns = [
     path('sale/success', SuccessSaleView.as_view(), name='success-sale'),
 
     # API's
-    path('get-sub-categories', SubCategoriesView.as_view())
+    path('get-sub-categories', SubCategoriesView.as_view()),
+    path('load-more-book', LoadMoreView.as_view())
 ]

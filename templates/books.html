@@ -1,4 +1,4 @@
-<div class="product-grid">
+<div class="product-grid" id="book-container">
     {% for book in books %}
     <div class="showcase">
 
@@ -30,7 +30,7 @@
             <ion-icon name="repeat-outline"></ion-icon>
           </button>
 
-          <a href="chat.html">
+          <a href="#">
             <button class="btn-action">
               <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
             </button>
@@ -73,4 +73,10 @@
 
     </div>
     {% endfor %}
+</div>
+
+<div>
+  <div class="load-container">
+    <button class="load-more-btn" id="load-more-btn">Daha çox</button>
+  </div>
 </div>

@@ -4,6 +4,10 @@
 
 {% block title %}{{ page_title }} - Kitlab{% endblock title %}
 
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/books.css' %}">
+{% endblock stylesheet %}
+
 {% block content %}
   <!--
     - MAIN
@@ -46,3 +50,7 @@
 
   </main>
 {% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/books.js' %}"></script>
+{% endblock script %}

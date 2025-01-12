@@ -18,7 +18,7 @@ function checkFormValid(button) {
     }
   
     else if (!emailInput) {
-      notyf.error('Email yazılmalıdır!');
+      notyf.error('E-poçt yazılmalıdır!');
       return;
     }
   

@@ -21,16 +21,14 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         page = self.request.GET.get('page', 1)
-        book_filter = {'is_approved': True}
-        books = Book.objects.filter(**book_filter)
+        books = Book.objects.filter(is_approved=True)
         paginator = Paginator(books, 16)
+        # reset book filter for LoadMoreView
+        self.request.session['book_filter'] = {}
         try:
             books_page = paginator.page(page)
         except EmptyPage:
             books_page = paginator.page(paginator.num_pages)
-
-        # store filtering criteria in session for LoadMoreView
-        self.request.session['book_filter'] = book_filter
 
         context['books'] = books_page.object_list
         context['quote'] = Quote.get_random_quote()
@@ -149,13 +147,10 @@ class CategoryFilterView(ListView):
     def get_queryset(self):
         slug = self.kwargs.get('slug')
         category = get_object_or_404(Category, slug=slug)
-        book_filter = {
-            'category__slug': category.slug,
-            'is_approved': True
-        }
+        book_filter = {'category__slug': category.slug}
         # store filtering criteria in session for LoadMoreView
         self.request.session['book_filter'] = book_filter
-        return Book.objects.filter(**book_filter)
+        return Book.objects.filter(**book_filter, is_approved=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -183,11 +178,10 @@ class SubCategoryFilterView(ListView):
         book_filter = {
             'category__slug': category.slug,
             'sub_category__slug': sub_category.slug,
-            'is_approved': True
         }
         # store filtering criteria in session for LoadMoreView
         self.request.session['book_filter'] = book_filter
-        return Book.objects.filter(**book_filter)
+        return Book.objects.filter(**book_filter, is_approved=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -214,13 +208,10 @@ class SecondhandBooksView(ListView):
     paginate_by = 16
 
     def get_queryset(self):
-        book_filter = {
-            'is_approved': True,
-            'new': False
-        }
+        book_filter = {'new': False}
         # store filtering criteria in session for LoadMoreView
         self.request.session['book_filter'] = book_filter
-        return Book.objects.filter(**book_filter)
+        return Book.objects.filter(**book_filter, is_approved=True)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -234,13 +225,10 @@ class NewBooksView(ListView):
     paginate_by = 16
 
     def get_queryset(self):
-        book_filter = {
-            'is_approved': True,
-            'new': True
-        }
+        book_filter = {'new': True}
         # store filtering criteria in session for LoadMoreView
         self.request.session['book_filter'] = book_filter
-        return Book.objects.filter(**book_filter)
+        return Book.objects.filter(**book_filter, is_approved=True)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -257,7 +245,7 @@ class LoadMoreView(ListView):
     def get(self, request, *args, **kwargs):
         page = request.GET.get('page', 1)
         book_filter = self.request.session.get('book_filter', {})
-        books = Book.objects.filter(**book_filter)
+        books = Book.objects.filter(**book_filter, is_approved=True)
         paginator = Paginator(books, self.paginate_by)
 
         try:

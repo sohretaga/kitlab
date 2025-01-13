@@ -74,6 +74,10 @@ function appendBooks(books) {
         const showcaseActions = document.createElement('div');
         showcaseActions.classList.add('showcase-actions');
 
+        // Mobile showcase actions
+        const mobileShowcaseActions = document.createElement('div');
+        mobileShowcaseActions.classList.add('mobile-showcase-actions');
+
         ['heart-outline', 'repeat-outline', 'chatbubble-ellipses-outline'].forEach(iconName => {
             const button = document.createElement('button');
             button.classList.add('btn-action');
@@ -83,6 +87,7 @@ function appendBooks(books) {
 
             button.appendChild(icon);
             showcaseActions.appendChild(button);
+            mobileShowcaseActions.appendChild(button);
         });
 
         showcaseBanner.appendChild(showcaseActions);
@@ -97,6 +102,7 @@ function appendBooks(books) {
         categoryLink.textContent = book.category_name;
         showcaseContent.appendChild(categoryLink);
 
+
         const titleLink = document.createElement('a');
         titleLink.href = `/book/${book.slug}`;
         const title = document.createElement('h3');
@@ -104,6 +110,8 @@ function appendBooks(books) {
         title.textContent = book.name;
         titleLink.appendChild(title);
         showcaseContent.appendChild(titleLink);
+
+        showcaseContent.appendChild(mobileShowcaseActions)
 
         const priceBox = document.createElement('div');
         priceBox.classList.add('price-box');

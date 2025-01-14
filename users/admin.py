@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import Contact
+from .models import Contact, Favorite
 # Register your models here.
+
+admin.site.register(Favorite)
 
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):

@@ -20,6 +20,9 @@ class Favorite(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='favorites')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('user', 'book')
+
 class Contact(models.Model):
     REASON_CHOICES = [
         ('offer', 'Təklif'),

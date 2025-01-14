@@ -25,3 +25,9 @@
     transform: scale(0.95);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+.favorite {
+    background: var(--salmon-pale-purple) !important;
+    border: 1px solid var(--salmon-pale-purple) !important;
+    color: var(--white) !important;
+}

@@ -103,6 +103,10 @@
                             </div>
                             <div class="tab-pane fade" id="favorites" role="tabpanel" aria-labelledby="favorites-tab">
                                 {% if favorites %}
+                                <p class="hidden-text">
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
+                                </p>
+
                                 <h5 class="fs-18 fw-bold">{{ favorites_count }} kitab</h5>
                                 {% else %}
                                 <div>
@@ -115,6 +119,10 @@
                                 {% endif %}
                             </div>
                             <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                                <p class="hidden-text">
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
+                                </p>
+
                                 <form method="post" enctype="multipart/form-data" action="{% url 'update-profile' %}">
                                     {% csrf_token %}
                                     <div>

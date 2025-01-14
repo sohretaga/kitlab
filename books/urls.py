@@ -23,6 +23,6 @@ urlpatterns = [
     path('sale/success', SuccessSaleView.as_view(), name='success-sale'),
 
     # API's
-    path('get-sub-categories', SubCategoriesView.as_view()),
-    path('load-more-book', LoadMoreView.as_view())
+    path('api/get-sub-categories', SubCategoriesView.as_view()),
+    path('api/load-more-book', LoadMoreView.as_view())
 ]

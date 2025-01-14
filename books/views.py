@@ -6,12 +6,15 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator, EmptyPage
+from django.db.models import Exists, Subquery, OuterRef, F
 from PIL import Image as PilImage
 from io import BytesIO
 from typing import Any
 
 from .models import Book, Image, Category, Publishing, Language, City, Quote
 from .forms import SaleBookForm
+from .utils import get_book_objects
+from users.models import Favorite
 
 import json
 
@@ -21,7 +24,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         page = self.request.GET.get('page', 1)
-        books = Book.objects.filter(is_approved=True)
+        books = get_book_objects(self.request)
         paginator = Paginator(books, 16)
         # reset book filter for LoadMoreView
         self.request.session['book_filter'] = {}
@@ -211,7 +214,7 @@ class SecondhandBooksView(ListView):
         book_filter = {'new': False}
         # store filtering criteria in session for LoadMoreView
         self.request.session['book_filter'] = book_filter
-        return Book.objects.filter(**book_filter, is_approved=True)
+        return  get_book_objects(self.request, **book_filter)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -228,15 +231,12 @@ class NewBooksView(ListView):
         book_filter = {'new': True}
         # store filtering criteria in session for LoadMoreView
         self.request.session['book_filter'] = book_filter
-        return Book.objects.filter(**book_filter, is_approved=True)
+        return get_book_objects(self.request, **book_filter)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Yeni Kitablar'
         return context
-    
-from .models import Image
-from django.db.models import Subquery, OuterRef, F
     
 class LoadMoreView(ListView):
     model = Book
@@ -253,14 +253,23 @@ class LoadMoreView(ListView):
                 book=OuterRef('pk')
             ).values('image')
 
+            if request.user.is_authenticated:
+                is_favorite = Favorite.objects.filter(
+                    user=request.user,
+                    book=OuterRef('pk')
+                )
+            else:
+                is_favorite = Favorite.objects.none()
+
             books_page = paginator.page(page)
             loaded_books = books_page.object_list.annotate(
                 hover_image=Subquery(hover_image[:1]),
-                category_name=F('category__name')
+                category_name=F('category__name'),
+                is_favorite=Exists(is_favorite)
             )
 
             books_data = list(loaded_books.values(
-                'name', 'slug', 'cover_photo', 'hover_image', 'category_name', 'is_approved', 'new', 'price'
+                'id', 'name', 'slug', 'cover_photo', 'hover_image', 'category_name', 'is_approved', 'new', 'price', 'is_favorite'
             ))
 
             return JsonResponse({

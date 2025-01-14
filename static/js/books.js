@@ -1,10 +1,11 @@
 let currentPage = 1;
 const loadMoreButton = document.getElementById('load-more-btn');
 const bookContainer = document.getElementById('book-container');
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 async function fetchBooks(page) {
     try {
-        const response = await fetch(`/load-more-book?page=${page}`);
+        const response = await fetch(`/api/load-more-book?page=${page}`);
         if (!response.ok) throw new Error('Failed to fetch books');
         
         const data = await response.json();
@@ -82,12 +83,23 @@ function appendBooks(books) {
             const button = document.createElement('button');
             button.classList.add('btn-action');
 
+            if (iconName == 'heart-outline') {
+                button.onclick = () => favorite(book.id);
+                button.classList.add(`favorite-btn-${book.id}`);
+
+                if (book.is_favorite) {
+                    button.classList.add('favorite');
+                };
+            };
+
             const icon = document.createElement('ion-icon');
             icon.setAttribute('name', iconName);
 
             button.appendChild(icon);
+            const mobileButton = button.cloneNode(true);
+
+            mobileShowcaseActions.appendChild(mobileButton);
             showcaseActions.appendChild(button);
-            mobileShowcaseActions.appendChild(button);
         });
 
         showcaseBanner.appendChild(showcaseActions);
@@ -111,7 +123,7 @@ function appendBooks(books) {
         titleLink.appendChild(title);
         showcaseContent.appendChild(titleLink);
 
-        showcaseContent.appendChild(mobileShowcaseActions)
+        showcaseContent.appendChild(mobileShowcaseActions);
 
         const priceBox = document.createElement('div');
         priceBox.classList.add('price-box');
@@ -130,3 +142,43 @@ loadMoreButton.addEventListener('click', () => {
     currentPage++;
     fetchBooks(currentPage);
 });
+
+async function favorite(bookId) {
+    try {
+        const response = await fetch('/api/favorite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                book_id: bookId
+            })
+        });
+    
+        if (response.ok) {
+            const data = await response.json();
+            const favoriteBtns = document.querySelectorAll(`.favorite-btn-${bookId}`);
+            favoriteBtns.forEach(btn => {
+                btn.classList.toggle('favorite');
+            });
+
+            if (data.created) {
+                notyf.open({
+                    type: 'info',
+                    message: 'Sevimlilərə əlavə edildi'
+                });
+            } else {
+                notyf.open({
+                    type: 'info',
+                    message: 'Sevimlilərdən silindi'
+                });
+            }
+
+        } else {
+            console.error('Error: ', response.status);
+        }
+    } catch (error) {
+        console.error(error);
+    };
+};

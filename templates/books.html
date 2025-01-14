@@ -22,7 +22,7 @@
 
         <div class="showcase-actions">
 
-          <button class="btn-action">
+          <button class="btn-action favorite-btn-{{ book.id }} {% if book.is_favorite %}favorite{% endif %}" onclick="favorite('{{ book.id }}')">
             <ion-icon name="heart-outline"></ion-icon>
           </button>
 
@@ -49,7 +49,7 @@
         </a>
 
         <div class="mobile-showcase-actions">
-          <button class="btn-action">
+          <button class="btn-action favorite-btn-{{ book.id }} {% if book.is_favorite %}favorite{% endif %}" onclick="favorite('{{ book.id }}')">
             <ion-icon name="heart-outline"></ion-icon>
           </button>
     

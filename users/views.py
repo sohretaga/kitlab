@@ -1,18 +1,23 @@
 from typing import Any
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.forms import BaseModelForm
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, FormView
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
-from .mixins import LogoutRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import OuterRef, Exists
+
+from .mixins import LogoutRequiredMixin
 from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm, ContactForm
-from .models import Profile
+from .models import Profile, Favorite
+from books.models import Book
+
+import json
 
 # Create your views here.
 
@@ -76,13 +81,27 @@ class RegisterView(CreateView):
             break
 
         return HttpResponseRedirect(reverse_lazy('auth'))
-    
+
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'profile.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        user_books = self.request.user.books.all()
-        user_favorites = self.request.user.favorites.all()
+
+        user = self.request.user
+        if user.is_authenticated:
+            is_favorite = Favorite.objects.filter(
+                user=user,
+                book=OuterRef('pk')
+            )
+        else:
+            is_favorite = Favorite.objects.none()
+
+        user_books = self.request.user.books.annotate(
+            is_favorite=Exists(is_favorite)
+        )
+        user_favorites = self.request.user.favorites.annotate(
+            is_favorite=Exists(is_favorite)
+        )
 
         context = super().get_context_data(**kwargs)
         context['books_count'] = user_books.count()
@@ -128,3 +147,31 @@ class ContactView(FormView):
         context = super().get_context_data(**kwargs)
         context['form_success'] = kwargs.get('form_success', '')
         return context
+
+class FavoriteBookView(View):
+    def post(self, request, *args, **kwargs):
+        """
+        Add or remove book from favorites
+        """
+        user=request.user
+
+        if not user.is_authenticated:
+            return JsonResponse({'error': 'Authentication required'})
+
+        body = json.loads(request.body)
+        book_id = body.get('book_id')
+        book = get_object_or_404(Book, id=book_id)
+
+        # Check favorite
+        favorite, created = Favorite.objects.get_or_create(user=request.user, book=book)
+        if created:
+            return JsonResponse({
+                    'message': 'Book added to favorites',
+                    'created': created
+                }, status=201)
+
+        favorite.delete()
+        return JsonResponse({
+                'message': 'Book removed from favorites',
+                'created': created
+            }, status=200)

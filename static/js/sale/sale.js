@@ -201,7 +201,7 @@ function listSubCategories(data) {
   
 
 async function getSubCategories(category) {
-  const url = "/get-sub-categories";
+  const url = "/api/get-sub-categories";
   const categoryId = category.value;
   
   if (categoryId) {

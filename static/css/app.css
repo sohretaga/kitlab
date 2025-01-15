@@ -3310,8 +3310,8 @@ footer {
 
 @media (hover: none) {
   .product-grid .btn-action:hover {
-    background: initial;
-    color: initial;
-    border-color: initial;
+    background: var(--white);
+    color: var(--sonic-silver);
+    border-color: var(--cultured);
   }
 }

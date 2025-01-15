@@ -3307,11 +3307,3 @@ footer {
   }
 
 }
-
-@media (hover: none) {
-  .product-grid .btn-action:hover {
-    background: transparent;
-    color: inherit;
-    border-color: inherit;
-  }
-}

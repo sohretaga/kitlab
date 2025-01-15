@@ -16,4 +16,5 @@ urlpatterns = [
 
     # API's
     path('api/favorite', views.FavoriteBookView.as_view()),
+    path('api/get-user-favorites', views.UserFavoriteBooks.as_view()),
 ]

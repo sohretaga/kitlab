@@ -7,9 +7,9 @@ async function fetchBooks(page) {
     try {
         const response = await fetch(`/api/load-more-book?page=${page}`);
         if (!response.ok) throw new Error('Failed to fetch books');
-        
+
         const data = await response.json();
-        appendBooks(data.books);
+        appendBooks(data.books, bookContainer);
 
         if (!data.has_next) {
             loadMoreButton.disabled = true;
@@ -20,7 +20,7 @@ async function fetchBooks(page) {
     }
 }
 
-function appendBooks(books) {
+function appendBooks(books, container) {
     books.forEach(book => {
         // Showcase main div
         const showcase = document.createElement('div');
@@ -134,7 +134,7 @@ function appendBooks(books) {
         showcaseContent.appendChild(priceBox);
 
         showcase.appendChild(showcaseContent);
-        bookContainer.appendChild(showcase);
+        container.appendChild(showcase);
     });
 }
 
@@ -142,6 +142,25 @@ loadMoreButton.addEventListener('click', () => {
     currentPage++;
     fetchBooks(currentPage);
 });
+
+function favoriteBtnHandle(bookId, created) {
+    const favoriteBtns = document.querySelectorAll(`.favorite-btn-${bookId}`);
+    favoriteBtns.forEach(btn => {
+        btn.classList.toggle('favorite');
+    });
+
+    if (created) {
+        notyf.open({
+            type: 'info',
+            message: 'Sevimlilərə əlavə edildi'
+        });
+    } else {
+        notyf.open({
+            type: 'info',
+            message: 'Sevimlilərdən silindi'
+        });
+    }
+};
 
 async function favorite(bookId) {
     try {
@@ -155,28 +174,16 @@ async function favorite(bookId) {
                 book_id: bookId
             })
         });
-    
+
         if (response.ok) {
             const data = await response.json();
-            const favoriteBtns = document.querySelectorAll(`.favorite-btn-${bookId}`);
-            favoriteBtns.forEach(btn => {
-                btn.classList.toggle('favorite');
+            favoriteBtnHandle(bookId, data.created);
+
+        } else if (response.status == 401) {
+            notyf.open({
+                type: 'info',
+                message: 'Giriş etməlisiniz'
             });
-
-            if (data.created) {
-                notyf.open({
-                    type: 'info',
-                    message: 'Sevimlilərə əlavə edildi'
-                });
-            } else {
-                notyf.open({
-                    type: 'info',
-                    message: 'Sevimlilərdən silindi'
-                });
-            }
-
-        } else {
-            console.error('Error: ', response.status);
         }
     } catch (error) {
         console.error(error);

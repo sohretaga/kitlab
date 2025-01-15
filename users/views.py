@@ -10,12 +10,12 @@ from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import OuterRef, Exists
+from django.db.models import OuterRef, Exists, Subquery, F
 
 from .mixins import LogoutRequiredMixin
 from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm, ContactForm
 from .models import Profile, Favorite
-from books.models import Book
+from books.models import Book, Image
 
 import json
 
@@ -99,15 +99,10 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         user_books = self.request.user.books.annotate(
             is_favorite=Exists(is_favorite)
         )
-        user_favorites = self.request.user.favorites.annotate(
-            is_favorite=Exists(is_favorite)
-        )
 
         context = super().get_context_data(**kwargs)
         context['books_count'] = user_books.count()
         context['books'] = user_books
-        context['favorites_count'] = user_favorites.count()
-        context['favorites'] = user_favorites
 
         book_filter = {'seller__username': self.request.user.username}
         # store filtering criteria in session for books.models.LoadMoreView
@@ -156,7 +151,7 @@ class FavoriteBookView(View):
         user=request.user
 
         if not user.is_authenticated:
-            return JsonResponse({'error': 'Authentication required'})
+            return JsonResponse({'error': 'Authentication required'}, status=401)
 
         body = json.loads(request.body)
         book_id = body.get('book_id')
@@ -175,3 +170,43 @@ class FavoriteBookView(View):
                 'message': 'Book removed from favorites',
                 'created': created
             }, status=200)
+
+class UserFavoriteBooks(LoginRequiredMixin, View):
+    def post(self, *args, **kwargs):
+
+        user = self.request.user
+        is_favorite = Favorite.objects.filter(
+            user=user,
+            book=OuterRef('book_id')
+        )
+
+        hover_image = Image.objects.filter(
+            book=OuterRef('book_id')
+        ).values('image')
+
+        user_fovorites = self.request.user.favorites.annotate(
+            name=F('book__name'),
+            slug=F('book__slug'),
+            cover_photo=F('book__cover_photo'),
+            hover_image=Subquery(hover_image[:1]),
+            category_name=F('book__category__name'),
+            is_approved=F('book__is_approved'),
+            new=F('book__new'),
+            price=F('book__price'),
+            is_favorite=Exists(is_favorite)
+        ).values(
+            'book_id',
+            'name',
+            'slug',
+            'cover_photo',
+            'hover_image',
+            'category_name',
+            'is_approved',
+            'new',
+            'price',
+            'is_favorite'
+        )
+
+        return JsonResponse({
+            'books': list(user_fovorites),
+        }, status=200)

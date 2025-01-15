@@ -102,21 +102,19 @@
                                 {% endif %}
                             </div>
                             <div class="tab-pane fade" id="favorites" role="tabpanel" aria-labelledby="favorites-tab">
-                                {% if favorites %}
                                 <p class="hidden-text">
                                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard
                                 </p>
 
-                                <h5 class="fs-18 fw-bold">{{ favorites_count }} kitab</h5>
-                                {% else %}
-                                <div>
+                                <div id="no-favorites">
                                     <h5 class="fs-18 fw-bold">Sevimli kitab yoxdur</h5>
                                     <p class="text-muted mt-4">
                                         Hələ ki, sevimli kitablar siyahınıza heç bir kitab əlavə etməmisiniz. <b>Kitlab</b> platformasından istifadə edərək,
                                         maraq dairənizə uyğun yeni kitablar kəşf edə və onları sevimlilərinizə əlavə edə bilərsiniz.
                                     </p>
                                 </div>
-                                {% endif %}
+
+                                <div class="product-grid" id="favorite-container"></div>
                             </div>
                             <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                                 <p class="hidden-text">
@@ -267,6 +265,6 @@
 
 {% block script %}
 <script src="{% static 'js/profile/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'js/profile/profile.js' %}"></script>
 <script src="{% static 'js/books.js' %}"></script>
+<script src="{% static 'js/profile/profile.js' %}"></script>
 {% endblock script %}

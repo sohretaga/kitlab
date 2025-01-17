@@ -85,7 +85,26 @@ function handleImageInputs() {
 
 }
 
-document.getElementById("image-input").addEventListener("change", function(event) {
+async function handleHEIC(file) {
+  try {
+    const convertedBlob = await heic2any({
+      blob: file,
+      toType: "image/jpeg",
+    });
+    return new File([convertedBlob], file.name.replace(/\.[^/.]+$/, ".jpeg"), {
+      type: "image/jpeg",
+    });
+  } catch (error) {
+    console.error("HEIC conversion error:", error);
+    notyf.open({
+      type: 'error',
+      message: 'HEIC faylını çevirmək mümkün olmadı.',
+    });
+    return null;
+  }
+};
+
+document.getElementById("image-input").addEventListener("change", async function(event) {
     const mainImageContainer = document.getElementById('main-image-container');
     const mainImagePreviewContainer = document.getElementById('main-image-preview');
     const imagePreviewContainer = document.getElementById("image-preview");
@@ -120,12 +139,17 @@ document.getElementById("image-input").addEventListener("change", function(event
     
     toggleLoadingAnimation(true);
 
-    const imagePromises = Array.from(files).map((file, index) => {
+    const imagePromises = Array.from(files).map(async (file, index) => {
       const options = {
         maxSizeMB: 5,
         maxWidthOrHeight: 1920,
         useWebWorker: true,
       };
+
+      if (file.type === "image/heic" || file.type === "image/heif") {
+        file = await handleHEIC(file);
+        if (!file) return;
+      }
   
       return imageCompression(file, options).then((compressedFile) => {
         return new Promise((resolve) => {
@@ -170,7 +194,11 @@ document.getElementById("image-input").addEventListener("change", function(event
           reader.readAsDataURL(compressedFile);
         });
       }).catch((error) => {
-        console.error("Sıkıştırma hatası: ", error);
+        toggleLoadingAnimation(false);
+        notyf.open({
+          type: 'error',
+          message: 'Yanlış şəkil formatı',
+        });
       });
     });
   

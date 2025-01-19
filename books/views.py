@@ -129,7 +129,25 @@ class BookDetailView(DetailView):
     context_object_name = 'book'
 
     def get_object(self, queryset = ...):
-        book = get_object_or_404(Book, slug=self.kwargs.get('slug'), is_approved=True)
+
+        if self.request.user.is_authenticated:
+            is_favorite = Favorite.objects.filter(
+                user=self.request.user,
+                book=OuterRef('pk')
+            )
+        else:
+            is_favorite = Favorite.objects.none()
+
+        book_queryset = Book.objects.filter(
+            slug=self.kwargs.get('slug'),
+            is_approved=True
+        ).annotate(
+            is_favorite=Exists(is_favorite)
+        )
+
+        book = book_queryset.first()
+        if not book:
+            raise Http404("Book not found")
 
         if book:
             viewed_books = self.request.session.get('viewed_books', [])

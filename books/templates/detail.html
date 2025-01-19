@@ -11,6 +11,7 @@
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'css/detail/detail.css' %}">
 <link rel="stylesheet" href="{% static 'css/left-side.css' %}">
+<link rel="stylesheet" href="{% static 'css/books.css' %}">
 {% endblock stylesheet %}
 
 {% block content %}
@@ -74,7 +75,7 @@
                                                 </div>
 
                                                 <div class="detail-showcase-actions product-grid mt-2">
-                                                    <button class="btn-action">
+                                                    <button class="btn-action favorite-btn-{{ book.id }} {% if book.is_favorite %}favorite{% endif %}" onclick="favorite('{{ book.id }}')">
                                                       <ion-icon name="heart-outline"></ion-icon>
                                                     </button>
                                               
@@ -222,4 +223,5 @@
 {% block script %}
 <script src="{% static 'js/detail/jquery.min.js' %}"></script>
 <script src="{% static 'js/detail/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/books.js' %}"></script>
 {% endblock script %}

@@ -9,7 +9,9 @@ from .views import (
     SecondhandBooksView,
     NewBooksView,
     SubCategoryFilterView,
-    LoadMoreView
+    LoadMoreView,
+    SearchBookNameView,
+    SearchBookView
 )
 
 urlpatterns = [
@@ -21,8 +23,10 @@ urlpatterns = [
     path('books/<slug:slug>', CategoryFilterView.as_view(), name='category-filter'),
     path('books/<slug:category_slug>/<slug:subcategory_slug>', SubCategoryFilterView.as_view(), name='subcategory-filter'),
     path('sale/success', SuccessSaleView.as_view(), name='success-sale'),
+    path('search', SearchBookView.as_view(), name='search'),
 
     # API's
     path('api/get-sub-categories', SubCategoriesView.as_view()),
-    path('api/load-more-book', LoadMoreView.as_view())
+    path('api/load-more-book', LoadMoreView.as_view()),
+    path('api/search-book-name', SearchBookNameView.as_view()),
 ]

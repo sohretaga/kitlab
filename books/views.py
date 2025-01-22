@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator, EmptyPage
-from django.db.models import Exists, Subquery, OuterRef, F
+from django.db.models import Exists, Subquery, OuterRef, F, Q
 from PIL import Image as PilImage
 from io import BytesIO
 from typing import Any
@@ -262,8 +262,19 @@ class LoadMoreView(ListView):
 
     def get(self, request, *args, **kwargs):
         page = request.GET.get('page', 1)
-        book_filter = self.request.session.get('book_filter', {})
-        books = Book.objects.filter(**book_filter, is_approved=True)
+        book_filter:dict = self.request.session.get('book_filter', {})
+
+        # If the query comes from the search page, this part works.
+        query = book_filter.get('q')
+        if query:
+            books = Book.objects.filter(
+                Q(name__icontains=query) |
+                Q(description__icontains=query) |
+                Q(author__icontains=query),
+                is_approved=True)
+        else:
+            books = Book.objects.filter(**book_filter, is_approved=True)
+
         paginator = Paginator(books, self.paginate_by)
 
         try:
@@ -300,3 +311,44 @@ class LoadMoreView(ListView):
                 'books': [],
                 'has_next': False
             })
+        
+class SearchBookNameView(View):
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '')
+        if query:
+            books = Book.objects.filter(name__icontains=query, is_approved=True)[:10].values('name', 'slug', 'author')
+            
+            return JsonResponse({
+                'books': list(books)
+            }, safe=False)
+
+        return JsonResponse({
+            'books': []
+        }, safe=False)
+    
+class SearchBookView(ListView):
+    model = Book
+    template_name = 'book-filter.html'
+    context_object_name = 'books'
+    paginate_by = 16
+
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
+        if query:
+            book_filter = {'q': query}
+
+            # store filtering criteria in session for LoadMoreView
+            self.request.session['book_filter'] = book_filter
+            return Book.objects.filter(
+                Q(name__icontains=query) |
+                Q(description__icontains=query) |
+                Q(author__icontains=query),
+                is_approved=True)
+
+        return Book.objects.none()
+    
+    def get_context_data(self, **kwargs):
+        query = self.request.GET.get('q', '')
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = f'Axtarış: {query}'
+        return context

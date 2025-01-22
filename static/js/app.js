@@ -86,3 +86,42 @@ for (let i = 0; i < accordionBtn.length; i++) {
   });
 
 }
+
+// search book name
+const searchInput = document.getElementById("search-field");
+const dropdownMenu = document.getElementById("search-dropdown-menu");
+
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.toLowerCase();
+
+  if (query.trim() === "") {
+    dropdownMenu.style.display = "none";
+    return;
+  }
+
+  fetch(`/api/search-book-name?q=${query}`)
+    .then(response => response.json())
+    .then(data => {
+      const books = data.books;
+      dropdownMenu.innerHTML = "";
+
+      if (books.length) {
+        books.forEach(item => {
+          const a = document.createElement("a");
+          a.className = "search-dropdown-item";
+          a.textContent = item.name;
+          a.href = `/book/${item.slug}`;
+          dropdownMenu.appendChild(a);
+        });
+      }
+
+      dropdownMenu.style.display = "block";
+    });
+
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".header-search-container")) {
+    dropdownMenu.style.display = "none";
+  }
+});

@@ -3315,3 +3315,29 @@ footer {
     border-color: var(--cultured);
   }
 }
+
+
+/* search book name */
+.search-dropdown-menu {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  border-radius: 10px;
+  background-color: var(--white);
+  box-shadow: 1px 10px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none;
+}
+
+.search-dropdown-item {
+  padding: 10px;
+  font-size: 14px;
+  color: var(--sonic-silver);
+  cursor: pointer;
+  transition: background-color 10ms;
+}
+
+.search-dropdown-item:hover {
+  background-color: var(--salmon-pale-purple);
+  color: var(--white);
+}

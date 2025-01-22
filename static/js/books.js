@@ -143,10 +143,12 @@ function appendBooks(books, container) {
     });
 }
 
-loadMoreButton.addEventListener('click', () => {
-    currentPage++;
-    fetchBooks(currentPage);
-});
+if (loadMoreButton) {
+    loadMoreButton.addEventListener('click', () => {
+        currentPage++;
+        fetchBooks(currentPage);
+    });
+}
 
 function favoriteBtnHandle(bookId, created) {
     const favoriteBtns = document.querySelectorAll(`.favorite-btn-${bookId}`);

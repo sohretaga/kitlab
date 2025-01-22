@@ -218,11 +218,15 @@
 
                 <div class="header-search-container">
 
-                    <input type="search" name="search" class="search-field" placeholder="Yeni kitablar kəşf et...">
+                    <form method="get" action="{% url 'search' %}">
+                        <input type="search" name="q" value="{{ request.GET.q }}" class="search-field" id="search-field" placeholder="Yeni kitablar kəşf et...">
 
-                    <button class="search-btn">
-                        <img src="{% static 'images/ionicons/search-outline.svg' %}" width="18" height="18">
-                    </button>
+                        <button class="search-btn" type="submit">
+                            <img src="{% static 'images/ionicons/search-outline.svg' %}" width="18" height="18">
+                        </button>
+                    </form>
+
+                    <div class="search-dropdown-menu" id="search-dropdown-menu"></div>
 
                 </div>
 

@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
 from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Exists, Subquery, OuterRef, F, Q
+from django.conf import settings
 from PIL import Image as PilImage
 from io import BytesIO
 from typing import Any
@@ -163,7 +164,7 @@ class CategoryFilterView(ListView):
     model = Book
     template_name = 'book-filter.html'
     context_object_name = 'books'
-    paginate_by = 16
+    paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_queryset(self):
         slug = self.kwargs.get('slug')
@@ -184,7 +185,7 @@ class SubCategoryFilterView(ListView):
     model = Book
     template_name = 'book-filter.html'
     context_object_name = 'books'
-    paginate_by = 16
+    paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_category_and_subcategory(self):
         """Helper method to fetch category and subcategory."""
@@ -226,7 +227,7 @@ class SecondhandBooksView(ListView):
     model = Book
     template_name = 'book-filter.html'
     context_object_name = 'books'
-    paginate_by = 16
+    paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_queryset(self):
         book_filter = {'new': False}
@@ -243,7 +244,7 @@ class NewBooksView(ListView):
     model = Book
     template_name = 'book-filter.html'
     context_object_name = 'books'
-    paginate_by = 16
+    paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_queryset(self):
         book_filter = {'new': True}
@@ -258,7 +259,7 @@ class NewBooksView(ListView):
     
 class LoadMoreView(ListView):
     model = Book
-    paginate_by = 16
+    paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get(self, request, *args, **kwargs):
         page = request.GET.get('page', 1)
@@ -330,20 +331,21 @@ class SearchBookView(ListView):
     model = Book
     template_name = 'book-filter.html'
     context_object_name = 'books'
-    paginate_by = 16
+    paginate_by = settings.DEFAULT_PAGINATE_BY
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
         if query:
             book_filter = {'q': query}
-
+            
             # store filtering criteria in session for LoadMoreView
             self.request.session['book_filter'] = book_filter
-            return Book.objects.filter(
+            return get_book_objects(
+                self.request,
                 Q(name__icontains=query) |
                 Q(description__icontains=query) |
-                Q(author__icontains=query),
-                is_approved=True)
+                Q(author__icontains=query)
+            )
 
         return Book.objects.none()
     

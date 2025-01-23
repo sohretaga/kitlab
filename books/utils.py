@@ -14,6 +14,6 @@ def get_book_objects(request, *args, **kwargs):
     else:
         is_favorite = Favorite.objects.none()
 
-    return Book.objects.filter(is_approved=True, **kwargs).annotate(
+    return Book.objects.filter(is_approved=True, *args, **kwargs).annotate(
         is_favorite=Exists(is_favorite)
     )

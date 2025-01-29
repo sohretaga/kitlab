@@ -40,7 +40,7 @@
         <div class="d-lg-flex chat-container" style="width: 100%;">
           <div class="chat-leftsidebar">
             <div class="p-3 border-bottom">
-              <div class="media">
+              <div class="media user-card">
                 <div class="align-self-center mr-3">
                   {% if user.profile.avatar %}
                   <img src="{{ user.profile.avatar.url }}" alt="{{ user.first_name }}" class="avatar-xs rounded-circle"/>
@@ -49,7 +49,7 @@
                   {% endif %}
                 </div>
                 <div class="media-body">
-                  <h5 class="font-size-15 mt-0 mb-1">{{ user.first_name }}</h5>
+                  <h5 class="font-size-15 mt-0 mb-0">{{ user.first_name }}</h5>
                 </div>
 
                 <div>
@@ -68,8 +68,8 @@
               </div>
             </div>
 
-            <ul class="list-unstyled chat-list"  id="message-list">
-              <li class="active">
+            <ul class="list-unstyled chat-list"  id="conversation-list">
+              <li class="active" onclick="loadMessage()">
                 <a href="#">
                   <div class="media">
 
@@ -251,12 +251,19 @@
           <div class="w-100 user-chat mt-4 mt-sm-0">
             <div class="p-3 px-lg-4 user-chat-border">
               <div class="row">
-                <div class="col-md-4 col-6">
-                  <h5 class="font-size-15 mb-1 text-truncate">Frank Vickery</h5>
+                <div class="col-md-4 col-6 media user-card">
+
+                  <button class="mr-1 go-back-btn d-none" onclick="closeChat()"><ion-icon name="chevron-back-outline"></ion-icon></button>
+
+                  <div class="align-self-center mr-3">
+                    <img src="{% static 'images/default-profile-photo.jpg' %}" alt="" class="avatar-xs rounded-circle"/>
+                  </div>
+                  <h5 class="font-size-15 mb-0 text-truncate">Frank Vickery</h5>
                 </div>
+
                 <div class="col-md-8 col-6">
                   <ul class="list-inline user-chat-nav text-right mb-0">
-                    <li class="list-inline-item m-0 d-none d-sm-inline-block">
+                    <li class="list-inline-item m-0 d-sm-inline-block">
                       <div class="dropdown">
                         <button class="btn nav-btn dropdown-toggle" type="button" data-toggle="dropdown"
                           aria-haspopup="true" aria-expanded="false">
@@ -270,21 +277,6 @@
                         </div>
                       </div>
                     </li>
-
-                    <li class="list-inline-item">
-                      <div class="dropdown">
-                        <button class="btn nav-btn dropdown-toggle" type="button" data-toggle="dropdown"
-                          aria-haspopup="true" aria-expanded="false">
-                          <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <a class="dropdown-item" href="#">Something else</a>
-                        </div>
-                      </div>
-                    </li>
-
                   </ul>
                 </div>
               </div>
@@ -292,7 +284,7 @@
 
             <div class="px-lg-2 overflow-auto">
               <div class="chat-conversation p-3">
-                <ul class="list-unstyled mb-0 pr-3 overflow-auto" data-simplebar style="max-height: 450px;">
+                <ul class="list-unstyled mb-0 pr-3 overflow-auto">
                   <li>
                     <div class="conversation-list">
                       <div class="chat-avatar">
@@ -409,23 +401,21 @@
                     </div>
                   </li>
 
-
                 </ul>
               </div>
 
             </div>
-            <div class="px-lg-3">
+            <div class="px-lg-3" id="message-input">
               <div class="p-3 chat-input-section">
                 <div class="row">
                   <div class="col">
                     <div class="position-relative">
-                      <input type="text" class="form-control chat-input" placeholder="Enter Message...">
+                      <input type="text" class="form-control chat-input" placeholder="Mesaj...">
 
                     </div>
                   </div>
-                  <div class="col-auto">
-                    <button type="submit" class="btn btn-primary chat-send w-md waves-effect waves-light"><span
-                        class="d-none d-sm-inline-block mr-2">Göndər</span></button>
+                  <div class="col-auto send-message-btn">
+                    <ion-icon name="paper-plane-outline" class="d-sm-inline-block"></ion-icon>
                   </div>
                 </div>
               </div>
@@ -445,6 +435,7 @@
 {% endblock content %}
 
 {% block script %}
+<script src="{% static 'js/message/message.js' %}"></script>
 <script src="{% static 'js/message/jquery.min.js' %}"></script>
 <script src="{% static 'js/message/bootstrap.bundle.min.js' %}"></script>
 {% endblock script %}

@@ -812,6 +812,10 @@ button {
     overflow: auto;
 }
 
+.chat-conversation ul {
+    max-height: 450px;
+}
+
 .chat-list li.active a {
     background-color: rgba(241, 245, 247, 0.7);
 }
@@ -982,9 +986,42 @@ button {
     }
 }
 
+.user-card {
+    align-items: center;
+}
+
+.send-message-btn {
+    font-size: 30px;
+    padding: 0;
+    color: var(--salmon-pale-purple);
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 992px) {
+    .go-back-btn {
+        height: 100%;
+        width: 25px;
+        margin-left: -10px !important;
+        display: block !important;
+    }
+
+    .send-message-btn {
+        margin-top: 5px;
+    }
+
+    .chat-conversation,
+    .chat-conversation ul {
+        max-height: calc(100% - 300px);
+        position: fixed;
+        overflow: auto;
+        padding-left: 1rem !important;
+        left: 0;
+        right: 0;
+    }
+
     .user-chat {
-        display: none;
+        margin-top: 0 !important;
+        display: none;        
     }
 
     .chat-list {
@@ -1021,6 +1058,11 @@ button {
         max-height: calc(100% - 215px);
         overflow: auto;
         width: 100%;
+    }
+
+    .chat-conversation,
+    .chat-conversation ul {
+        max-height: calc(100% - 250px);
     }
 }
 

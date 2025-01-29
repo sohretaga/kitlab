@@ -249,7 +249,11 @@
                     </button>
 
                     <button class="action-btn">
-                        <a href="#"><img src="{% static 'images/ionicons/chatbubble-ellipses-outline.svg' %}" width="35" height="34"></a>
+                        {% if 'message' in request.path %}
+                        <a href="{% url 'message' %}"><img src="{% static 'images/ionicons/chatbubble-ellipses-sharp.svg' %}" width="35" height="34"></a>
+                        {% else %}
+                        <a href="{% url 'message' %}"><img src="{% static 'images/ionicons/chatbubble-ellipses-outline.svg' %}" width="35" height="34"></a>
+                        {% endif %}
                         <span class="count">0</span>
                     </button>
 
@@ -296,7 +300,11 @@
             </button>
 
             <button class="action-btn">
-                <a href="#"><img src="{% static 'images/ionicons/chatbubble-ellipses-outline.svg' %}" width="26" height="26"></a>
+                {% if 'message' in request.path %}
+                <a href="{% url 'message' %}"><img src="{% static 'images/ionicons/chatbubble-ellipses-sharp.svg' %}" width="26" height="26"></a>
+                {% else %}
+                <a href="{% url 'message' %}"><img src="{% static 'images/ionicons/chatbubble-ellipses-outline.svg' %}" width="26" height="26"></a>
+                {% endif %}
                 <span class="count">0</span>
             </button>
 

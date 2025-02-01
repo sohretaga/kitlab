@@ -9,7 +9,9 @@ const sendBtn = document.getElementById("send");
 const currentPartnerName = document.getElementById('current-partner-name');
 const currentPartnerAvatar = document.getElementById('current-partner-avatar');
 let activeSockets = {};
-let currentRoom = null;  
+let currentRoom = null;
+
+const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 
 const openChat = () => {
     chatLeftside.style.display = 'none';
@@ -177,7 +179,7 @@ const loadMessage = (event) => {
         activeSockets[currentRoom].close();
     }
 
-    let socket = new WebSocket(`ws://${window.location.host}/ws/message/${roomId}/`);
+    const socket = new WebSocket(`${protocol}${window.location.host}/ws/message/${roomId}/`);
     activeSockets[roomId] = socket;
     currentRoom = roomId;
 

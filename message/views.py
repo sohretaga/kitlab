@@ -40,7 +40,7 @@ class MessageView(LoginRequiredMixin, TemplateView):
             last_message=Subquery(
                 Message.objects.filter(
                     Q(sender_id=OuterRef('pk')) | Q(sender_id=self.request.user.id),
-                    conversation__in=conversations
+                    conversation__participants=OuterRef('id')
                 )
                 .order_by('-timestamp')
                 .values('content')[:1]

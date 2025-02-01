@@ -1,17 +1,10 @@
-
-
-
-
-
-
-
-
 {% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Mesajlar - Kitlab{% endblock title %}
 
 {% block stylesheet %}
+<meta name="logged-user" content="{{ user.id }}">
 <link rel="stylesheet" href="{% static 'css/message/app.css' %}">
 <link rel="stylesheet" href="{% static 'css/left-side.css' %}">
 {% endblock stylesheet %}
@@ -69,182 +62,30 @@
             </div>
 
             <ul class="list-unstyled chat-list"  id="conversation-list">
-              <li class="active" onclick="loadMessage()">
-                <a href="#">
+              {% for partner in partners %}
+              <li onclick="loadMessage(this)" data-room="{{ partner.conversation_id }}">
+                <a href="javascript:void(0)">
                   <div class="media">
 
                     <div class="user-img online align-self-center mr-3">
-                      <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle avatar-xs" alt="">
+                      {% if partner.profile.avatar %}
+                      <img src="{{ partner.profile.avatar.url }}" class="rounded-circle avatar-xs" alt="{{ partner.first_name }}">
+                      {% else %}
+                      <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle avatar-xs" alt="{{ partner.first_name }}">
+                      {% endif %}
                       <span class="user-status"></span>
                     </div>
 
                     <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Frank Vickery</h5>
+                      <h5 class="text-truncate font-size-14 mb-1" id="full-name">{{ partner.first_name }}</h5>
                       <p class="text-truncate mb-0">Hey! there I'm available</p>
                     </div>
-                    <div class="font-size-11">04 min</div>
+                    <div class="font-size-11"></div>
                   </div>
                 </a>
               </li>
+              {% endfor %}
 
-              <li>
-                <a href="#">
-                  <div class="media">
-                    <div class="user-img away align-self-center mr-3">
-                      <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle avatar-xs" alt="">
-                      <span class="user-status"></span>
-                    </div>
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Robert Winter</h5>
-                      <p class="text-truncate mb-0">I've finished it! See you so</p>
-                    </div>
-                    <div class="font-size-11">09 min</div>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#">
-                  <div class="media">
-                    <div class="user-img online mr-3">
-                      <div class="avatar-xs align-self-center">
-                        <span class="avatar-title rounded-circle bg-light text-body">
-                          C
-                        </span>
-                      </div>
-                      <span class="user-status"></span>
-                    </div>
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Crystal Elliott</h5>
-                      <p class="text-truncate mb-0">This theme is awesome!</p>
-                    </div>
-                    <div class="font-size-11">21 min</div>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#">
-                  <div class="media">
-
-                    <div class="user-img online align-self-center mr-3">
-                      <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle avatar-xs" alt="">
-                      <span class="user-status"></span>
-                    </div>
-
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Frank Vickery</h5>
-                      <p class="text-truncate mb-0">Hey! there I'm available</p>
-                    </div>
-                    <div class="font-size-11">04 min</div>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#">
-                  <div class="media">
-                    <div class="user-img align-self-center mr-3">
-                      <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle avatar-xs" alt="">
-                      <span class="user-status"></span>
-                    </div>
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Kristen Steele</h5>
-                      <p class="text-truncate mb-0">Nice to meet you</p>
-                    </div>
-                    <div class="font-size-11">1 hr</div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <div class="media">
-                    <div class="user-img away mr-3">
-                      <div class="avatar-xs align-self-center">
-                        <span class="avatar-title rounded-circle bg-light text-body">
-                          M
-                        </span>
-                      </div>
-                      <span class="user-status"></span>
-                    </div>
-
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Mitchel Givens</h5>
-                      <p class="text-truncate mb-0">Hey! there I'm available</p>
-                    </div>
-                    <div class="font-size-11">3 hrs</div>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#">
-                  <div class="media">
-                    <div class="user-img online align-self-center mr-3">
-                      <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle avatar-xs" alt="">
-                      <span class="user-status"></span>
-                    </div>
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Stephen Hadley</h5>
-                      <p class="text-truncate mb-0">I've finished it! See you so</p>
-                    </div>
-                    <div class="font-size-11">5hrs</div>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#">
-                  <div class="media">
-                    <div class="user-img online align-self-center mr-3">
-                      <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle avatar-xs" alt="">
-                      <span class="user-status"></span>
-                    </div>
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Stephen Hadley</h5>
-                      <p class="text-truncate mb-0">I've finished it! See you so</p>
-                    </div>
-                    <div class="font-size-11">5hrs</div>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#">
-                  <div class="media">
-                    <div class="user-img online align-self-center mr-3">
-                      <img src="{% static 'images/default-profile-photo.jpg' %}" class="rounded-circle avatar-xs" alt="">
-                      <span class="user-status"></span>
-                    </div>
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Stephen Hadley</h5>
-                      <p class="text-truncate mb-0">I've finished it! See you so</p>
-                    </div>
-                    <div class="font-size-11">5hrs</div>
-                  </div>
-                </a>
-              </li>
-
-              <li>
-                <a href="#">
-                  <div class="media">
-                    <div class="user-img online mr-3">
-                      <div class="avatar-xs align-self-center">
-                        <span class="avatar-title rounded-circle bg-light text-body">
-                          K
-                        </span>
-                      </div>
-                      <span class="user-status"></span>
-                    </div>
-
-                    <div class="media-body overflow-hidden">
-                      <h5 class="text-truncate font-size-14 mb-1">Tracy Penley</h5>
-                      <p class="text-truncate mb-0">This theme is awesome!</p>
-                    </div>
-                    <div class="font-size-11">24/03</div>
-                  </div>
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -256,9 +97,9 @@
                   <button class="mr-1 go-back-btn d-none" onclick="closeChat()"><ion-icon name="chevron-back-outline"></ion-icon></button>
 
                   <div class="align-self-center mr-3">
-                    <img src="{% static 'images/default-profile-photo.jpg' %}" alt="" class="avatar-xs rounded-circle"/>
+                    <img src="" alt="" id="current-partner-avatar" class="avatar-xs rounded-circle"/>
                   </div>
-                  <h5 class="font-size-15 mb-0 text-truncate">Frank Vickery</h5>
+                  <h5 class="font-size-15 mb-0 text-truncate" id="current-partner-name"></h5>
                 </div>
 
                 <div class="col-md-8 col-6">
@@ -284,124 +125,7 @@
 
             <div class="px-lg-2 overflow-auto">
               <div class="chat-conversation p-3">
-                <ul class="list-unstyled mb-0 pr-3 overflow-auto">
-                  <li>
-                    <div class="conversation-list">
-                      <div class="chat-avatar">
-                        <img src="{% static 'images/default-profile-photo.jpg' %}" alt="">
-                      </div>
-                      <div class="ctext-wrap">
-                        <div class="conversation-name">Frank Vickery</div>
-                        <div class="ctext-wrap-content">
-                          <p class="mb-0">
-                            Hey! I am available
-                          </p>
-                        </div>
-                        <p class="chat-time mb-0"><i class="mdi mdi-clock-outline align-middle mr-1"></i> 12:09</p>
-                      </div>
-
-                    </div>
-                  </li>
-
-                  <li class="right">
-                    <div class="conversation-list">
-                      <div class="ctext-wrap">
-                        <div class="conversation-name">Ricky Clark</div>
-                        <div class="ctext-wrap-content">
-                          <p class="mb-0">
-                            Hi, How are you? What about our next meeting?
-                          </p>
-                        </div>
-
-                        <p class="chat-time mb-0"><i class="bx bx-time-five align-middle mr-1"></i> 10:02</p>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="conversation-list">
-                      <div class="chat-avatar">
-                        <img src="{% static 'images/default-profile-photo.jpg' %}" alt="">
-                      </div>
-                      <div class="ctext-wrap">
-                        <div class="conversation-name">Frank Vickery</div>
-                        <div class="ctext-wrap-content">
-                          <p class="mb-0">
-                            Hello!
-                          </p>
-                        </div>
-                        <p class="chat-time mb-0"><i class="mdi mdi-clock-outline mr-1"></i> 10:00</p>
-                      </div>
-
-                    </div>
-                  </li>
-
-                  <li class="right">
-                    <div class="conversation-list">
-                      <div class="ctext-wrap">
-                        <div class="conversation-name">Ricky Clark</div>
-                        <div class="ctext-wrap-content">
-                          <p class="mb-0">
-                            Hi, How are you? What about our next meeting?
-                          </p>
-                        </div>
-
-                        <p class="chat-time mb-0"><i class="mdi mdi-clock-outline mr-1"></i> 10:02</p>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="conversation-list">
-                      <div class="chat-avatar">
-                        <img src="{% static 'images/default-profile-photo.jpg' %}" alt="">
-                      </div>
-                      <div class="ctext-wrap">
-                        <div class="conversation-name">Frank Vickery</div>
-                        <div class="ctext-wrap-content">
-                          <p class="mb-0">
-                            Yeah everything is fine
-                          </p>
-                        </div>
-
-                        <p class="chat-time mb-0"><i class="mdi mdi-clock-outline mr-1"></i> 10:06</p>
-                      </div>
-
-                    </div>
-                  </li>
-
-                  <li>
-                    <div class="conversation-list">
-                      <div class="chat-avatar">
-                        <img src="{% static 'images/default-profile-photo.jpg' %}" alt="">
-                      </div>
-                      <div class="ctext-wrap">
-                        <div class="conversation-name">Frank Vickery</div>
-                        <div class="ctext-wrap-content">
-                          <p class="mb-0">& Next meeting tomorrow 10.00AM</p>
-                        </div>
-                        <p class="chat-time mb-0"><i class="mdi mdi-clock-outline mr-1"></i> 10:06</p>
-                      </div>
-
-                    </div>
-                  </li>
-
-                  <li class="right">
-                    <div class="conversation-list">
-                      <div class="ctext-wrap">
-                        <div class="conversation-name">Ricky Clark</div>
-                        <div class="ctext-wrap-content">
-                          <p class="mb-0">
-                            Wow that's great
-                          </p>
-                        </div>
-
-                        <p class="chat-time mb-0"><i class="mdi mdi-clock-outline mr-1"></i> 10:07</p>
-                      </div>
-                    </div>
-                  </li>
-
-                </ul>
+                <ul class="list-unstyled mb-0 pr-3 overflow-auto" id="message-list"></ul>
               </div>
 
             </div>
@@ -410,11 +134,11 @@
                 <div class="row">
                   <div class="col">
                     <div class="position-relative">
-                      <input type="text" class="form-control chat-input" placeholder="Mesaj...">
+                      <input type="text" class="form-control chat-input" id="message" placeholder="Mesaj...">
 
                     </div>
                   </div>
-                  <div class="col-auto send-message-btn">
+                  <div class="col-auto send-message-btn" id="send">
                     <ion-icon name="paper-plane-outline" class="d-sm-inline-block"></ion-icon>
                   </div>
                 </div>

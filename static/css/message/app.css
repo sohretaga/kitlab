@@ -812,6 +812,10 @@ button {
     overflow: auto;
 }
 
+#message-list {
+    height: 565px;
+}
+
 .chat-conversation ul {
     max-height: 450px;
 }

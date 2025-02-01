@@ -30,7 +30,7 @@
             <ion-icon name="repeat-outline"></ion-icon>
           </button>
 
-          <a href="#">
+          <a href="{% url 'message-with-username' book.seller.username %}">
             <button class="btn-action">
               <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
             </button>
@@ -57,7 +57,7 @@
             <ion-icon name="repeat-outline"></ion-icon>
           </button>
     
-          <a href="chat.html">
+          <a href="{% url 'message-with-username' book.seller.username %}">
             <button class="btn-action">
               <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
             </button>

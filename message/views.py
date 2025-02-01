@@ -5,7 +5,7 @@ from message.models import Conversation
 from django.db.models import Subquery, OuterRef
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from message.models import Conversation
+from message.models import Conversation, Message
 import json
 
 class MessageView(LoginRequiredMixin, TemplateView):
@@ -36,6 +36,12 @@ class MessageView(LoginRequiredMixin, TemplateView):
                 conversations.filter(
                     participants=OuterRef('id')
                 ).values('id')[:1]
+            ),
+            last_message=Subquery(
+                Message.objects.filter(
+                    conversation__in=conversations,
+                ).order_by('-timestamp')
+                .values('content')[:1]
             )
         )
         context['partners'] = partners

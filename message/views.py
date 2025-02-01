@@ -33,7 +33,7 @@ class MessageView(LoginRequiredMixin, TemplateView):
             id=self.request.user.id
         ).annotate(
             conversation_id=Subquery(
-                Conversation.objects.filter(
+                conversations.filter(
                     participants=OuterRef('id')
                 ).values('id')[:1]
             )

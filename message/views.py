@@ -2,7 +2,7 @@ from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from message.models import Conversation
-from django.db.models import Subquery, OuterRef
+from django.db.models import Subquery, OuterRef, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from message.models import Conversation, Message
@@ -39,8 +39,10 @@ class MessageView(LoginRequiredMixin, TemplateView):
             ),
             last_message=Subquery(
                 Message.objects.filter(
-                    conversation__in=conversations,
-                ).order_by('-timestamp')
+                    Q(sender_id=OuterRef('pk')) | Q(sender_id=self.request.user.id),
+                    conversation__in=conversations
+                )
+                .order_by('-timestamp')
                 .values('content')[:1]
             )
         )

@@ -17,6 +17,8 @@ let currentRoom = null;
 
 const deactivateConversation = () => {
     const currentActiveRoom = document.querySelector('li.active');
+    message.value = '';
+
     if (currentActiveRoom) {
         currentActiveRoom.classList.remove('active');
     }
@@ -29,6 +31,7 @@ const openChat = () => {
     userChat.style.display = 'block';
     mobileBottomNavigation.style.display = 'none';
     messageDiv.classList.add('mobile-bottom-navigation');
+    message.focus();
 }
 
 const closeChat = () => {

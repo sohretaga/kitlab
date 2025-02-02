@@ -812,12 +812,12 @@ button {
     overflow: auto;
 }
 
-#message-list {
-    height: 565px;
-}
+/* #message-list {
+    min-height: 565px;
+} */
 
 .chat-conversation ul {
-    max-height: 450px;
+    height: 450px;
 }
 
 .chat-list li.active a {
@@ -886,6 +886,11 @@ button {
     -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     border: 1px solid #eff2f7;
+}
+
+.chat-conversation {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 .chat-conversation li {
@@ -1128,7 +1133,6 @@ button {
     right: -10px;
 }
 
-
 .conversation-compose .send {
     background: transparent;
     border: 0;
@@ -1215,6 +1219,10 @@ button {
 /* End Message Bubble */
 
 @media only screen and (max-width: 992px) {
+    .header-top {
+        display: none !important;
+    }
+
     .mobile-bottom-navigation {
         -webkit-box-shadow: unset !important;
         box-shadow: unset !important;
@@ -1237,7 +1245,7 @@ button {
 
     .chat-conversation,
     .chat-conversation ul {
-        max-height: calc(100% - 300px);
+        height: calc(100% - 130px);
         position: fixed;
         overflow: auto;
         padding-left: 1rem !important;
@@ -1284,11 +1292,6 @@ button {
         max-height: calc(100% - 215px);
         overflow: auto;
         width: 100%;
-    }
-
-    .chat-conversation,
-    .chat-conversation ul {
-        max-height: calc(100% - 250px);
     }
 }
 

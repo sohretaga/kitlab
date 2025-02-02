@@ -8,10 +8,16 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute
 const sendBtn = document.getElementById("send");
 const currentPartnerName = document.getElementById('current-partner-name');
 const currentPartnerAvatar = document.getElementById('current-partner-avatar');
+const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 let activeSockets = {};
 let currentRoom = null;
 
-const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+const deactivateConversation = () => {
+    const currentActiveRoom = document.querySelector('li.active');
+    if (currentActiveRoom) {
+        currentActiveRoom.classList.remove('active');
+    }
+}
 
 const openChat = () => {
     chatLeftside.style.display = 'none';
@@ -25,6 +31,7 @@ const closeChat = () => {
     userChat.style.display = 'none';
     mobileBottomNavigation.style.display = 'flex';
     messageInput.classList.remove('mobile-bottom-navigation');
+    deactivateConversation();
 }
 
 const scrollToBottom = () => {
@@ -34,41 +41,23 @@ const scrollToBottom = () => {
 
 const createLeftChatItem = (user) => {
     const li = document.createElement('li');
+    li.className = 'left';
 
-    const conversationList = document.createElement('div');
-    conversationList.className = 'conversation-list';
+    const receivedMessageDiv = document.createElement('div');
+    receivedMessageDiv.className = 'message received';
 
-    const chatAvatar = document.createElement('div');
-    chatAvatar.className = 'chat-avatar';
-    const img = document.createElement('img');
-    img.src = user.avatar;
-    img.alt = user.name;
-    chatAvatar.appendChild(img);
+    const metadataDiv = document.createElement('span');
+    metadataDiv.className = 'metadata';
 
-    const ctextWrap = document.createElement('div');
-    ctextWrap.className = 'ctext-wrap';
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'time';
+    timeSpan.textContent = user.time;
 
-    const conversationName = document.createElement('div');
-    conversationName.className = 'conversation-name';
-    conversationName.textContent = user.name;
+    metadataDiv.appendChild(timeSpan);
 
-    const ctextWrapContent = document.createElement('div');
-    ctextWrapContent.className = 'ctext-wrap-content';
-    const messageParagraph = document.createElement('p');
-    messageParagraph.className = 'mb-0';
-    messageParagraph.textContent = user.message;
-    ctextWrapContent.appendChild(messageParagraph);
-
-    const chatTime = document.createElement('p');
-    chatTime.className = 'chat-time mb-0';
-    chatTime.innerHTML = `<i class="mdi mdi-clock-outline align-middle mr-1"></i> ${user.time}`;
-
-    ctextWrap.appendChild(conversationName);
-    ctextWrap.appendChild(ctextWrapContent);
-    ctextWrap.appendChild(chatTime);
-    conversationList.appendChild(chatAvatar);
-    conversationList.appendChild(ctextWrap);
-    li.appendChild(conversationList);
+    receivedMessageDiv.textContent = user.message;
+    receivedMessageDiv.appendChild(metadataDiv);
+    li.appendChild(receivedMessageDiv);
 
     return li;
 }
@@ -77,32 +66,21 @@ const createRightChatItem = (user) => {
     const li = document.createElement('li');
     li.className = 'right';
 
-    const conversationList = document.createElement('div');
-    conversationList.className = 'conversation-list';
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message sent';
 
-    const ctextWrap = document.createElement('div');
-    ctextWrap.className = 'ctext-wrap';
+    const metadataDiv = document.createElement('span');
+    metadataDiv.className = 'metadata';
 
-    const conversationName = document.createElement('div');
-    conversationName.className = 'conversation-name';
-    conversationName.textContent = user.name;
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'time';
+    timeSpan.textContent = user.time;
 
-    const ctextWrapContent = document.createElement('div');
-    ctextWrapContent.className = 'ctext-wrap-content';
-    const messageParagraph = document.createElement('p');
-    messageParagraph.className = 'mb-0';
-    messageParagraph.textContent = user.message;
-    ctextWrapContent.appendChild(messageParagraph);
+    metadataDiv.appendChild(timeSpan);
 
-    const chatTime = document.createElement('p');
-    chatTime.className = 'chat-time mb-0';
-    chatTime.innerHTML = `<i class="bx bx-time-five align-middle mr-1"></i> ${user.time}`;
-
-    ctextWrap.appendChild(conversationName);
-    ctextWrap.appendChild(ctextWrapContent);
-    ctextWrap.appendChild(chatTime);
-    conversationList.appendChild(ctextWrap);
-    li.appendChild(conversationList);
+    messageDiv.textContent = user.message;
+    messageDiv.appendChild(metadataDiv);
+    li.appendChild(messageDiv);
 
     return li;
 }
@@ -130,16 +108,13 @@ async function listAllMessage(conversation_id, user) {
             let messageHTML = '';
             if (element.sender_id == loggedUserId) {
                 messageHTML = createRightChatItem({
-                    name: data.full_name,
                     message: element.content,
                     time: "10:02"
                 });
             } else {
                 messageHTML = createLeftChatItem({
-                    name: user.name,
                     message: element.content,
                     time: "12:09",
-                    avatar: user.avatar
                 });
             }
 
@@ -164,16 +139,8 @@ const loadMessage = (event) => {
         avatar: partnerAvatar
     });
 
-    const currentActiveRoom = document.querySelector('li.active');
-    if (currentActiveRoom) {
-        currentActiveRoom.classList.remove('active');
-    }
-
+    deactivateConversation();
     event.classList.add('active');
-
-    if (roomId === currentRoom) {
-        return;
-    }
 
     if (currentRoom !== null && activeSockets[currentRoom]) {
         activeSockets[currentRoom].close();
@@ -183,7 +150,7 @@ const loadMessage = (event) => {
     activeSockets[roomId] = socket;
     currentRoom = roomId;
 
-    socket.onmessage = function(e) {
+    socket.onmessage = function (e) {
         let data = JSON.parse(e.data);
         messageHTML = '';
         if (data.sender_id == loggedUserId) {
@@ -205,7 +172,7 @@ const loadMessage = (event) => {
         scrollToBottom();
     };
 
-    sendBtn.addEventListener("click", function() {
+    sendBtn.addEventListener("click", function () {
         const message = document.getElementById("message");
         socket.send(JSON.stringify({ "message": message.value, "sender": loggedUserId }));
         message.value = '';
@@ -217,7 +184,7 @@ const loadMessage = (event) => {
     }
 }
 
-document.getElementById('message-input').addEventListener('keypress', function(event) {
+document.getElementById('message-input').addEventListener('keypress', function (event) {
     if (event.key === 'Enter') {
         sendBtn.click();
     }

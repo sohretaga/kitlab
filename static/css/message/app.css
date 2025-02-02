@@ -254,7 +254,7 @@ button {
     opacity: 0.65;
 }
 
-.chat-container  .btn:not(:disabled):not(.disabled) {
+.chat-container .btn:not(:disabled):not(.disabled) {
     cursor: pointer;
 }
 
@@ -326,6 +326,7 @@ button {
 .dropdown-menu.show {
     top: 100% !important;
 }
+
 .dropdown-menu.show {
     display: block;
 }
@@ -348,8 +349,7 @@ button {
     border: 0;
 }
 
-.dropdown-item:hover
-.dropdown-item:focus {
+.dropdown-item:hover .dropdown-item:focus {
     color: var(--salmon-pale-purple);
     text-decoration: none;
     background-color: #f8f9fa;
@@ -952,6 +952,7 @@ button {
 .chat-input-section {
     background-color: #fff;
     border-radius: 0.25rem;
+
 }
 
 .chat-input {
@@ -1001,7 +1002,174 @@ button {
     cursor: pointer;
 }
 
+.left {
+    margin-left: 10px;
+}
+
+.message {
+    color: #000;
+    clear: both;
+    line-height: 18px;
+    font-size: 15px;
+    padding: 8px;
+    position: relative;
+    margin: 8px 0;
+    max-width: 85%;
+    word-wrap: break-word;
+    z-index: 1;
+}
+
+.message:after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.metadata {
+    display: inline-block;
+    float: right;
+    padding: 0 0 0 7px;
+    position: relative;
+    bottom: -4px;
+}
+
+.metadata .time {
+    color: rgba(0, 0, 0, .45);
+    font-size: 11px;
+    display: inline-block;
+}
+
+.message.received {
+    background: #e1ffc7;
+    color: #000;
+    border-radius: 0px 10px 10px 10px;
+    float: left;
+}
+
+.message.received .metadata {
+    padding: 0 0 0 16px;
+}
+
+.message.received:after {
+    border-width: 0px 10px 10px 0;
+    border-color: transparent #e1ffc7 transparent transparent;
+    top: 0;
+    left: -10px;
+}
+
+.message.sent {
+    background: #eff2f7;
+    border-radius: 10px 0px 10px 10px;
+    float: right;
+}
+
+.message.sent:after {
+    border-width: 0px 0 10px 10px;
+    border-color: transparent transparent transparent #eff2f7;
+    top: 0;
+    right: -10px;
+}
+
+.conversation-compose {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    overflow: hidden;
+    height: 50px;
+    width: 100%;
+    z-index: 2;
+}
+
+.conversation-compose div,
+.conversation-compose input {
+    background: #eff2f7;
+    height: 100%;
+}
+
+.conversation-compose .emoji {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eff2f7;
+    border-radius: 10px 0 0 10px;
+    flex: 0 0 auto;
+    margin-left: 8px;
+    width: 48px;
+}
+
+.conversation-compose .input-msg {
+    border: 0;
+    flex: 1 1 auto;
+    font-size: 16px;
+    margin: 0;
+    outline: none;
+    min-width: 50px;
+}
+
+.conversation-compose .photo {
+    flex: 0 0 auto;
+    border-radius: 0 0 10px 0;
+    text-align: center;
+    position: relative;
+    width: 48px;
+}
+
+.conversation-compose .photo:after {
+    border-width: 0px 0 10px 10px;
+    border-color: transparent transparent transparent #eff2f7;
+    border-style: solid;
+    position: absolute;
+    width: 0;
+    height: 0;
+    content: "";
+    top: 0;
+    right: -10px;
+}
+
+
+.conversation-compose .send {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    flex: 0 0 auto;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: 0;
+    position: relative;
+    outline: none;
+    font-size: 25px;
+}
+
+.conversation-compose .send .circle {
+    background: var(--salmon-pale-purple);
+    border-radius: 50%;
+    color: #fff;
+    position: relative;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.conversation-compose .send .circle .send-icon {
+    font-size: 24px;
+    margin-right: 3px;
+    margin-top: 2px;
+}
+
 @media only screen and (max-width: 992px) {
+    .mobile-bottom-navigation {
+        -webkit-box-shadow: unset !important;
+        box-shadow: unset !important;
+    }
+
+    .chat-input-section {
+        padding: 0 10px !important;
+    }
+
     .go-back-btn {
         height: 100%;
         width: 25px;
@@ -1025,7 +1193,7 @@ button {
 
     .user-chat {
         margin-top: 0 !important;
-        display: none;        
+        display: none;
     }
 
     .chat-list {
@@ -1072,6 +1240,6 @@ button {
 
 @media (max-width: 1024px) {
     .chat-leftsidebar {
-      min-width: 250px;
+        min-width: 250px;
     }
 }

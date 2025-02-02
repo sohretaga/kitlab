@@ -25,27 +25,44 @@ class MessageConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        message_content = data['message']
+        message_type = data['type']
         sender_id = data['sender']
 
-        sender = await self.get_user(sender_id)
-        conversation = await self.get_conversation(self.room_name)
+        if message_type == 'chat_message':
+            message_content = data['message']
 
-        if sender and conversation:
-            message = await self.create_message(conversation, sender, message_content)
+            sender = await self.get_user(sender_id)
+            conversation = await self.get_conversation(self.room_name)
+
+            if sender and conversation:
+                message = await self.create_message(conversation, sender, message_content)
+
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "chat_message",
+                        "message": message.content,
+                        "sender_id": sender_id,
+                        "full_name": sender.first_name,
+                        "timestamp": str(message.timestamp)
+                    }
+                )
+        elif message_type == 'chat_typing':
+            has_message = data['has_message']
 
             await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    "type": "chat_message",
-                    "message": message.content,
-                    "sender_id": sender_id,
-                    "full_name": sender.first_name,
-                    "timestamp": str(message.timestamp)
-                }
-            )
+                    self.room_group_name,
+                    {
+                        "type": "chat_typing",
+                        "has_message": has_message,
+                        "sender_id": sender_id
+                    }
+                )
 
     async def chat_message(self, event):
+        await self.send(text_data=json.dumps(event))
+    
+    async def chat_typing(self, event):
         await self.send(text_data=json.dumps(event))
 
     @database_sync_to_async

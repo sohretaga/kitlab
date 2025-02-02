@@ -1,7 +1,8 @@
 const chatLeftside = document.querySelector('.chat-leftsidebar');
 const userChat = document.querySelector('.user-chat');
 const mobileBottomNavigation = document.querySelector('.mobile-bottom-navigation');
-const messageInput = document.getElementById('message-input');
+const messageDiv = document.getElementById('message-input');
+const message = document.getElementById("message");
 const loggedUserId = document.querySelector('meta[name="logged-user"]').getAttribute('content');
 const messageList = document.getElementById('message-list');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -23,14 +24,14 @@ const openChat = () => {
     chatLeftside.style.display = 'none';
     userChat.style.display = 'block';
     mobileBottomNavigation.style.display = 'none';
-    messageInput.classList.add('mobile-bottom-navigation');
+    messageDiv.classList.add('mobile-bottom-navigation');
 }
 
 const closeChat = () => {
     chatLeftside.style.display = 'block';
     userChat.style.display = 'none';
     mobileBottomNavigation.style.display = 'flex';
-    messageInput.classList.remove('mobile-bottom-navigation');
+    messageDiv.classList.remove('mobile-bottom-navigation');
     deactivateConversation();
 }
 
@@ -83,6 +84,55 @@ const createRightChatItem = (user) => {
     li.appendChild(messageDiv);
 
     return li;
+}
+
+const createChatBubble = (data) => {
+    const messageBubble = document.getElementById('message-bubble');
+    if (data.has_message) {
+        if (!messageBubble) {
+            const li = document.createElement('li');
+            li.className = 'left';
+            li.id = 'message-bubble';
+    
+            const receivedMessageDiv = document.createElement('div');
+            receivedMessageDiv.className = 'message received';
+    
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing';
+    
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                typingDiv.appendChild(dot);
+            }
+    
+            receivedMessageDiv.appendChild(typingDiv);
+            li.appendChild(receivedMessageDiv);
+            messageList.appendChild(li);
+        }
+    } else {
+        messageBubble?.remove();
+    }
+}
+
+const createDialogueBox = (data) => {
+    let messageHTML = '';
+
+    if (data.sender_id == loggedUserId) {
+        messageHTML = createRightChatItem({
+            message: data.message,
+            time: "10:02"
+        });
+    } else {
+        document.getElementById('message-bubble')?.remove();
+
+        messageHTML = createLeftChatItem({
+            message: data.message,
+            time: "12:09",
+        });
+    }
+    
+    messageList.appendChild(messageHTML);
 }
 
 async function listAllMessage(conversation_id, user) {
@@ -152,31 +202,36 @@ const loadMessage = (event) => {
 
     socket.onmessage = function (e) {
         let data = JSON.parse(e.data);
-        messageHTML = '';
-        if (data.sender_id == loggedUserId) {
-            messageHTML = createRightChatItem({
-                name: data.full_name,
-                message: data.message,
-                time: "10:02"
-            });
-        } else {
-            messageHTML = createLeftChatItem({
-                name: partnerFullName,
-                message: data.message,
-                time: "12:09",
-                avatar: partnerAvatar
-            })
+
+        if (data.type == "chat_typing" && data.sender_id != loggedUserId) {
+            createChatBubble(data);
         }
 
-        messageList.appendChild(messageHTML);
+        else if (data.type == "chat_message") {
+            createDialogueBox(data);
+        }
+
         scrollToBottom();
     };
 
     sendBtn.addEventListener("click", function () {
-        const message = document.getElementById("message");
-        socket.send(JSON.stringify({ "message": message.value, "sender": loggedUserId }));
+        socket.send(JSON.stringify({
+            "type": "chat_message",
+            "message": message.value,
+            "sender": loggedUserId
+        }));
         message.value = '';
         message.focus();
+    });
+
+    message.addEventListener("input", function() {
+        const hasMessage = message.value ? true:false;
+
+        socket.send(JSON.stringify({
+            "type": "chat_typing",
+            "has_message": hasMessage,
+            "sender": loggedUserId
+        }));
     });
 
     if (window.innerWidth < 992) {

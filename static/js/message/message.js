@@ -9,6 +9,8 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute
 const sendBtn = document.getElementById("send");
 const currentPartnerName = document.getElementById('current-partner-name');
 const currentPartnerAvatar = document.getElementById('current-partner-avatar');
+const headerMain = document.querySelector('.header-main');
+const container = document.querySelector('.product-container').querySelector('.container');
 const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 let activeSockets = {};
 let currentRoom = null;
@@ -21,6 +23,8 @@ const deactivateConversation = () => {
 }
 
 const openChat = () => {
+    container.style.padding = '0';
+    headerMain.style.display = 'none';
     chatLeftside.style.display = 'none';
     userChat.style.display = 'block';
     mobileBottomNavigation.style.display = 'none';
@@ -28,6 +32,8 @@ const openChat = () => {
 }
 
 const closeChat = () => {
+    container.style.padding = '0 15px';
+    headerMain.style.display = '';
     chatLeftside.style.display = 'block';
     userChat.style.display = 'none';
     mobileBottomNavigation.style.display = 'flex';
@@ -208,6 +214,7 @@ const loadMessage = (event) => {
         }
 
         else if (data.type == "chat_message") {
+            message.value = '';
             createDialogueBox(data);
         }
 
@@ -220,7 +227,6 @@ const loadMessage = (event) => {
             "message": message.value,
             "sender": loggedUserId
         }));
-        message.value = '';
         message.focus();
     });
 

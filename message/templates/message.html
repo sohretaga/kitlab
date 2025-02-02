@@ -32,34 +32,6 @@
 
         <div class="d-lg-flex chat-container" style="width: 100%;">
           <div class="chat-leftsidebar">
-            <div class="p-3 border-bottom">
-              <div class="media user-card">
-                <div class="align-self-center mr-3">
-                  {% if user.profile.avatar %}
-                  <img src="{{ user.profile.avatar.url }}" alt="{{ user.first_name }}" class="avatar-xs rounded-circle"/>
-                  {% else %}
-                  <img src="{% static 'images/default-profile-photo.jpg' %}" alt="{{ user.first_name }}" class="avatar-xs rounded-circle"/>
-                  {% endif %}
-                </div>
-                <div class="media-body">
-                  <h5 class="font-size-15 mt-0 mb-0">{{ user.first_name }}</h5>
-                </div>
-
-                <div>
-                  <div class="dropdown chat-noti-dropdown">
-                    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                      aria-expanded="false">
-                      <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <ul class="list-unstyled chat-list"  id="conversation-list">
               {% for partner in partners %}

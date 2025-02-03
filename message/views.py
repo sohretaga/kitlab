@@ -2,7 +2,7 @@ from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from message.models import Conversation
-from django.db.models import Subquery, OuterRef, Q
+from django.db.models import Subquery, OuterRef
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from message.models import Conversation, Message
@@ -39,8 +39,7 @@ class MessageView(LoginRequiredMixin, TemplateView):
             ),
             last_message=Subquery(
                 Message.objects.filter(
-                    Q(sender_id=OuterRef('pk')) | Q(sender_id=self.request.user.id),
-                    conversation__participants=OuterRef('id')
+                    conversation_id=OuterRef('conversation_id')
                 )
                 .order_by('-timestamp')
                 .values('content')[:1]
@@ -57,11 +56,11 @@ class LoadMessagesView(View):
         if not conversation_id:
             return JsonResponse({"error": "conversation_id is required"}, status=400)
         
-        messages = Conversation.objects.get(id=conversation_id).messages.values(
-            'sender_id', 'content'
-        )
+        messages = Conversation.objects.get(id=conversation_id).messages
+        messages.exclude(sender=self.request.user).update(is_read=True)
+        message_values = messages.values('sender_id', 'content', 'is_read')
 
         return JsonResponse({
-            'messages': list(messages),
+            'messages': list(message_values),
             'full_name': self.request.user.first_name
         })

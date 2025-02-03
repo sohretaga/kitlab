@@ -85,12 +85,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-# Redis ayarları
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
-REDIS_DB = 0
-REDIS_PASSWORD = None 
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -154,3 +148,9 @@ LOGIN_URL = '/auth/'
 LOGIN_REDIRECT_URL = '/'
 
 DEFAULT_PAGINATE_BY = 16
+
+# Redis
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
+REDIS_PASSWORD = None 

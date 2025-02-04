@@ -256,12 +256,12 @@ const loadMessage = (event) => {
             createChatBubble(data);
         }
 
-        else if (data.type == "chat_message") {
-            createDialogueBox(data);
+        else if (data.type == "member_joined" && data.sender_id != loggedUserId) {
+            makeMessageAsRead(event);
         }
 
-        else if (data.type == "member_joined") {
-            makeMessageAsRead(event);
+        else if (data.type == "chat_message") {
+            createDialogueBox(data);
         }
 
         scrollToBottom();

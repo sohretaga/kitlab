@@ -79,7 +79,8 @@ class MessageConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     "type": "member_joined",
-                    "all_read": True
+                    "all_read": True,
+                    "sender_id": sender_id
                 }
             )
 

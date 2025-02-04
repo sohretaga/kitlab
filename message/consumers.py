@@ -72,11 +72,24 @@ class MessageConsumer(AsyncWebsocketConsumer):
                         "sender_id": sender_id
                     }
                 )
+        elif message_type == 'member_joined':
+            await self.make_messages_as_read(self.room_name)
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "member_joined",
+                    "all_read": True
+                }
+            )
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps(event))
 
     async def chat_typing(self, event):
+        await self.send(text_data=json.dumps(event))
+    
+    async def member_joined(self, event):
         await self.send(text_data=json.dumps(event))
 
     @database_sync_to_async
@@ -109,6 +122,12 @@ class MessageConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_conversation(self, conversation_id):
         return Conversation.objects.get(id=conversation_id)
+
+    @database_sync_to_async
+    def make_messages_as_read(self, conversation_id):
+        Conversation.objects.get(id=conversation_id).messages.exclude(
+            sender=self.user
+        ).update(is_read=True)
 
     @database_sync_to_async
     def create_message(self, conversation, sender, message_content, is_read):

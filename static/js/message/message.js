@@ -180,6 +180,13 @@ const createDialogueBox = (data) => {
     messageRead(messageHTML, data.is_read);
 }
 
+const makeMessageAsRead = (event) => {
+    const ticks = document.querySelectorAll('.tick-animation');
+    ticks.forEach(tick => {
+        tick.classList.remove('tick-animation');
+    })
+}
+
 async function listAllMessage(conversation_id, user) {
     currentPartnerName.innerText = user.name;
     currentPartnerAvatar.src = user.avatar;
@@ -253,7 +260,18 @@ const loadMessage = (event) => {
             createDialogueBox(data);
         }
 
+        else if (data.type == "member_joined") {
+            makeMessageAsRead(event);
+        }
+
         scrollToBottom();
+    };
+
+    socket.onopen = function () {
+        socket.send(JSON.stringify({
+            "type": "member_joined",
+            "sender": loggedUserId
+        }));
     };
 
     sendBtn.addEventListener("click", function () {

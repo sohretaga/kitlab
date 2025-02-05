@@ -19,6 +19,16 @@ const sentTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15"
 const deliveredTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck" x="2047" y="2061"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#92a58c"/></svg>'
 const readTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck-ack" x="2063" y="2076"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#4fc3f7"/></svg>'
 
+const getAzerbaijanISOTime = () => {
+    const date = new Date();
+
+    // Convert to Azerbaijan time by adding 4 hours to UTC time
+    date.setUTCHours(date.getUTCHours() + 4);
+
+    // Return in ISO 8601 format
+    return date.toISOString();
+}
+
 const closeAllSoctets = () => {
     if (currentRoom !== null && activeSockets[currentRoom]) {
         activeSockets[currentRoom].close();
@@ -83,6 +93,45 @@ const messageRead = (message, read=false) =>{
     }
 }
 
+const formatDate = (timestamp) => {
+    const date = new Date(timestamp);  
+    const today = new Date(getAzerbaijanISOTime());
+    const yesterday = new Date(getAzerbaijanISOTime());
+    
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) {
+        return "Bu gün";
+    } else if (date.toDateString() === yesterday.toDateString()) {
+        return "Dünən";
+    } else {
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        let formattedDate = date.toLocaleDateString('az-AZ', options);
+        return formattedDate.replace(/\b\p{L}/u, match => match.toUpperCase());
+    }
+}
+
+const chatDayTitle = (timestamp) => {
+    const chatDayId = timestamp.split("T")[0];
+
+    if (!document.getElementById(chatDayId)) {
+        const li = document.createElement('li');
+        li.id = chatDayId;
+
+        const div = document.createElement('div');
+        div.className = 'chat-day-title';
+
+        const span = document.createElement('span');
+        span.className = 'title';
+        span.textContent = formatDate(timestamp);
+
+        div.appendChild(span);
+        li.appendChild(div);
+
+        messageList.appendChild(li);
+    }
+}
+
 const createLeftChatItem = (user) => {
     const li = document.createElement('li');
     li.className = 'left';
@@ -95,7 +144,7 @@ const createLeftChatItem = (user) => {
 
     const timeSpan = document.createElement('span');
     timeSpan.className = 'time';
-    timeSpan.textContent = user.time;
+    timeSpan.textContent = user.timestamp.slice(11, 16); // HH:MM
 
     metadataDiv.appendChild(timeSpan);
     
@@ -118,7 +167,7 @@ const createRightChatItem = (user) => {
 
     const timeSpan = document.createElement('span');
     timeSpan.className = 'time';
-    timeSpan.textContent = user.time;
+    timeSpan.textContent = user.timestamp.slice(11, 16); // HH:MM
 
     const tickSpan = messageStatusHandler(user.is_read, user.process);
     metadataDiv.appendChild(timeSpan);
@@ -178,7 +227,7 @@ const createDialogueBox = (data) => {
 
         messageHTML = createLeftChatItem({
             message: data.message,
-            time: "12:09",
+            timestamp: data.timestamp,
         });
 
         messageList.appendChild(messageHTML);
@@ -186,7 +235,7 @@ const createDialogueBox = (data) => {
     }
 }
 
-const makeMessageAsRead = (event) => {
+const makeMessageAsRead = () => {
     const ticks = document.querySelectorAll('.tick-animation');
     ticks.forEach(tick => {
         tick.className = 'tick';
@@ -213,18 +262,19 @@ async function listAllMessage(conversation_id, user) {
         const messages = data.messages;
         messageList.innerHTML = '';
         messages.forEach(element => {
-            let messageHTML = '';
+            chatDayTitle(element.timestamp);
+
             if (element.sender_id == loggedUserId) {
                 messageHTML = createRightChatItem({
                     message: element.content,
                     is_read: element.is_read,
-                    time: "10:02",
+                    timestamp: element.timestamp,
                     process: false
                 });
             } else {
                 messageHTML = createLeftChatItem({
                     message: element.content,
-                    time: "12:09",
+                    timestamp: element.timestamp,
                 });
             }
 
@@ -239,9 +289,12 @@ async function listAllMessage(conversation_id, user) {
 }
 
 function sendMessage() {
+    const timestamp = getAzerbaijanISOTime();
+    chatDayTitle(timestamp);
+
     messageHTML = createRightChatItem({
         message: message.value,
-        time: "10:02",
+        timestamp: timestamp,
         process: true
     });
     messageList.appendChild(messageHTML);
@@ -253,7 +306,8 @@ function sendMessage() {
     activeSockets[currentRoom].send(JSON.stringify({
         "type": "chat_message",
         "message": message_value,
-        "sender": loggedUserId
+        "sender": loggedUserId,
+        "timestamp": timestamp
     }));
 
     message.focus();
@@ -285,7 +339,7 @@ const loadMessage = (event) => {
         }
 
         else if (data.type == "member_joined" && data.sender_id != loggedUserId) {
-            makeMessageAsRead(event);
+            makeMessageAsRead();
         }
 
         else if (data.type == "chat_message") {

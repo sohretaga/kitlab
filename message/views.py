@@ -57,7 +57,7 @@ class LoadMessagesView(View):
             return JsonResponse({"error": "conversation_id is required"}, status=400)
         
         messages = Conversation.objects.get(id=conversation_id).messages.values(
-            'sender_id', 'content', 'is_read'
+            'sender_id', 'content', 'timestamp', 'is_read'
         )
 
         return JsonResponse({

@@ -34,6 +34,7 @@ class MessageConsumer(AsyncWebsocketConsumer):
 
         if message_type == 'chat_message':
             message_content = data['message']
+            timestamp = data['timestamp']
 
             sender = await self.get_user(sender_id)
             conversation = await self.get_conversation(self.room_name)
@@ -47,6 +48,7 @@ class MessageConsumer(AsyncWebsocketConsumer):
                     conversation=conversation,
                     sender=sender,
                     message_content=message_content,
+                    timestamp=timestamp,
                     is_read=is_read
                 )
 
@@ -131,11 +133,11 @@ class MessageConsumer(AsyncWebsocketConsumer):
         ).update(is_read=True)
 
     @database_sync_to_async
-    def create_message(self, conversation, sender, message_content, is_read):
+    def create_message(self, conversation, sender, message_content, timestamp, is_read):
         return Message.objects.create(
             conversation=conversation,
             sender=sender,
             content=message_content,
             is_read=is_read,
-            timestamp=now()
+            timestamp=timestamp
         )

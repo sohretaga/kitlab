@@ -904,6 +904,33 @@ button {
     border-radius: 50%;
 }
 
+.chat-conversation .chat-day-title {
+    position: relative;
+    text-align: center;
+}
+
+.chat-conversation .chat-day-title .title {
+    background-color: #eff2f7;
+    position: relative;
+    z-index: 1;
+    padding: 3px 16px;
+    border-radius: 30px;
+    margin-bottom: 20px !important;
+    margin-top: 20px !important;
+}
+
+.chat-conversation .chat-day-title:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left: 0;
+    right: 0;
+    background-color: #eff2f7;
+    top: 16px;
+    margin-top: 20px !important;
+}
+
 .chat-conversation .conversation-list {
     margin-bottom: 24px;
     display: inline-block;

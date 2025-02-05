@@ -15,6 +15,9 @@ const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 let activeSockets = {};
 let currentRoom = null;
 
+const sentTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck"><path d="M10.91 3.316l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#92a58c"/></svg>'
+const deliveredTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck" x="2047" y="2061"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#92a58c"/></svg>'
+const readTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck-ack" x="2063" y="2076"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#4fc3f7"/></svg>'
 
 const closeAllSoctets = () => {
     if (currentRoom !== null && activeSockets[currentRoom]) {
@@ -40,7 +43,6 @@ const openChat = () => {
     userChat.style.display = 'block';
     mobileBottomNavigation.style.display = 'none';
     messageDiv.classList.add('mobile-bottom-navigation');
-    message.focus();
 }
 
 const closeChat = () => {
@@ -58,14 +60,16 @@ const scrollToBottom = () => {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-const readHandler = (isRead) => {
-    const tick1 = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck" x="2047" y="2061"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#92a58c"/></svg>'
-    const tick2 = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck-ack" x="2063" y="2076"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#4fc3f7"/></svg>'
-    
+const messageStatusHandler = (isRead, process) => {
     const span = document.createElement('span');
-    span.className = isRead ? 'tick':'tick tick-animation';
 
-    span.innerHTML = tick1 + tick2;
+    if (process) {
+        span.className = 'tick';
+        span.innerHTML = sentTick;
+    } else {
+        span.className = isRead ? 'tick':'tick tick-animation';
+        span.innerHTML = deliveredTick + readTick;
+    }
 
     return span;
 }
@@ -73,9 +77,9 @@ const readHandler = (isRead) => {
 const messageRead = (message, read=false) =>{
 	const tick = message.querySelector('.tick');
     if (tick && read) {
-        setTimeout(function() {
-            tick.classList.remove('tick-animation');
-        }, 500);
+        setTimeout(() => {
+            tick.classList.remove('tick-animation')
+        }, 10);
     }
 }
 
@@ -104,7 +108,7 @@ const createLeftChatItem = (user) => {
 
 const createRightChatItem = (user) => {
     const li = document.createElement('li');
-    li.className = 'right';
+    li.className = user.process ? 'right process':'right';
 
     const messageDiv = document.createElement('div');
     messageDiv.className = 'message sent';
@@ -116,7 +120,7 @@ const createRightChatItem = (user) => {
     timeSpan.className = 'time';
     timeSpan.textContent = user.time;
 
-    const tickSpan = readHandler(user.is_read);
+    const tickSpan = messageStatusHandler(user.is_read, user.process);
     metadataDiv.appendChild(timeSpan);
     metadataDiv.appendChild(tickSpan);
 
@@ -160,12 +164,14 @@ const createDialogueBox = (data) => {
     let messageHTML = '';
 
     if (data.sender_id == loggedUserId) {
-        messageHTML = createRightChatItem({
-            message: data.message,
-            time: "10:02"
-        });
-
-        message.value = '';
+        const processMessages = document.querySelectorAll('.process');
+        processMessages.forEach(messageHTML => {
+            const tick = messageHTML.querySelector('.tick');
+            tick.innerHTML = deliveredTick + readTick;
+            tick.classList.add('tick-animation');
+            messageHTML.classList.remove('process');
+            messageRead(messageHTML, data.is_read);
+        })
 
     } else {
         document.getElementById('message-bubble')?.remove();
@@ -174,16 +180,16 @@ const createDialogueBox = (data) => {
             message: data.message,
             time: "12:09",
         });
+
+        messageList.appendChild(messageHTML);
+        messageRead(messageHTML, data.is_read);
     }
-    
-    messageList.appendChild(messageHTML);
-    messageRead(messageHTML, data.is_read);
 }
 
 const makeMessageAsRead = (event) => {
     const ticks = document.querySelectorAll('.tick-animation');
     ticks.forEach(tick => {
-        tick.classList.remove('tick-animation');
+        tick.className = 'tick';
     })
 }
 
@@ -212,7 +218,8 @@ async function listAllMessage(conversation_id, user) {
                 messageHTML = createRightChatItem({
                     message: element.content,
                     is_read: element.is_read,
-                    time: "10:02"
+                    time: "10:02",
+                    process: false
                 });
             } else {
                 messageHTML = createLeftChatItem({
@@ -229,6 +236,27 @@ async function listAllMessage(conversation_id, user) {
     } catch (error) {
         console.error('Error:', error);
     }
+}
+
+function sendMessage() {
+    messageHTML = createRightChatItem({
+        message: message.value,
+        time: "10:02",
+        process: true
+    });
+    messageList.appendChild(messageHTML);
+    scrollToBottom();
+
+    message_value = message.value;
+    message.value = '';
+
+    activeSockets[currentRoom].send(JSON.stringify({
+        "type": "chat_message",
+        "message": message_value,
+        "sender": loggedUserId
+    }));
+
+    message.focus();
 }
 
 const loadMessage = (event) => {
@@ -274,14 +302,8 @@ const loadMessage = (event) => {
         }));
     };
 
-    sendBtn.addEventListener("click", function () {
-        socket.send(JSON.stringify({
-            "type": "chat_message",
-            "message": message.value,
-            "sender": loggedUserId
-        }));
-        message.focus();
-    });
+    sendBtn.removeEventListener("click", sendMessage); // remove old listener
+    sendBtn.addEventListener("click", sendMessage);
 
     message.addEventListener("input", function() {
         const hasMessage = message.value ? true:false;

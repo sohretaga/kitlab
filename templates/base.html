@@ -254,7 +254,10 @@
                         {% else %}
                         <a href="{% url 'message' %}"><img src="{% static 'images/ionicons/chatbubble-ellipses-outline.svg' %}" width="35" height="34"></a>
                         {% endif %}
-                        <span class="count">0</span>
+
+                        {% if new_message_count %}
+                        <span class="count">{{ new_message_count }}</span>
+                        {% endif %}
                     </button>
 
                 </div>
@@ -305,7 +308,10 @@
                 {% else %}
                 <a href="{% url 'message' %}"><img src="{% static 'images/ionicons/chatbubble-ellipses-outline.svg' %}" width="26" height="26"></a>
                 {% endif %}
-                <span class="count">0</span>
+
+                {% if new_message_count %}
+                <span class="count">{{ new_message_count }}</span>
+                {% endif %}
             </button>
 
             <button class="action-btn">

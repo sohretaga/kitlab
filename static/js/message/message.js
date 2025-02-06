@@ -242,6 +242,45 @@ const makeMessageAsRead = () => {
     })
 }
 
+async function cleanUnreadMessages(li) {
+
+    li.classList.remove('unread-messages');
+
+    const newMessageCount = li.querySelector('.message-count');
+    const unreadCount = parseInt(newMessageCount.textContent) || 0;
+
+    const allNewMessageCount = document.querySelectorAll('.count');
+    allNewMessageCount.forEach(count => {
+        let currentCount = parseInt(count.textContent) || 0;
+        let updatedCount = Math.max(currentCount - unreadCount, 0);
+        
+        count.textContent = updatedCount;
+        if (updatedCount === 0) {
+            count.style.display = 'none';
+        }
+    });
+
+    newMessageCount.textContent = '';
+}
+
+async function sortConversationList (roomId, newId) {
+    const conversation = document.querySelector(`li[data-room="${roomId}"]`);
+    conversation.id = newId;
+
+    const ul = document.getElementById("conversation-list");
+    const items = Array.from(ul.querySelectorAll("li"));
+
+    const sortItems = async () => {
+        return items.sort((a, b) => {
+            const idA = parseInt(a.id, 10);
+            const idB = parseInt(b.id, 10);
+            return idB - idA;
+        });
+    };
+    const sortedItems = await sortItems();
+    sortedItems.forEach(li => ul.appendChild(li));
+}
+
 async function listAllMessage(conversation_id, user) {
     currentPartnerName.innerText = user.name;
     currentPartnerAvatar.src = user.avatar;
@@ -338,12 +377,17 @@ const loadMessage = (event) => {
             createChatBubble(data);
         }
 
-        else if (data.type == "member_joined" && data.sender_id != loggedUserId) {
-            makeMessageAsRead();
+        else if (data.type == "member_joined") {
+            if (data.sender_id != loggedUserId) {
+                makeMessageAsRead();
+            } else {
+                cleanUnreadMessages(event);
+            }
         }
 
         else if (data.type == "chat_message") {
             createDialogueBox(data);
+            sortConversationList(roomId, data.message_id);
         }
 
         scrollToBottom();

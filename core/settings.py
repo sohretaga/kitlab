@@ -70,6 +70,7 @@ TEMPLATES = [
                 
                 'books.context_processors.categories',
                 'books.context_processors.suggested_books',
+                'message.context_processors.new_messages'
             ],
         },
     },

@@ -2,7 +2,6 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth.models import User
 from .models import Message, Conversation
-from django.utils.timezone import now
 from channels.db import database_sync_to_async
 from core.redis_client import redis_client
 
@@ -57,6 +56,7 @@ class MessageConsumer(AsyncWebsocketConsumer):
                     {
                         "type": "chat_message",
                         "message": message.content,
+                        "message_id": message.id,
                         "sender_id": sender_id,
                         "full_name": sender.first_name,
                         "is_read": message.is_read,
@@ -95,21 +95,18 @@ class MessageConsumer(AsyncWebsocketConsumer):
     async def member_joined(self, event):
         await self.send(text_data=json.dumps(event))
 
-    @database_sync_to_async
-    def add_user_to_presence(self):
+    async def add_user_to_presence(self):
         cache_key = f"chat_presence:{self.room_group_name}"
         user_id = str(self.user.id)
         redis_client.sadd(cache_key, user_id)
         redis_client.expire(cache_key, 86400)  # 24 hour TTL
 
-    @database_sync_to_async
-    def remove_user_from_presence(self):
+    async def remove_user_from_presence(self):
         cache_key = f"chat_presence:{self.room_group_name}"
         user_id = str(self.user.id)
         redis_client.srem(cache_key, user_id)
 
-    @database_sync_to_async
-    def check_user_presence(self, user_id):
+    async def check_user_presence(self, user_id):
         cache_key = f"chat_presence:{self.room_group_name}"
         return redis_client.sismember(cache_key, str(user_id))
     
@@ -141,3 +138,36 @@ class MessageConsumer(AsyncWebsocketConsumer):
             is_read=is_read,
             timestamp=timestamp
         )
+    
+class NotificationConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.user = self.scope['user']
+        self.room_name = self.scope['url_route']['kwargs']['user_id']
+        self.room_group_name = f"notification_{self.room_name}"
+
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    async def disconnect(self, code):
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+    
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        page_type = data['type']
+
+        if page_type == 'general':
+            ...
+        
+        if page_type == 'message':
+            ...
+    
+    async def general(self, event):
+        await self.send(text_data=json.dumps(event))
+    
+    async def message(self, event):
+        await self.send(text_data=json.dumps(event))

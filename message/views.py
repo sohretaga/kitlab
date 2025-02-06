@@ -2,7 +2,7 @@ from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from message.models import Conversation
-from django.db.models import Subquery, OuterRef
+from django.db.models import Subquery, OuterRef, Count
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from message.models import Conversation, Message
@@ -27,6 +27,10 @@ class MessageView(LoginRequiredMixin, TemplateView):
 
         conversations = Conversation.objects.filter(participants=self.request.user)
 
+        message_subquery = Message.objects.filter(
+            conversation=OuterRef('conversation_id')
+        ).order_by('-timestamp')
+
         partners = User.objects.filter(
             conversations__in=conversations
         ).exclude(
@@ -37,14 +41,18 @@ class MessageView(LoginRequiredMixin, TemplateView):
                     participants=OuterRef('id')
                 ).values('id')[:1]
             ),
-            last_message=Subquery(
+            last_message=Subquery(message_subquery.values('content')[:1]),
+            last_message_id=Subquery(message_subquery.values('id')[:1]),
+            unread_messages_count=Subquery(
                 Message.objects.filter(
-                    conversation_id=OuterRef('conversation_id')
-                )
-                .order_by('-timestamp')
-                .values('content')[:1]
+                    conversation_id=OuterRef('conversation_id'),
+                    sender_id=OuterRef('id'),
+                    is_read=False
+                ).values('conversation_id')
+                .annotate(count=Count('id'))
+                .values('count')[:1]
             )
-        )
+        ).order_by('-last_message_id')
         context['partners'] = partners
         return context
 

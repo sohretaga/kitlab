@@ -809,6 +809,7 @@ button {
 .chat-list {
     margin: 0;
     max-height: 565px;
+    width: 360px;
     overflow: auto;
 }
 
@@ -1034,6 +1035,10 @@ button {
     margin-left: 10px;
 }
 
+.unread-messages {
+    font-weight: bold;
+}
+
 .message {
     color: #000;
     clear: both;
@@ -1042,7 +1047,7 @@ button {
     padding: 8px;
     position: relative;
     margin: 8px 0;
-    max-width: 85%;
+    max-width: 50%;
     word-wrap: break-word;
     z-index: 1;
 }
@@ -1359,5 +1364,9 @@ button {
 @media (max-width: 1024px) {
     .chat-leftsidebar {
         min-width: 250px;
+    }
+
+    .message {
+        max-width: 85%;
     }
 }

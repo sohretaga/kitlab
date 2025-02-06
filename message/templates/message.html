@@ -5,6 +5,7 @@
 
 {% block stylesheet %}
 <meta name="logged-user" content="{{ user.id }}">
+<meta name="partner-user" content="{{ partner_user }}">
 <link rel="stylesheet" href="{% static 'css/message/app.css' %}">
 <link rel="stylesheet" href="{% static 'css/left-side.css' %}">
 {% endblock stylesheet %}
@@ -35,7 +36,7 @@
 
             <ul class="list-unstyled chat-list"  id="conversation-list">
               {% for partner in partners %}
-              <li onclick="loadMessage(this)" id="{{ partner.last_message_id }}" data-room="{{ partner.conversation_id }}"
+              <li onclick="loadMessage(this)" id="{{ partner.last_message_id }}" data-room="{{ partner.conversation_id }}" data-user="{{ partner.username }}"
                 class="{% if partner.unread_messages_count %}unread-messages{% endif %}">
 
                 <a href="javascript:void(0)">

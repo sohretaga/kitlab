@@ -24,7 +24,6 @@ class MessageView(LoginRequiredMixin, TemplateView):
                 conversation = Conversation.objects.create()
                 conversation.participants.add(self.request.user, partner_user)
 
-
         conversations = Conversation.objects.filter(participants=self.request.user)
 
         message_subquery = Message.objects.filter(

@@ -4,6 +4,7 @@ const mobileBottomNavigation = document.querySelector('.mobile-bottom-navigation
 const messageDiv = document.getElementById('message-input');
 const message = document.getElementById("message");
 const loggedUserId = document.querySelector('meta[name="logged-user"]').getAttribute('content');
+const partnerUser = document.querySelector('meta[name="partner-user"]').getAttribute('content');
 const messageList = document.getElementById('message-list');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const sendBtn = document.getElementById("send");
@@ -421,5 +422,12 @@ const loadMessage = (event) => {
 document.getElementById('message-input').addEventListener('keypress', function (event) {
     if (event.key === 'Enter') {
         sendBtn.click();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (partnerUser) {
+        const user = document.querySelector(`li[data-user='${partnerUser}']`);
+        user.click();
     }
 });

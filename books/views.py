@@ -295,11 +295,22 @@ class LoadMoreView(ListView):
             loaded_books = books_page.object_list.annotate(
                 hover_image=Subquery(hover_image[:1]),
                 category_name=F('category__name'),
-                is_favorite=Exists(is_favorite)
+                is_favorite=Exists(is_favorite),
+                username=F('seller__username')
             )
 
             books_data = list(loaded_books.values(
-                'id', 'name', 'slug', 'cover_photo', 'hover_image', 'category_name', 'is_approved', 'new', 'price', 'is_favorite'
+                'id',
+                'new',
+                'price',
+                'name',
+                'slug',
+                'cover_photo',
+                'hover_image',
+                'category_name',
+                'is_approved',
+                'is_favorite',
+                'username'
             ))
 
             return JsonResponse({

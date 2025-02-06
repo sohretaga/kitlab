@@ -20,9 +20,13 @@ async function fetchBooks(page) {
     }
 }
 
-function createButton(iconName, book) {
+function createButton(iconName, book, data=null) {
     const button = document.createElement('button');
     button.classList.add('btn-action');
+
+    const icon = document.createElement('ion-icon');
+    icon.setAttribute('name', iconName);
+    button.appendChild(icon);
 
     if (iconName === 'heart-outline') {
         button.onclick = () => favorite(book.id);
@@ -31,11 +35,13 @@ function createButton(iconName, book) {
         if (book.is_favorite) {
             button.classList.add('favorite');
         }
-    }
 
-    const icon = document.createElement('ion-icon');
-    icon.setAttribute('name', iconName);
-    button.appendChild(icon);
+    } else if (iconName == 'chatbubble-ellipses-outline') {
+        const a = document.createElement('a');
+        a.href = `/message/${data.username}`;
+        a.appendChild(button);
+        return a;
+    }
 
     return button;
 }
@@ -100,8 +106,8 @@ function appendBooks(books, container) {
         mobileShowcaseActions.classList.add('mobile-showcase-actions');
 
         ['heart-outline', 'repeat-outline', 'chatbubble-ellipses-outline'].forEach(iconName => {
-            const button = createButton(iconName, book);
-            const mobileButton = createButton(iconName, book);
+            const button = createButton(iconName, book, {username:book.username});
+            const mobileButton = createButton(iconName, book, {username:book.username});
         
             mobileShowcaseActions.appendChild(mobileButton);
             showcaseActions.appendChild(button);

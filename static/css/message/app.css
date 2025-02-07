@@ -1168,6 +1168,7 @@ button {
     flex: 0 0 auto;
     margin-left: 8px;
     width: 48px;
+    cursor: pointer;
 }
 
 .conversation-compose .input-msg {

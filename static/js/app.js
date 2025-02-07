@@ -125,3 +125,29 @@ document.addEventListener("click", (event) => {
     dropdownMenu.style.display = "none";
   }
 });
+
+async function updadeMessageCount(data) {
+  if (data.message) {
+    const allNewMessageCount = document.querySelectorAll('.count');
+    allNewMessageCount.forEach(count => {
+        let currentCount = parseInt(count.textContent) || 0;
+        let updatedCount = currentCount + 1;
+        count.textContent = updatedCount;
+        count.style.display = 'unset';
+    });
+  }
+  
+}
+
+const loggedUserId = document.querySelector('meta[name="logged-user"]').getAttribute('content');
+const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+var notificationSocket;
+
+if (loggedUserId) {
+  notificationSocket = new WebSocket(`${protocol}${window.location.host}/ws/notification/${loggedUserId}/`);
+
+  notificationSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    updadeMessageCount(data);
+  };
+}

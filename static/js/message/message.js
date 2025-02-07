@@ -3,7 +3,6 @@ const userChat = document.querySelector('.user-chat');
 const mobileBottomNavigation = document.querySelector('.mobile-bottom-navigation');
 const messageDiv = document.getElementById('message-input');
 const message = document.getElementById("message");
-const loggedUserId = document.querySelector('meta[name="logged-user"]').getAttribute('content');
 const partnerUser = document.querySelector('meta[name="partner-user"]').getAttribute('content');
 const messageList = document.getElementById('message-list');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -12,7 +11,6 @@ const currentPartnerName = document.getElementById('current-partner-name');
 const currentPartnerAvatar = document.getElementById('current-partner-avatar');
 const headerMain = document.querySelector('.header-main');
 const container = document.querySelector('.product-container').querySelector('.container');
-const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 let activeSockets = {};
 let currentRoom = null;
 
@@ -241,6 +239,22 @@ const makeMessageAsRead = () => {
     ticks.forEach(tick => {
         tick.className = 'tick';
     })
+}
+
+async function updadeMessageCount(data) {
+    const conversation = document.querySelector(`li[data-user="${data.sender}"]:not(.active)`);
+    
+    if (conversation) {
+        conversation.classList.add('unread-messages');
+        const lastMessage = conversation.querySelector('.last-message');
+        lastMessage.textContent = data.message;
+
+        const messageCount = conversation.querySelector('.message-count');
+        let currentCount = parseInt(messageCount.textContent) || 0;
+        messageCount.textContent = currentCount += 1;
+
+        sortConversationList(data.conversation_id, data.message_id);
+    }
 }
 
 async function cleanUnreadMessages(li) {

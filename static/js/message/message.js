@@ -406,6 +406,10 @@ const loadMessage = (event) => {
         else if (data.type == "chat_message") {
             createDialogueBox(data);
             sortConversationList(roomId, data.message_id);
+
+            // update last message
+            const lastMessage = document.querySelector('.last-message');
+            lastMessage.textContent = data.message;
         }
 
         scrollToBottom();

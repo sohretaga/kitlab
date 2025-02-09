@@ -16,4 +16,4 @@ class Message(models.Model):
     timestamp = models.DateTimeField()
 
     def __str__(self):
-        return f"Message from {self.sender.username} at {self.timestamp}"
+        return f"Message from {self.sender.username} - {self.content[:50]}"

@@ -18,16 +18,6 @@ const sentTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15"
 const deliveredTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck" x="2047" y="2061"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#92a58c"/></svg>'
 const readTick = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" id="msg-dblcheck-ack" x="2063" y="2076"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.88a.32.32 0 0 1-.484.032l-.358-.325a.32.32 0 0 0-.484.032l-.378.48a.418.418 0 0 0 .036.54l1.32 1.267a.32.32 0 0 0 .484-.034l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.88a.32.32 0 0 1-.484.032L1.892 7.77a.366.366 0 0 0-.516.005l-.423.433a.364.364 0 0 0 .006.514l3.255 3.185a.32.32 0 0 0 .484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="#4fc3f7"/></svg>'
 
-const getAzerbaijanISOTime = () => {
-    const date = new Date();
-
-    // Convert to Azerbaijan time by adding 4 hours to UTC time
-    date.setUTCHours(date.getUTCHours() + 4);
-
-    // Return in ISO 8601 format
-    return date.toISOString();
-}
-
 const closeAllSoctets = () => {
     if (currentRoom !== null && activeSockets[currentRoom]) {
         activeSockets[currentRoom].close();
@@ -93,25 +83,32 @@ const messageRead = (message, read=false) =>{
 }
 
 const formatDate = (timestamp) => {
-    const date = new Date(timestamp);  
-    const today = new Date(getAzerbaijanISOTime());
-    const yesterday = new Date(getAzerbaijanISOTime());
-    
+    const messageDate = new Date(timestamp);
+    const today = new Date();
+    const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
 
-    if (date.toDateString() === today.toDateString()) {
+    messageDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    yesterday.setHours(0, 0, 0, 0);
+
+    if (messageDate.getTime() === today.getTime()) {
         return "Bu gün";
-    } else if (date.toDateString() === yesterday.toDateString()) {
+    } else if (messageDate.getTime() === yesterday.getTime()) {
         return "Dünən";
     } else {
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
-        let formattedDate = date.toLocaleDateString('az-AZ', options);
+        let formattedDate = messageDate.toLocaleDateString('az-AZ', options);
         return formattedDate.replace(/\b\p{L}/u, match => match.toUpperCase());
     }
 }
 
 const chatDayTitle = (timestamp) => {
-    const chatDayId = timestamp.split("T")[0];
+    const messageDate = new Date(timestamp);
+    const year = messageDate.getFullYear();
+    const month = String(messageDate.getMonth() + 1).padStart(2, '0');
+    const day = String(messageDate.getDate()).padStart(2, '0');
+    const chatDayId = `${year}-${month}-${day}`;
 
     if (!document.getElementById(chatDayId)) {
         const li = document.createElement('li');
@@ -143,7 +140,10 @@ const createLeftChatItem = (user) => {
 
     const timeSpan = document.createElement('span');
     timeSpan.className = 'time';
-    timeSpan.textContent = user.timestamp.slice(11, 16); // HH:MM
+    const messageDate = new Date(user.timestamp);
+    const hours = String(messageDate.getHours()).padStart(2, '0');
+    const minutes = String(messageDate.getMinutes()).padStart(2, '0');
+    timeSpan.textContent = `${hours}:${minutes}`;
 
     metadataDiv.appendChild(timeSpan);
     
@@ -166,7 +166,10 @@ const createRightChatItem = (user) => {
 
     const timeSpan = document.createElement('span');
     timeSpan.className = 'time';
-    timeSpan.textContent = user.timestamp.slice(11, 16); // HH:MM
+    const messageDate = new Date(user.timestamp);
+    const hours = String(messageDate.getHours()).padStart(2, '0');
+    const minutes = String(messageDate.getMinutes()).padStart(2, '0');
+    timeSpan.textContent = `${hours}:${minutes}`;
 
     const tickSpan = messageStatusHandler(user.is_read, user.process);
     metadataDiv.appendChild(timeSpan);
@@ -343,7 +346,7 @@ async function listAllMessage(conversation_id, user) {
 }
 
 function sendMessage() {
-    const timestamp = getAzerbaijanISOTime();
+    const timestamp = new Date().toISOString();
     chatDayTitle(timestamp);
 
     messageHTML = createRightChatItem({

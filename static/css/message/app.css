@@ -1312,7 +1312,8 @@ button {
 
     .chat-conversation,
     .chat-conversation ul {
-        height: calc(100% - 130px);
+        max-height: calc(100% - 130px);
+        height: unset;
         position: fixed;
         overflow: auto;
         padding-left: 1rem !important;

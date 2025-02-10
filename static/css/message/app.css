@@ -1020,6 +1020,10 @@ button {
     }
 }
 
+#message-list li {
+    white-space: pre-wrap;
+}
+
 .user-card {
     align-items: center;
 }
@@ -1310,7 +1314,6 @@ button {
         margin-top: 5px;
     }
 
-    .chat-conversation,
     .chat-conversation ul {
         max-height: calc(100% - 130px);
         height: unset;

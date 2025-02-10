@@ -16,7 +16,6 @@ env/
 
 # Django secret keys and configuration files
 *.env
-.env.*
 
 # Django files
 *.log

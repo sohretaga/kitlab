@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
-    <meta name="logged-user" content="{{ user.id }}">
+    <meta name="logged-user" content="{% if user.is_authenticated %}{{ user.id }}{% endif %}">
 
     <meta name="description" content="Kitab oxumaq telefonunuzun batareya ömrünü uzadır.">
     <meta name="theme-color" content="#ffffff">

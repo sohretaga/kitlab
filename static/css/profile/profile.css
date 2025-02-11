@@ -803,6 +803,7 @@ textarea.form-control {
     height: 5rem;
     width: 5rem;
     margin: auto;
+    object-fit: cover;
 }
 
 .form-control,

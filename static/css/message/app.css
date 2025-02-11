@@ -713,6 +713,7 @@ button {
 .avatar-xs {
     height: 2rem;
     width: 2rem;
+    object-fit: cover;
 }
 
 .avatar-title {

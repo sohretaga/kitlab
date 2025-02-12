@@ -6,14 +6,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 48px;
+    padding: 50px 0;
 }
 
 .formbold-form-wrapper {
     margin: 0 auto;
     max-width: 550px;
     width: 100%;
-    background: white;
+    background: var(--white);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--cultured);
 }
 
 .formbold-input-flex {
@@ -144,6 +147,10 @@
 }
 
 @media only screen and (max-width: 600px) {
+    .formbold-main-wrapper {
+        padding-top: 10px;
+    }
+
     .formbold-radio-flex {
         display: unset;
     }

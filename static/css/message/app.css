@@ -1021,6 +1021,11 @@ button {
     }
 }
 
+.unset-shadow {
+    -webkit-box-shadow: unset !important;
+    box-shadow: unset !important;
+}
+
 #message-list li {
     white-space: pre-wrap;
 }
@@ -1295,11 +1300,6 @@ button {
         display: none !important;
     }
 
-    .mobile-bottom-navigation {
-        -webkit-box-shadow: unset !important;
-        box-shadow: unset !important;
-    }
-
     .chat-input-section {
         padding: 0 10px !important;
     }
@@ -1327,6 +1327,7 @@ button {
 
     .user-chat {
         margin-top: 0 !important;
+        background-color: var(--soft-ivory);
         display: none;
     }
 

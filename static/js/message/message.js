@@ -40,8 +40,8 @@ const openChat = () => {
     headerMain.style.display = 'none';
     chatLeftside.style.display = 'none';
     userChat.style.display = 'block';
-    mobileBottomNavigation.style.display = 'none';
     messageDiv.classList.add('mobile-bottom-navigation');
+    mobileBottomNavigation.style.display = 'none';
 }
 
 const closeChat = () => {
@@ -49,8 +49,8 @@ const closeChat = () => {
     headerMain.style.display = '';
     chatLeftside.style.display = 'block';
     userChat.style.display = 'none';
-    mobileBottomNavigation.style.display = 'flex';
     messageDiv.classList.remove('mobile-bottom-navigation');
+    mobileBottomNavigation.style.display = 'flex';
     deactivateConversation();
 }
 
@@ -408,7 +408,7 @@ const loadMessage = (event) => {
             sortConversationList(roomId, data.message_id);
 
             // update last message
-            const lastMessage = document.querySelector('.last-message');
+            const lastMessage = event.querySelector('.last-message');
             lastMessage.textContent = data.message;
         }
 

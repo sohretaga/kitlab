@@ -578,7 +578,7 @@ input {
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: #fff;
+    background-color: var(--soft-ivory);
     background-clip: border-box;
     border: 0 solid #f1f5f7;
     border-radius: .25rem;
@@ -802,6 +802,7 @@ a.text-primary:hover {
 
 .nav-tabs-custom .nav-item .nav-link.active {
     color: #5664d2;
+    background-color: var(--soft-ivory);
 }
 
 .nav-tabs-custom .nav-item .nav-link.active:after {

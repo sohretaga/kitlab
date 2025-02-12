@@ -24,6 +24,7 @@
   --cultured: hsl(0, 0%, 93%);
   --white: hsl(0, 100%, 100%);
   --onyx: hsl(0, 0%, 27%);
+  --soft-ivory: hsl(37, 80%, 98%);
 
   /**
    * typography
@@ -114,7 +115,7 @@ input::-ms-input-placeholder { font: inherit; }
 
 input::placeholder { font: inherit; }
 
-body { background: var(--white); }
+body { background: var(--soft-ivory); }
 
 /**
  * scrollbar style
@@ -123,13 +124,13 @@ body { background: var(--white); }
 body::-webkit-scrollbar { width: 15px; }
 
 body::-webkit-scrollbar-track {
-  background: var(--white);
+  background: var(--soft-ivory);
   border-left: 1px solid var(--cultured);
 }
 
 body::-webkit-scrollbar-thumb {
   background: hsl(0, 0%, 80%);
-  border: 3px solid var(--white);
+  border: 3px solid var(--soft-ivory);
   -webkit-border-radius: 10px;
           border-radius: 10px;
 }
@@ -155,7 +156,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .has-scrollbar::-webkit-scrollbar-thumb {
   background: transparent;
-  border: 3px solid var(--white);
+  border: 3px solid var(--soft-ivory);
   -webkit-border-radius: 20px;
           border-radius: 20px;
 }
@@ -289,7 +290,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   position: relative;
   max-width: 350px;
   margin: 20px;
-  background: var(--white);
+  background: var(--soft-ivory);
   -webkit-border-radius: var(--border-radius-md);
           border-radius: var(--border-radius-md);
   overflow: hidden;
@@ -317,7 +318,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   top: 15px;
   right: 15px;
   background: var(--salmon-pale-purple);
-  color: var(--white);
+  color: var(--soft-ivory);
   font-size: 16px;
   padding: 5px;
   -webkit-border-radius: var(--border-radius-sm);
@@ -359,7 +360,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .btn-newsletter {
   background: var(--eerie-black);
-  color: var(--white);
+  color: var(--soft-ivory);
   font-size: var(--fs-7);
   font-weight: var(--weight-600);
   text-transform: uppercase;
@@ -387,7 +388,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   bottom: 80px;
   left: 20px;
   right: 20px;
-  background: var(--white);
+  background: var(--soft-ivory);
   max-width: 300px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -543,7 +544,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 .search-field::-webkit-search-cancel-button { display: none; }
 
 .search-btn {
-  background: var(--white);
+  background: var(--soft-ivory);
   position: absolute;
   top: 50%;
   right: 2px;
@@ -563,7 +564,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 .search-btn:hover { color: var(--salmon-pale-purple); }
 
 .mobile-bottom-navigation {
-  background: var(--white);
+  background: var(--soft-ivory);
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -607,7 +608,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .mobile-bottom-navigation .count {
   background: var(--bittersweet);
-  color: var(--white);
+  color: var(--soft-ivory);
   position: absolute;
   top: 0;
   right: 0;
@@ -620,7 +621,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 .mobile-navigation-menu {
-  background: var(--white);
+  background: var(--soft-ivory);
   position: fixed;
   top: 0;
   left: -100%;
@@ -875,7 +876,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .banner-btn {
   background: var(--salmon-pale-purple);
-  color: var(--white);
+  color: var(--soft-ivory);
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
@@ -935,6 +936,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   -webkit-border-radius: var(--border-radius-md);
           border-radius: var(--border-radius-md);
   scroll-snap-align: start;
+  background-color: var(--white);
 }
 
 .category-img-box {
@@ -1028,7 +1030,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 \*-----------------------------------*/
 
 .sidebar {
-  background: var(--white);
+  background: var(--soft-ivory);
   position: fixed;
   top: 0;
   left: -100%;
@@ -1055,6 +1057,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   margin-bottom: 15px;
   padding-bottom: 15px;
   border-bottom: 1px solid var(--cultured);
+  background-color: var(--white);
 }
 
 .sidebar-top {
@@ -1455,7 +1458,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 .product-featured .add-cart-btn {
   background: var(--salmon-pale-purple);
   padding: 8px 15px;
-  color: var(--white);
+  color: var(--soft-ivory);
   font-weight: var(--fs-9);
   font-weight: var(--weight-700);
   text-transform: uppercase;
@@ -1469,7 +1472,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .product-featured .add-cart-btn:hover {
   background: var(--eerie-black);
-  color: var(--white);
+  color: var(--soft-ivory);
 }
 
 .product-featured .showcase-status { margin-bottom: 15px; }
@@ -1578,6 +1581,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   -webkit-transition: var(--transition-timing);
   -o-transition: var(--transition-timing);
   transition: var(--transition-timing);
+  background-color: var(--white);
 }
 
 .product-grid .showcase:hover { -webkit-box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.1); box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.1); }
@@ -1620,7 +1624,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   background: var(--ocean-green);
   font-size: var(--fs-8);
   font-weight: var(--weight-500);
-  color: var(--white);
+  color: var(--soft-ivory);
   padding: 0 8px;
   -webkit-border-radius: var(--border-radius-sm);
           border-radius: var(--border-radius-sm);
@@ -1677,7 +1681,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .product-grid .btn-action:hover {
   background: var(--salmon-pale-purple);
-  color: var(--white);
+  color: var(--soft-ivory);
   border-color: var(--salmon-pale-purple);
 }
 
@@ -1746,6 +1750,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
           border-radius: var(--border-radius-md);
   text-align: center;
   margin-bottom: 25px;
+  background-color: var(--white);
 }
 
 .testimonial-banner {
@@ -1824,7 +1829,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .cta-content .discount {
   background: var(--eerie-black);
-  color: var(--white);
+  color: var(--soft-ivory);
   font-size: var(--fs-11);
   font-weight: var(--weight-600);
   text-transform: uppercase;
@@ -1888,6 +1893,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
   border: 1px solid var(--cultured);
   -webkit-border-radius: var(--border-radius-md);
           border-radius: var(--border-radius-md);
+  background-color: var(--white);
 }
 
 .service-item {
@@ -2092,7 +2098,7 @@ footer {
 
 .footer-nav .nav-title {
   position: relative;
-  color: var(--white);
+  color: var(--soft-ivory);
   font-size: var(--fs-7);
   text-transform: uppercase;
   margin-bottom: 15px;
@@ -2696,6 +2702,12 @@ footer {
   
 }
 
+@media only screen and (max-width: 1024px) {
+  .sidebar-category {
+    background-color: var(--soft-ivory);
+  }
+}
+
 
 /**
  * responsive larger than 1024px screen
@@ -2765,7 +2777,7 @@ footer {
 
   .header-social-container .social-link:hover {
     background: var(--salmon-pale-purple);
-    color: var(--white);
+    color: var(--soft-ivory);
   }
 
   .header-user-actions {
@@ -2792,7 +2804,7 @@ footer {
     top: -2px;
     right: -3px;
     background: var(--bittersweet);
-    color: var(--white);
+    color: var(--soft-ivory);
     font-size: 12px;
     font-weight: var(--weight-500);
     line-height: 1;
@@ -2861,7 +2873,7 @@ footer {
     position: absolute;
     top: 100%;
     left: 0;
-    background: var(--white);
+    background: var(--soft-ivory);
     width: 100%;
     display: -ms-grid;
     display: grid;
@@ -2931,7 +2943,7 @@ footer {
     top: 100%;
     left: 0;
     width: 200px;
-    background: var(--white);
+    background: var(--soft-ivory);
     padding: 20px 0;
     -webkit-border-radius: var(--border-radius-md);
             border-radius: var(--border-radius-md);
@@ -3339,5 +3351,5 @@ footer {
 
 .search-dropdown-item:hover {
   background-color: var(--salmon-pale-purple);
-  color: var(--white);
+  color: var(--soft-ivory);
 }
